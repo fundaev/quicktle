@@ -18,6 +18,15 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 
+/*!
+    \file  tlelib.h
+    \brief Include this file in your project to use the TLELib.
+*/
+
+/*!
+    \brief Main namespace of TLELib. All objects and functions
+           of this library are located in the 'tlelib' namespace.
+*/
 namespace tlelib
 {
 }

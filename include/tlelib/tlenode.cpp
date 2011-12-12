@@ -17,8 +17,12 @@
  | You should have received a copy of the GNU Lesser General Public License    |
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
+/*!
+    \file tlenode.cpp
+    \brief File contains the realization of methods of tlelib::tle_node object.
+*/
 
-#define CHECKSUM_INDEX 68
+#define CHECKSUM_INDEX 68 //!< Index of checksum symbol in the TLE format line
 
 #include <string>
 #include <cstdlib>
@@ -30,33 +34,33 @@
 
 using namespace tlelib;
 
-TleNode::TleNode()
+tle_node::tle_node()
 {
     init();
 }
 //------------------------------------------------------------------------------
 
-TleNode::TleNode(const std::string& line1, const std::string& line2, const std::string& line3, bool forceParsing)
+tle_node::tle_node(const std::string& line1, const std::string& line2, const std::string& line3, bool forceParsing)
 {
     init();
     assign(line1, line2, line3, forceParsing);
 }
 //------------------------------------------------------------------------------
 
-TleNode::TleNode(const std::string& line1, const std::string& line2, bool forceParsing)
+tle_node::tle_node(const std::string& line1, const std::string& line2, bool forceParsing)
 {
     init();
     assign(line1, line2, forceParsing);
 }
 //------------------------------------------------------------------------------
 
-TleNode::~TleNode()
+tle_node::~tle_node()
 {
     free();
 }
 //------------------------------------------------------------------------------
 
-void TleNode::init()
+void tle_node::init()
 {
     m_line1 = m_line2 = m_line3 = m_satName = m_satNumber = m_designator = NULL;
     m_dn = m_d2n = m_Bstar = m_i = m_Omega = m_omega = m_M = m_n = m_e = NULL;
@@ -66,7 +70,7 @@ void TleNode::init()
 }
 //------------------------------------------------------------------------------
 
-void TleNode::free()
+void tle_node::free()
 {
     if (m_line1) delete m_line1;
     if (m_line2) delete m_line2;
@@ -92,46 +96,46 @@ void TleNode::free()
 }
 //------------------------------------------------------------------------------
 
-void TleNode::assign(const std::string& line1, const std::string& line2, const std::string& line3, bool forceParsing)
+void tle_node::assign(const std::string& line1, const std::string& line2, const std::string& line3, bool forceParsing)
 {
     // Check checksums
-    checkLine(line2);
-    checkLine(line3);
+    check_line(line2);
+    check_line(line3);
     // Assign
     free();
     m_line1 = new std::string(line1);
     m_line2 = new std::string(line2);
     m_line3 = new std::string(line3);
     // Parse
-    if (forceParsing) parseAll();
+    if (forceParsing) parse_all();
 }
 //------------------------------------------------------------------------------
 
-void TleNode::assign(const std::string& line1, const std::string& line2, bool forceParsing)
+void tle_node::assign(const std::string& line1, const std::string& line2, bool forceParsing)
 {
     // Check checksums
-    checkLine(line1);
-    checkLine(line2);
+    check_line(line1);
+    check_line(line2);
     // Assign
     free();
     m_line2 = new std::string(line1);
     m_line3 = new std::string(line2);
     // Parse
-    if (forceParsing) parseAll();
+    if (forceParsing) parse_all();
 }
 //------------------------------------------------------------------------------
 
-void TleNode::parseAll()
+void tle_node::parse_all()
 {
     n(); dn(); d2n(); i(); Omega(); omega(); M(); e(); BSTAR();
-    satNumber(); satName(); designator();
-    classification(); ephemerisType();
-    elementNumber(); revolutionNumber();
-    preciseEpoch();
+    sat_number(); sat_name(); designator();
+    classification(); ephemeris_type();
+    element_number(); revolution_number();
+    precise_epoch();
 }
 //------------------------------------------------------------------------------
 
-void TleNode::checkLine(const std::string &str) const
+void tle_node::check_line(const std::string &str) const
 {
     if (str.length() < CHECKSUM_INDEX + 1)
         throw tle_too_short_string(str);
@@ -143,7 +147,7 @@ void TleNode::checkLine(const std::string &str) const
 }
 //------------------------------------------------------------------------------
 
-std::string &TleNode::satNumber()
+std::string &tle_node::sat_number()
 {
     if (!m_satNumber)
     {
@@ -160,7 +164,7 @@ std::string &TleNode::satNumber()
 }
 //------------------------------------------------------------------------------
 
-std::string &TleNode::satName()
+std::string &tle_node::sat_name()
 {
     if (!m_satName)
     {
@@ -178,7 +182,7 @@ std::string &TleNode::satName()
 }
 //------------------------------------------------------------------------------
 
-std::string &TleNode::designator()
+std::string &tle_node::designator()
 {
     if (!m_designator)
     {
@@ -189,7 +193,7 @@ std::string &TleNode::designator()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::n()
+double &tle_node::n()
 {
     if (!m_n)
     {
@@ -200,7 +204,7 @@ double &TleNode::n()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::dn()
+double &tle_node::dn()
 {
     if (!m_dn)
     {
@@ -211,7 +215,7 @@ double &TleNode::dn()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::d2n()
+double &tle_node::d2n()
 {
     if (!m_d2n)
     {
@@ -222,7 +226,7 @@ double &TleNode::d2n()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::i()
+double &tle_node::i()
 {
     if (!m_i)
     {
@@ -233,7 +237,7 @@ double &TleNode::i()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::Omega()
+double &tle_node::Omega()
 {
     if (!m_Omega)
     {
@@ -244,7 +248,7 @@ double &TleNode::Omega()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::omega()
+double &tle_node::omega()
 {
     if (!m_omega)
     {
@@ -255,7 +259,7 @@ double &TleNode::omega()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::M()
+double &tle_node::M()
 {
     if (!m_M)
     {
@@ -266,7 +270,7 @@ double &TleNode::M()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::BSTAR()
+double &tle_node::BSTAR()
 {
     if (!m_Bstar)
     {
@@ -277,7 +281,7 @@ double &TleNode::BSTAR()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::e()
+double &tle_node::e()
 {
     if (!m_e)
     {
@@ -288,7 +292,7 @@ double &TleNode::e()
 }
 //------------------------------------------------------------------------------
 
-char &TleNode::classification()
+char &tle_node::classification()
 {
     if (!m_classification)
     {
@@ -299,7 +303,7 @@ char &TleNode::classification()
 }
 //------------------------------------------------------------------------------
 
-char &TleNode::ephemerisType()
+char &tle_node::ephemeris_type()
 {
     if (!m_ephemerisType)
     {
@@ -310,7 +314,7 @@ char &TleNode::ephemerisType()
 }
 //------------------------------------------------------------------------------
 
-int &TleNode::elementNumber()
+int &tle_node::element_number()
 {
     if (!m_elementNumber)
     {
@@ -321,7 +325,7 @@ int &TleNode::elementNumber()
 }
 //------------------------------------------------------------------------------
 
-int &TleNode::revolutionNumber()
+int &tle_node::revolution_number()
 {
     if (!m_revolutionNumber)
     {
@@ -332,7 +336,7 @@ int &TleNode::revolutionNumber()
 }
 //------------------------------------------------------------------------------
 
-double &TleNode::preciseEpoch()
+double &tle_node::precise_epoch()
 {
     if (!m_date)
     {
@@ -344,41 +348,34 @@ double &TleNode::preciseEpoch()
 }
 //------------------------------------------------------------------------------
 
-std::time_t TleNode::epoch()
+std::time_t tle_node::epoch()
 {
-    /*if (!m_epoch)
-    {
-        std::string date = parseString(m_line2, 18, 14);
-        m_epoch = new std::time_t(stringToUNIXDate(date));
-    }
-
-    return *m_epoch;*/
-    return static_cast<std::time_t>(preciseEpoch());
+    return static_cast<std::time_t>(precise_epoch());
 }
 //------------------------------------------------------------------------------
 
-std::string TleNode::getFirstString()
+std::string tle_node::first_string()
 {
-    std::string res = satName();
+    std::string res = sat_name();
     while (res.length() < 24) res += " ";
     return res;
 }
 //------------------------------------------------------------------------------
 
-std::string TleNode::getSecondString()
+std::string tle_node::second_string()
 {
     std::string res = "1 ";
-    res += string2string(satNumber(), 5);
+    res += string2string(sat_number(), 5);
     const char cl = classification();
     res += (isprint(cl) ? std::string(1, cl) : " ") + " ";
     res += string2string(designator(), 8) + " ";
-    res += date2string(preciseEpoch(), 14) + " ";
+    res += date2string(precise_epoch(), 14) + " ";
     res += double2string(dn(), 10, 8, false, false, false) + " ";
     res += double2string(d2n(), 8, 3, true, true, false) + " ";
     res += double2string(BSTAR(), 8, 3, true, true, false) + " ";
-    const char eph = ephemerisType();
+    const char eph = ephemeris_type();
     res += (isprint(eph) ? std::string(1, eph) : " ") + " ";
-    res += int2string(elementNumber(), 4, false);
+    res += int2string(element_number(), 4, false);
 
     // Checksum
     int sum = checksum(res);
@@ -388,17 +385,17 @@ std::string TleNode::getSecondString()
 }
 //------------------------------------------------------------------------------
 
-std::string TleNode::getThirdString()
+std::string tle_node::third_string()
 {
     std::string res = "2 ";
-    res += string2string(satNumber(), 5) + " ";
+    res += string2string(sat_number(), 5) + " ";
     res += double2string(i(), 8, 4, false, false, false) + " ";
     res += double2string(Omega(), 8, 4, false, false, false) + " ";
     res += double2string(e(), 7, 7, false, true, false) + " ";
     res += double2string(omega(), 8, 4, false, false, false) + " ";
     res += double2string(M(), 8, 4, false, false, false) + " ";
     res += double2string(n(), 11, 8, false, false, false);
-    res += int2string(revolutionNumber(), 5, false);
+    res += int2string(revolution_number(), 5, false);
 
     // Checksum
     int sum = checksum(res);

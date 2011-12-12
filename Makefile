@@ -19,7 +19,7 @@
 #-----------------------------------------------------------------------------+
 
 TESTDIR        = ./test
-INCPATH        +=  -I$(TESTDIR) -I$(GTEST_DIR)/src -I./include/
+INCPATH        +=  -I$(TESTDIR) -I$(GTEST_DIR)/src -I$(GTEST_DIR)/include -I./include/
 CXXFLAGS       +=  -Wall $(INCPATH) 
 LIBS           += -lpthread
 TARGET         = tletest

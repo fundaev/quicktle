@@ -18,7 +18,7 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "test_tlefunc.h"
 #include "test_tlenode.h"
 

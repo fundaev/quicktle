@@ -17,6 +17,11 @@
  | You should have received a copy of the GNU Lesser General Public License    |
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
+/*!
+    \file tlefunc.cpp
+    \brief File contains the realizations of the functions, defined in the tlefunc.h file
+           and used by the TLELib library.
+*/
 
 #define UNIX_FIRST_YEAR 1970
 
@@ -31,16 +36,14 @@
 namespace tlelib
 {
 
-std::string int2string(const int val, const std::size_t minWidth, const bool leftAlign)
+std::string int2string(const int val, const std::size_t fieldLength, const bool leftAlign)
 {
     char *str = new char(6);
     sprintf(str, "%d", val);
     std::string res(str);
     delete str;
 
-    while (minWidth && res.length() < minWidth) res += " ";
-
-    return string2string(trim(res), minWidth, leftAlign, false);
+    return string2string(trim(res), fieldLength, leftAlign, false);
 }
 //------------------------------------------------------------------------------
 

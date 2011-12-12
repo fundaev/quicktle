@@ -28,47 +28,47 @@
 
 using namespace tlelib;
 
-class TleNodeTest: public TleNode, public ::testing::Test
+class tle_node_test: public tle_node, public ::testing::Test
 {
 };
 
 //
 //---- TESTS -------------------------------------------------------------------
 
-TEST(TleNodeTest, TleNode_Exceptions)
+TEST(tle_node_test, tle_node_exceptions)
 {
     std::string line1 = "Mir";
     std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112";
     std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
 
-    EXPECT_NO_THROW(TleNode());
-    EXPECT_NO_THROW(TleNode(line1, line2, line3, true));
-    EXPECT_NO_THROW(TleNode(line2, line3, true));
+    EXPECT_NO_THROW(tle_node());
+    EXPECT_NO_THROW(tle_node(line1, line2, line3, true));
+    EXPECT_NO_THROW(tle_node(line2, line3, true));
 
     // Too short lines
-    EXPECT_THROW(TleNode("1 16609U 86017A   ", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394"), tle_too_short_string);
-    EXPECT_THROW(TleNode("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158"), tle_too_short_string);
+    EXPECT_THROW(tle_node("1 16609U 86017A   ", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394"), tle_too_short_string);
+    EXPECT_THROW(tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158"), tle_too_short_string);
 
     // Checksum error
-    EXPECT_THROW(TleNode("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   115", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394"), tle_checksum_error);
-    EXPECT_THROW(TleNode("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   398"), tle_checksum_error);
+    EXPECT_THROW(tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   115", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394"), tle_checksum_error);
+    EXPECT_THROW(tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   398"), tle_checksum_error);
 }
 //------------------------------------------------------------------------------
 
-TEST(TleNodeTest, TleNode_Elements)
+TEST(tle_nodeTest, tle_node_Elements)
 {
     std::string line1 = "Mir                     ";
     std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112";
     std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
 
-    TleNode node(line1, line2, line3);
-    EXPECT_TRUE(node.satName() == "Mir");
-    EXPECT_TRUE(node.satNumber() == "16609");
+    tle_node node(line1, line2, line3);
+    EXPECT_TRUE(node.sat_name() == "Mir");
+    EXPECT_TRUE(node.sat_number() == "16609");
     EXPECT_TRUE(node.classification() == 'U');
     EXPECT_TRUE(node.designator() == "86017A");
-    EXPECT_TRUE(node.ephemerisType() == '0');
-    EXPECT_EQ(11, node.elementNumber());
-    EXPECT_EQ(39, node.revolutionNumber());
+    EXPECT_TRUE(node.ephemeris_type() == '0');
+    EXPECT_EQ(11, node.element_number());
+    EXPECT_EQ(39, node.revolution_number());
     EXPECT_DOUBLE_EQ(0.00057349, node.dn());
     EXPECT_DOUBLE_EQ(0, node.d2n());
     EXPECT_DOUBLE_EQ(0.31166e-3, node.BSTAR());
@@ -90,14 +90,14 @@ TEST(TleNodeTest, TleNode_Elements)
 }
 //------------------------------------------------------------------------------
 
-TEST(TleNodeTest, TleNode_Output)
+TEST(tle_nodeTest, tle_node_Output)
 {
     std::string line1 = "Mir                     ";
     std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112";
     std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
 
-    EXPECT_TRUE(TleNode(line1, line2, line3).getFirstString() == line1);
-    EXPECT_TRUE(TleNode(line1, line2, line3).getSecondString() == line2);
-    EXPECT_TRUE(TleNode(line1, line2, line3).getThirdString() == line3);
+    EXPECT_TRUE(tle_node(line1, line2, line3).first_string() == line1);
+    EXPECT_TRUE(tle_node(line1, line2, line3).second_string() == line2);
+    EXPECT_TRUE(tle_node(line1, line2, line3).third_string() == line3);
 }
 //------------------------------------------------------------------------------
