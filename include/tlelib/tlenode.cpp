@@ -32,7 +32,8 @@
 #include <tlelib/tlefunc.h>
 #include <tlelib/tleexception.h>
 
-using namespace tlelib;
+namespace tlelib
+{
 
 tle_node::tle_node()
 {
@@ -151,14 +152,21 @@ std::string &tle_node::sat_number()
 {
     if (!m_satNumber)
     {
-        // Try to obtain the satellite number from the second line...
-        m_satNumber = new std::string(trim(parseString(m_line2, 2, 5)));
-        // or from third line
-        if (*m_satNumber == "")
+        if (m_line2)
         {
-            delete m_satNumber;
-            m_satNumber = new std::string(trim(parseString(m_line3, 2, 5)));
+            // Try to obtain the satellite number from the second line...
+            m_satNumber = new std::string(trim(parseString(m_line2, 2, 5)));
+            // or from third line
+            if (*m_satNumber == "")
+            {
+                delete m_satNumber;
+                m_satNumber = new std::string(trim(parseString(m_line3, 2, 5)));
+            }
         }
+        else
+            {
+                m_satNumber = new std::string("");
+            }
     }
     return *m_satNumber;
 }
@@ -186,7 +194,7 @@ std::string &tle_node::designator()
 {
     if (!m_designator)
     {
-        m_designator = new std::string(trim(parseString(m_line2, 9, 8)));
+        m_designator = m_line2 ? new std::string(trim(parseString(m_line2, 9, 8))) : new std::string("");
     }
 
     return *m_designator;
@@ -197,7 +205,7 @@ double &tle_node::n()
 {
     if (!m_n)
     {
-        m_n = new double(parseDouble(m_line3, 52, 11));
+        m_n = m_line3 ? new double(parseDouble(m_line3, 52, 11)) : new double(0);
     }
 
     return *m_n;
@@ -208,7 +216,7 @@ double &tle_node::dn()
 {
     if (!m_dn)
     {
-        m_dn = new double(parseDouble(m_line2, 33, 10));
+        m_dn = m_line2 ? new double(parseDouble(m_line2, 33, 10)) : new double(0);
     }
 
     return *m_dn;
@@ -219,7 +227,7 @@ double &tle_node::d2n()
 {
     if (!m_d2n)
     {
-        m_d2n = new double(parseDouble(m_line2, 44, 8, true));
+        m_d2n = m_line2 ? new double(parseDouble(m_line2, 44, 8, true)) : new double(0);
     }
 
     return *m_d2n;
@@ -230,7 +238,7 @@ double &tle_node::i()
 {
     if (!m_i)
     {
-        m_i = new double(parseDouble(m_line3, 8, 8));
+        m_i = m_line3 ? new double(parseDouble(m_line3, 8, 8)) : new double(0);
     }
 
     return *m_i;
@@ -241,7 +249,7 @@ double &tle_node::Omega()
 {
     if (!m_Omega)
     {
-        m_Omega = new double(parseDouble(m_line3, 17, 8));
+        m_Omega = m_line3 ? new double(parseDouble(m_line3, 17, 8)) : new double(0);
     }
 
     return *m_Omega;
@@ -252,7 +260,7 @@ double &tle_node::omega()
 {
     if (!m_omega)
     {
-        m_omega = new double(parseDouble(m_line3, 34, 8));
+        m_omega = m_line3 ? new double(parseDouble(m_line3, 34, 8)) : new double(0);
     }
 
     return *m_omega;
@@ -263,7 +271,7 @@ double &tle_node::M()
 {
     if (!m_M)
     {
-        m_M = new double(parseDouble(m_line3, 43, 8));
+        m_M = m_line3 ? new double(parseDouble(m_line3, 43, 8)) : new double(0);
     }
 
     return *m_M;
@@ -274,7 +282,7 @@ double &tle_node::BSTAR()
 {
     if (!m_Bstar)
     {
-        m_Bstar = new double(parseDouble(m_line2, 53, 8, true));
+        m_Bstar = m_line2 ? new double(parseDouble(m_line2, 53, 8, true)) : new double(0);
     }
 
     return *m_Bstar;
@@ -285,7 +293,7 @@ double &tle_node::e()
 {
     if (!m_e)
     {
-        m_e = new double(parseDouble(m_line3, 26, 7, true));
+        m_e = m_line3 ? new double(parseDouble(m_line3, 26, 7, true)) : new double(0);
     }
 
     return *m_e;
@@ -296,7 +304,7 @@ char &tle_node::classification()
 {
     if (!m_classification)
     {
-        m_classification = new char(parseChar(m_line2, 7));
+        m_classification = m_line2 ? new char(parseChar(m_line2, 7)) : new char('\0');
     }
 
     return *m_classification;
@@ -307,7 +315,7 @@ char &tle_node::ephemeris_type()
 {
     if (!m_ephemerisType)
     {
-        m_ephemerisType = new char(parseChar(m_line2, 62));
+        m_ephemerisType = m_line2 ? new char(parseChar(m_line2, 62)) : new char('\0');
     }
 
     return *m_ephemerisType;
@@ -318,7 +326,7 @@ int &tle_node::element_number()
 {
     if (!m_elementNumber)
     {
-        m_elementNumber = new int(parseInt(m_line2, 64, 4));
+        m_elementNumber = m_line2 ? new int(parseInt(m_line2, 64, 4)) : new int(0);
     }
 
     return *m_elementNumber;
@@ -329,7 +337,7 @@ int &tle_node::revolution_number()
 {
     if (!m_revolutionNumber)
     {
-        m_revolutionNumber = new int(parseInt(m_line3, 63, 5));
+        m_revolutionNumber = m_line3 ? new int(parseInt(m_line3, 63, 5)) : new int(0);
     }
 
     return *m_revolutionNumber;
@@ -340,8 +348,15 @@ double &tle_node::precise_epoch()
 {
     if (!m_date)
     {
-        std::string date = parseString(m_line2, 18, 14);
-        m_date = new double(string2date(date));
+        if (m_line2)
+        {
+            std::string date = parseString(m_line2, 18, 14);
+            m_date = new double(string2date(date));
+        }
+        else
+            {
+                m_date = new double(0);
+            }
     }
 
     return *m_date;
@@ -404,3 +419,19 @@ std::string tle_node::third_string()
     return res;
 }
 //------------------------------------------------------------------------------
+
+std::ostream &operator<<(std::ostream &stream, tle_node &node)
+{
+    if (node.m_line1)
+    {
+        // Three lines TLE format
+        stream << node.first_string() << std::endl;
+    }
+    stream << node.second_string() << std::endl;
+    stream << node.third_string() << std::endl;
+
+    return stream;
+}
+//------------------------------------------------------------------------------
+
+} // namespace tlelib

@@ -17,19 +17,35 @@
  | You should have received a copy of the GNU Lesser General Public License    |
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
+/*!
+    \file tlestream.h
+    \brief File contains the definition of tle_stream object.
+*/
 
-#include <gtest/gtest.h>
-#include "test_tlefunc.h"
-#include "test_tlenode.h"
-#include "test_tlestream.h"
+#ifndef TLESTREAM_H
+#define TLESTREAM_H
 
-/**
-  function: main
-    Run all tests
-**/
-int main(int argc, char* argv[])
+#include <iostream>
+
+#include <tlelib/tlenode.h>
+
+namespace tlelib
 {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+
+enum tle_file_type {two_lines, three_lines};
+
+class tle_stream
+{
+    std::istream *m_source;
+    tle_file_type m_file_type;
+    tle_stream() {}
+public:
+    tle_stream(std::istream &source, const tle_file_type = two_lines);
+    std::istream &operator>>(tle_node &node);
+    operator bool();
+};
 //------------------------------------------------------------------------------
+
+} // namespace tlelib
+
+#endif // TLESTREAM_H

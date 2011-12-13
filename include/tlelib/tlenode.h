@@ -28,6 +28,7 @@
 
 #include <string>
 #include <ctime>
+#include <iostream>
 
 #include <tlelib/tlefunc.h>
 
@@ -222,6 +223,14 @@ public:
         \return Third TLE string.
     */
     std::string third_string();
+
+    /*!
+        \brief Output function
+        \param stream - Output stream
+        \param node - The tle_node object
+        \return Output stream
+    */
+    friend std::ostream &operator<<(std::ostream &stream, tle_node &node);
 };
 
 } // namespace

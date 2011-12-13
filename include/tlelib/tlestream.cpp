@@ -17,19 +17,53 @@
  | You should have received a copy of the GNU Lesser General Public License    |
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
+/*!
+    \file tlestream.cpp
+    \brief File contains the realization of tle_stream object.
+*/
 
-#include <gtest/gtest.h>
-#include "test_tlefunc.h"
-#include "test_tlenode.h"
-#include "test_tlestream.h"
+#define TLE_LINE_LENGTH 72
 
-/**
-  function: main
-    Run all tests
-**/
-int main(int argc, char* argv[])
+#include <string>
+#include <iostream>
+
+#include <tlelib/tlestream.h>
+
+using namespace tlelib;
+
+tle_stream::tle_stream(std::istream &source, const tle_file_type file_type)
 {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    m_source = &source;
+    m_file_type = file_type;
+}
+//------------------------------------------------------------------------------
+
+std::istream &tle_stream::operator>>(tle_node &node)
+{
+    char buf[TLE_LINE_LENGTH] = "";
+
+    m_source->getline(buf, TLE_LINE_LENGTH);
+    std::string line1(buf);
+    m_source->getline(buf, TLE_LINE_LENGTH);
+    std::string line2(buf);
+
+    if (m_file_type == three_lines)
+    {
+        m_source->getline(buf, TLE_LINE_LENGTH);
+        std::string line3(buf);
+        node.assign(line1, line2, line3);
+    }
+    else
+        {
+            node.assign(line1, line2);
+        }
+
+    return *m_source;
+}
+//------------------------------------------------------------------------------
+
+tle_stream::operator bool()
+{
+    return m_source ? true : false;
 }
 //------------------------------------------------------------------------------

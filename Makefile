@@ -19,6 +19,7 @@
 #-----------------------------------------------------------------------------+
 
 TESTDIR        = ./test
+TEST_SRCS      = $(TESTDIR)/test_tlefunc.h $(TESTDIR)/test_tlenode.h $(TESTDIR)/test_tlestream.h $(TESTDIR)/main.cpp
 INCPATH        +=  -I$(TESTDIR) -I$(GTEST_DIR)/src -I$(GTEST_DIR)/include -I./include/
 CXXFLAGS       +=  -Wall $(INCPATH) 
 LIBS           += -lpthread
@@ -28,12 +29,12 @@ GTEST_SRCS     = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 TLELIB_DIR     = ./include/tlelib
 TLELIB_HEADERS = $(TLELIB_DIR)/*.h
 TLELIB_SRCS    = $(TLELIB_DIR)/*.cpp
-OBJECTS        = $(GTEST_DIR)/src/gtest-all.o tlenode.o tlefunc.o main.o
+OBJECTS        = $(GTEST_DIR)/src/gtest-all.o tlenode.o tlestream.o tlefunc.o main.o
 
 .PHONY: purge clean
 
 
-build-test: $(OBJECTS)
+build-test: $(OBJECTS) $(TEST_SRCS)
 	$(CXX) $(LDFLAGS) $(INCPATH) $(LIBS) $(OBJECTS) -o $(TARGET)
 
 main.o: $(TESTDIR)/main.cpp $(TESTDIR)/test_tlenode.h $(TESTDIR)/test_tlefunc.h
@@ -41,6 +42,9 @@ main.o: $(TESTDIR)/main.cpp $(TESTDIR)/test_tlenode.h $(TESTDIR)/test_tlefunc.h
 
 tlenode.o: $(TLELIB_DIR)/tlenode.cpp $(TLELIB_DIR)/tlenode.h $(TLELIB_DIR)/tleexception.h
 	$(CXX) -c $(CXXFLAGS) $(TLELIB_DIR)/tlenode.cpp
+
+tlestream.o: $(TLELIB_DIR)/tlestream.cpp $(TLELIB_DIR)/tlestream.h $(TLELIB_DIR)/tlenode.h
+	$(CXX) -c $(CXXFLAGS) $(TLELIB_DIR)/tlestream.cpp
 
 tlefunc.o: $(TLELIB_DIR)/tlefunc.cpp $(TLELIB_DIR)/tlefunc.h
 	$(CXX) -c $(CXXFLAGS) $(TLELIB_DIR)/tlefunc.cpp
