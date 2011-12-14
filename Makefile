@@ -37,7 +37,7 @@ OBJECTS        = $(GTEST_DIR)/src/gtest-all.o tlenode.o tlestream.o tlefunc.o ma
 build-test: $(TEST_SRCS) $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(INCPATH) $(LIBS) $(OBJECTS) -o $(TARGET)
 
-main.o: $(TESTDIR)/main.cpp $(TESTDIR)/test_tlenode.h $(TESTDIR)/test_tlefunc.h
+main.o: $(TEST_SRCS)
 	$(CXX) -c $(CXXFLAGS) $(TESTDIR)/main.cpp
 
 tlenode.o: $(TLELIB_DIR)/tlenode.cpp $(TLELIB_DIR)/tlenode.h $(TLELIB_DIR)/tleexception.h
