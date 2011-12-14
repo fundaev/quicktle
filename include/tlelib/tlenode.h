@@ -36,6 +36,15 @@ namespace tlelib
 {
 
 /*!
+    \brief TLE file format:
+*/
+enum tle_file_type
+{
+    two_lines,  //!< two-lines format
+    three_lines //!< three-lines format
+};
+
+/*!
     \brief Main object of TLELib library. It represents the data, specified
            in the one measurement in TLE file.
 */

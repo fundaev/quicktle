@@ -22,7 +22,7 @@
     \brief File contains the realization of tle_stream object.
 */
 
-#define TLE_LINE_LENGTH 72
+#define TLE_LINE_LENGTH 72 //!< Length of TLE line
 
 #include <string>
 #include <iostream>
@@ -64,6 +64,6 @@ std::istream &tle_stream::operator>>(tle_node &node)
 
 tle_stream::operator bool()
 {
-    return m_source ? true : false;
+    return *m_source ? true : false;
 }
 //------------------------------------------------------------------------------
