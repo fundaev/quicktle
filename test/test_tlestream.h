@@ -101,3 +101,23 @@ TEST(tle_stream_test, output)
     EXPECT_TRUE(std::string(str) == "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394");
 }
 //------------------------------------------------------------------------------
+
+TEST(tle_stream_test, parsingMode)
+{
+    std::string line1 = "Mir                     \n";
+    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112\n";
+    std::string line3 = "2zsdfgsdfdsggsdfsdfsdfsdfsdfsdfsdfdsgdgrsasdfasdfsdfsdfgfdgdfgdsfgsd2\n"; // invalid line with valid checksum
+
+    std::stringstream lines(std::stringstream::in | std::stringstream::out);
+    lines << line1 << line2 << line3;
+
+    tle_stream tle(lines, three_lines);
+    tle_node node;
+    EXPECT_NO_THROW(tle >> node); // second line is invalid, but node does not parse it here
+
+    // Set enforce parsing
+    lines.seekg(0, std::ios::beg);
+    tle.enforce_parsing(true);
+    EXPECT_THROW(tle >> node, tle_invalid_format); // second line is invalid and node tries to parse it here
+}
+//------------------------------------------------------------------------------

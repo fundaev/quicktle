@@ -35,6 +35,7 @@ tle_stream::tle_stream(std::istream &source, const tle_file_type file_type)
 {
     m_source = &source;
     m_file_type = file_type;
+    m_enforce_parsing = false;
 }
 //------------------------------------------------------------------------------
 
@@ -51,11 +52,11 @@ std::istream &tle_stream::operator>>(tle_node &node)
     {
         m_source->getline(buf, TLE_LINE_LENGTH);
         std::string line3(buf);
-        node.assign(line1, line2, line3);
+        node.assign(line1, line2, line3, m_enforce_parsing);
     }
     else
         {
-            node.assign(line1, line2);
+            node.assign(line1, line2, m_enforce_parsing);
         }
 
     return *m_source;
@@ -65,5 +66,13 @@ std::istream &tle_stream::operator>>(tle_node &node)
 tle_stream::operator bool()
 {
     return *m_source ? true : false;
+}
+//------------------------------------------------------------------------------
+
+bool tle_stream::enforce_parsing(bool parsingMode)
+{
+    bool res = m_enforce_parsing;
+    m_enforce_parsing = parsingMode;
+    return res;
 }
 //------------------------------------------------------------------------------
