@@ -34,7 +34,7 @@ OBJECTS        = $(GTEST_DIR)/src/gtest-all.o tlenode.o tlestream.o tlefunc.o ma
 .PHONY: purge clean
 
 
-build-test: $(OBJECTS) $(TEST_SRCS)
+build-test: $(TEST_SRCS) $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(INCPATH) $(LIBS) $(OBJECTS) -o $(TARGET)
 
 main.o: $(TESTDIR)/main.cpp $(TESTDIR)/test_tlenode.h $(TESTDIR)/test_tlefunc.h

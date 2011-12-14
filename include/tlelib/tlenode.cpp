@@ -38,6 +38,7 @@ namespace tlelib
 tle_node::tle_node()
 {
     init();
+    m_file_type = two_lines;
 }
 //------------------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ tle_node::tle_node(const std::string& line1, const std::string& line2, const std
 {
     init();
     assign(line1, line2, line3, forceParsing);
+    m_file_type = three_lines;
 }
 //------------------------------------------------------------------------------
 
@@ -52,6 +54,7 @@ tle_node::tle_node(const std::string& line1, const std::string& line2, bool forc
 {
     init();
     assign(line1, line2, forceParsing);
+    m_file_type = two_lines;
 }
 //------------------------------------------------------------------------------
 
@@ -420,9 +423,16 @@ std::string tle_node::third_string()
 }
 //------------------------------------------------------------------------------
 
+tle_node &tle_node::output_format(const tle_file_type format)
+{
+    m_file_type = format;
+    return *this;
+}
+//------------------------------------------------------------------------------
+
 std::ostream &operator<<(std::ostream &stream, tle_node &node)
 {
-    if (node.m_line1)
+    if (node.m_file_type == three_lines)
     {
         // Three lines TLE format
         stream << node.first_string() << std::endl;

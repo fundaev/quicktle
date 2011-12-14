@@ -55,6 +55,7 @@ class tle_node
     double *m_dn, *m_d2n, *m_Bstar, *m_i, *m_Omega, *m_omega, *m_M, *m_n, *m_e, *m_date; 
     char *m_classification, *m_ephemerisType;
     int *m_elementNumber, *m_revolutionNumber;
+    tle_file_type m_file_type;
 
 protected:
     void init(); //!< Initialize members.
@@ -232,6 +233,13 @@ public:
         \return Third TLE string.
     */
     std::string third_string();
+
+    /*!
+        \brief Set output format: 2- or 3-lines
+        \param format - output format: 2- or 3-lines
+        \return Reference to itself.
+    */
+    tle_node &output_format(const tle_file_type format);
 
     /*!
         \brief Output function
