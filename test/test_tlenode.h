@@ -88,7 +88,7 @@ TEST(tle_nodeTest, tle_node_Elements)
     std::tm *t = gmtime(&dt);
     EXPECT_EQ(86, t->tm_year); // 1986
     EXPECT_EQ(1, t->tm_mon);   // Feb
-    EXPECT_EQ(23, t->tm_mday); // 23
+    EXPECT_EQ(22, t->tm_mday); // 22
     EXPECT_EQ(7, t->tm_hour);  // 07
     EXPECT_EQ(19, t->tm_min);  // 19
     EXPECT_EQ(31, t->tm_sec);  // 31

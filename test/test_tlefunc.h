@@ -213,28 +213,22 @@ TEST(Functions, parseDouble)
 
 TEST(Functions, string2date)
 {
-    /*std::time_t dt = string2date("   86053.30522506 ");
-    std::tm *t = gmtime(&dt);
-    EXPECT_EQ(86, t->tm_year); // 1986
-    EXPECT_EQ(1, t->tm_mon);   // Feb
-    EXPECT_EQ(23, t->tm_mday); // 23
-    EXPECT_EQ(7, t->tm_hour);  // 07
-    EXPECT_EQ(19, t->tm_min);  // 19
-    EXPECT_EQ(31, t->tm_sec);  // 31
+    std::string str = "11349.37521666";
+    std::time_t t = static_cast<std::time_t>(string2date(str));
+    struct tm *t0 = gmtime(&t);
 
-    dt = stringToUNIXDate("11000.1");
-    t = gmtime(&dt);
-    EXPECT_EQ(111, t->tm_year);// 2011: 111 years after 1900
-    EXPECT_EQ(0, t->tm_mon);  // Jan
-    EXPECT_EQ(1, t->tm_mday); // 23
-    EXPECT_EQ(2, t->tm_hour); // 02
-    EXPECT_EQ(24, t->tm_min); // 24
-    EXPECT_EQ(0, t->tm_sec);  // 00
-    
-    // Exceptions
-    EXPECT_THROW(stringToUNIXDate(" e12011.43"), tle_invalid_format);
-    EXPECT_THROW(stringToUNIXDate(" 12-011.43"), tle_invalid_format);
-    EXPECT_NO_THROW(stringToUNIXDate("120"));*/
+    EXPECT_EQ(111, t0->tm_year);
+    EXPECT_EQ(11, t0->tm_mon);
+    EXPECT_EQ(15, t0->tm_mday);
+    EXPECT_EQ(9, t0->tm_hour);
+    EXPECT_EQ(0, t0->tm_min);
+    EXPECT_EQ(18, t0->tm_sec);
+
+    // Convertion
+    std::string s0 = "11348.60068410";
+    double dt = string2date(s0);
+    std::string s1 = date2string(dt, 14);
+    EXPECT_TRUE(s0 == s1);
 }
 //------------------------------------------------------------------------------
 

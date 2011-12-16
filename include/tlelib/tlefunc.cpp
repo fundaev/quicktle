@@ -141,7 +141,7 @@ std::string date2string(const double date, const std::size_t fieldLength, const 
         year++;
     }
     year -= year>2000 ? 2000 : 1900;
-    double res = year * 1000 + dt / 86400.0;
+    double res = year * 1000 + dt / 86400.0 + 1;
 
     std::string pref = year < 10 ? "0" : "";
     std::size_t length = year < 10 ? fieldLength - 1 : fieldLength; 
@@ -305,7 +305,7 @@ double string2date(const std::string &str)
     res *= 86400;
 
     // Additional part
-    res += string2double(str1.substr(2, str1.length() - 2)) * 86400;
+    res += (string2double(str1.substr(2, str1.length() - 2)) - 1) * 86400;
     return res;
 }
 //------------------------------------------------------------------------------
