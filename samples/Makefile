@@ -18,6 +18,7 @@ sample_1: $(TLELIB_OBJECTS) sample1/main.o
 
 purge:
 	rm -f *.o
+	rm sample1/*.o
 
 clean: purge
 	rm -f $(TARGETS)

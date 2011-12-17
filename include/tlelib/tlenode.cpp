@@ -407,11 +407,11 @@ std::string tle_node::third_string()
 {
     std::string res = "2 ";
     res += string2string(sat_number(), 5) + " ";
-    res += double2string(i(), 8, 4, false, false, false) + " ";
-    res += double2string(Omega(), 8, 4, false, false, false) + " ";
+    res += double2string(normalize_angle(i()), 8, 4, false, false, false) + " ";
+    res += double2string(normalize_angle(Omega()), 8, 4, false, false, false) + " ";
     res += double2string(e(), 7, 7, false, true, false) + " ";
-    res += double2string(omega(), 8, 4, false, false, false) + " ";
-    res += double2string(M(), 8, 4, false, false, false) + " ";
+    res += double2string(normalize_angle(omega()), 8, 4, false, false, false) + " ";
+    res += double2string(normalize_angle(M()), 8, 4, false, false, false) + " ";
     res += double2string(n(), 11, 8, false, false, false);
     res += int2string(revolution_number(), 5, false);
 
