@@ -201,6 +201,9 @@ TEST(Functions, parseDouble)
     EXPECT_DOUBLE_EQ(0.0123, parseDouble(&str, 0, 6));
     EXPECT_DOUBLE_EQ(23, parseDouble(&str, 1, 2));
 
+    str = "-58797-4";
+    EXPECT_DOUBLE_EQ(-0.000058797, parseDouble(&str, 0, 8, true));
+
     // Exceptions
     str = "abc123e-4";
     EXPECT_NO_THROW(parseDouble(&str, 3, 6));

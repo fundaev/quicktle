@@ -9,6 +9,7 @@
 int main(int argc, char** argv)
 {
     tlelib::tle_node node;              // create "empty" node
+
     node.sat_name() = "ISS";            // set satellite name
     node.sat_number() = "25544";        // NORAD number
     node.designator() = "98067A";       // International designator

@@ -257,19 +257,24 @@ double parseDouble(const std::string *line, const std::size_t start, const std::
         std::string val = trim(line->substr(start, length));
 
         // Prepare string
-        if (decimalPointAssumed) val = "0." + val;
+        if (decimalPointAssumed)
+        {
+            if (val[0] == '-' || val[0] == '+')
+                val = val.substr(0, 1) + "0." + val.substr(1, val.length() - 1);
+            else
+                val = "0." + val;
+        }
         // -- 123-4 or 123+4 -> 123e-4 or 123e4 --
         std::size_t pos = val.rfind('-');
         if (pos != std::string::npos && pos && val[pos - 1] != 'e' && val[pos - 1] != 'E')
         {
             val.replace(pos, 1, "e-");
         }
-        else
-            {
-                std::size_t pos = val.rfind('+');
-                if (pos != std::string::npos)
-                    val.replace(pos, 1, "e");
-            }
+        pos = val.rfind('+');
+        if (pos != std::string::npos && pos && val[pos - 1] != 'e' && val[pos - 1] != 'E')
+        {
+            val.replace(pos, 1, "e+");
+        }
 
         // Parsing
         try{
