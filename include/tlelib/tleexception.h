@@ -26,6 +26,8 @@
 #include <exception>
 #include <stdexcept>
 
+#include <tlelib/tlefunc.h>
+
 #ifndef TLEEXCEPTION_H
 #define TLEEXCEPTION_H
 
