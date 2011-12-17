@@ -27,6 +27,15 @@
     \brief Main namespace of TLELib. All objects and functions
            of this library are located in the 'tlelib' namespace.
 */
-namespace tlelib
-{
-}
+
+#ifndef TLELIB_H
+#define TLELIB_H
+
+#define TLELIB_VERSION "1.0.0"
+
+#include <tlelib/tleexception.h>
+#include <tlelib/tlefunc.h>
+#include <tlelib/tlenode.h>
+#include <tlelib/tlestream.h>
+
+#endif
