@@ -142,5 +142,12 @@ double parseDouble(const std::string *line, const std::size_t start, const std::
 */
 int checksum(const std::string &str);
 
+/*!
+    \brief Make the angle value between 0 and 360 degrees
+    \param angle - angle
+    \return Angle [0 - 360) degrees
+*/
+double normalize_angle(double angle);
+
 } // namespace tlelib
 #endif // TLEFUNC_H

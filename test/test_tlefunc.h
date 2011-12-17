@@ -239,3 +239,14 @@ TEST(Functions, checksum)
     EXPECT_EQ(7, checksum(" 1 23-4 567-890"));
 }
 //------------------------------------------------------------------------------
+
+TEST(Functions, normalize_angle)
+{
+    EXPECT_DOUBLE_EQ(124, normalize_angle(124));
+    EXPECT_DOUBLE_EQ(274.15, normalize_angle(274.15));
+    EXPECT_DOUBLE_EQ(45.237, normalize_angle(405.237));
+    EXPECT_DOUBLE_EQ(17.64, normalize_angle(-342.36));
+    EXPECT_DOUBLE_EQ(0, normalize_angle(360));
+    EXPECT_DOUBLE_EQ(0, normalize_angle(720));
+}
+//------------------------------------------------------------------------------

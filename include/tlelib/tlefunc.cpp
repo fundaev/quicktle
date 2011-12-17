@@ -24,6 +24,7 @@
 */
 
 #define UNIX_FIRST_YEAR 1970
+#define MAX_ANGLE 360.0
 
 #include <cmath>
 #include <cstdio>
@@ -319,6 +320,18 @@ int checksum(const std::string &str)
     checksum -= (checksum/10) * 10;
 
     return checksum;
+}
+//------------------------------------------------------------------------------
+
+double normalize_angle(double angle)
+{
+    if (angle >= MAX_ANGLE)
+        angle -= MAX_ANGLE * floor(angle / MAX_ANGLE);
+    else
+        if (angle < 0)
+            angle += MAX_ANGLE * ceil(fabs(angle) / MAX_ANGLE);
+
+    return angle;
 }
 //------------------------------------------------------------------------------
 
