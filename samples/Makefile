@@ -19,17 +19,18 @@
 #-----------------------------------------------------------------------------+
 
 CXXFLAGS       += -Wall -I../include
-TARGETS        = sample_1 sample_2
+TARGETS        = sample_1 sample_2 sample_3
 TLELIB_DIR     = ../include/tlelib
 VPATH          = $(TLELIB_DIR)
 TLELIB_OBJECTS = tlenode.o tlestream.o tlefunc.o
 
-.PHONY: purge clean sample1
+.PHONY: purge clean $(TARGETS)
 
 all: $(TARGETS)
 
 sample1/main.o: sample1/main.cpp
 sample2/main.o: sample2/main.cpp
+sample3/main.o: sample3/main.cpp
 tlenode.o: $(TLELIB_DIR)/tlenode.cpp $(TLELIB_DIR)/tlenode.h $(TLELIB_DIR)/tleexception.h
 tlestream.o: $(TLELIB_DIR)/tlestream.cpp $(TLELIB_DIR)/tlestream.h $(TLELIB_DIR)/tlenode.h
 tlefunc.o: $(TLELIB_DIR)/tlefunc.cpp $(TLELIB_DIR)/tlefunc.h
@@ -40,9 +41,11 @@ sample_1: $(TLELIB_OBJECTS) sample1/main.o
 sample_2: $(TLELIB_OBJECTS) sample2/main.o
 	$(CXX) $(LDFLAGS) sample2/main.o $(TLELIB_OBJECTS) -o sample_2
 
+sample_3: $(TLELIB_OBJECTS) sample3/main.o
+	$(CXX) $(LDFLAGS) sample3/main.o $(TLELIB_OBJECTS) -o sample_3
+
 purge:
-	rm -f *.o
-	rm sample1/*.o sample2/*.o
+	rm -f *.o sample1/*.o sample2/*.o sample3/*.o
 
 clean: purge
 	rm -f $(TARGETS)

@@ -65,7 +65,16 @@ std::istream &tle_stream::operator>>(tle_node &node)
 
 tle_stream::operator bool()
 {
-    return *m_source ? true : false;
+    if (!(*m_source) || m_source->eof()) return false;
+
+    // Detect if there are tle lines, not read yet
+    m_source->get();
+    if (!m_source->good() || m_source->eof())
+        return false;
+    else
+        m_source->unget();
+
+    return true;
 }
 //------------------------------------------------------------------------------
 

@@ -46,7 +46,6 @@ tle_node::tle_node(const std::string& line1, const std::string& line2, const std
 {
     init();
     assign(line1, line2, line3, forceParsing);
-    m_file_type = three_lines;
 }
 //------------------------------------------------------------------------------
 
@@ -54,7 +53,6 @@ tle_node::tle_node(const std::string& line1, const std::string& line2, bool forc
 {
     init();
     assign(line1, line2, forceParsing);
-    m_file_type = two_lines;
 }
 //------------------------------------------------------------------------------
 
@@ -110,6 +108,7 @@ void tle_node::assign(const std::string& line1, const std::string& line2, const 
     m_line1 = new std::string(line1);
     m_line2 = new std::string(line2);
     m_line3 = new std::string(line3);
+    m_file_type = three_lines;
     // Parse
     if (forceParsing) parse_all();
 }
@@ -124,6 +123,7 @@ void tle_node::assign(const std::string& line1, const std::string& line2, bool f
     free();
     m_line2 = new std::string(line1);
     m_line3 = new std::string(line2);
+    m_file_type = two_lines;
     // Parse
     if (forceParsing) parse_all();
 }
