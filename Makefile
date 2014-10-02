@@ -38,7 +38,7 @@ PACK_NAME      = tlelib_1_0_0.zip
 
 
 build-test: $(TEST_SRCS) $(OBJECTS)
-	$(CXX) $(LDFLAGS) $(INCPATH) $(LIBS) $(OBJECTS) -o $(TARGET)
+	$(CXX) $(LDFLAGS) $(INCPATH) $(OBJECTS) $(LIBS) -o $(TARGET)
 
 main.o: $(TEST_SRCS)
 tlenode.o: $(TLELIB_DIR)/tlenode.cpp $(TLELIB_DIR)/tlenode.h $(TLELIB_DIR)/tleexception.h

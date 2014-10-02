@@ -56,6 +56,73 @@ tle_node::tle_node(const std::string& line1, const std::string& line2, bool forc
 }
 //------------------------------------------------------------------------------
 
+tle_node::tle_node(const tle_node &node)
+{
+    init();
+    if (node.m_line1)
+        m_line1 = new std::string(*node.m_line1);
+
+    if (node.m_line2)
+        m_line1 = new std::string(*node.m_line1);
+
+    if (node.m_line3)
+        m_line1 = new std::string(*node.m_line1);
+
+    if (node.m_satName)
+        m_satName = new std::string(*node.m_satName);
+
+    if (node.m_satNumber)
+        m_satNumber = new std::string(*node.m_satNumber);
+
+    if (node.m_designator)
+        m_designator = new std::string(*node.m_designator);
+
+    if (node.m_dn)
+        m_dn = new double(*node.m_dn);
+
+    if (node.m_d2n)
+        m_d2n = new double(*node.m_d2n);
+
+    if (node.m_Bstar)
+        m_Bstar = new double(*node.m_Bstar);
+
+    if (node.m_i)
+        m_i = new double(*node.m_i);
+
+    if (node.m_Omega)
+        m_Omega = new double(*node.m_Omega);
+
+    if (node.m_omega)
+        m_omega = new double(*node.m_omega);
+
+    if (node.m_M)
+        m_M = new double(*node.m_M);
+
+    if (node.m_n)
+        m_n = new double(*node.m_n);
+
+    if (node.m_e)
+        m_e = new double(*node.m_e);
+
+    if (node.m_date)
+        m_date = new double(*node.m_date);
+
+    if (node.m_classification)
+        m_classification = new char(*node.m_classification);
+
+    if (node.m_ephemerisType)
+        m_ephemerisType = new char(*node.m_ephemerisType);
+
+    if (node.m_elementNumber)
+        m_elementNumber = new int(*node.m_elementNumber);
+
+    if (node.m_revolutionNumber)
+        m_revolutionNumber = new int(*node.m_revolutionNumber);
+
+    m_file_type = node.m_file_type;
+}
+//------------------------------------------------------------------------------
+
 tle_node::~tle_node()
 {
     free();

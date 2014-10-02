@@ -87,6 +87,9 @@ public:
     */
     tle_node(const std::string& line1, const std::string& line2, bool forceParsing = false);
 
+    //! Copy constructor
+    tle_node(const tle_node &node);
+
     virtual ~tle_node(); //!< Destructor.
 
     /*!

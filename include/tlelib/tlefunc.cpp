@@ -62,13 +62,11 @@ std::string double2string(const double val, const std::size_t fieldLength, const
 
     // Remove decimal point
     std::size_t pos = res.find(".");
-    bool replaced = false;
     int n = 0;
     if (decimalPointAssumed && pos != std::string::npos && scientific)
     {
         n = -pos;
         res.replace(pos, 1, "");
-        replaced = true;
     }
     else
         if (decimalPointAssumed && !scientific)
