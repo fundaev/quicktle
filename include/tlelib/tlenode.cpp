@@ -63,10 +63,10 @@ tle_node::tle_node(const tle_node &node)
         m_line1 = new std::string(*node.m_line1);
 
     if (node.m_line2)
-        m_line1 = new std::string(*node.m_line1);
+        m_line2 = new std::string(*node.m_line2);
 
     if (node.m_line3)
-        m_line1 = new std::string(*node.m_line1);
+        m_line3 = new std::string(*node.m_line3);
 
     if (node.m_satName)
         m_satName = new std::string(*node.m_satName);
@@ -120,6 +120,41 @@ tle_node::tle_node(const tle_node &node)
         m_revolutionNumber = new int(*node.m_revolutionNumber);
 
     m_file_type = node.m_file_type;
+}
+//------------------------------------------------------------------------------
+
+void tle_node::swap(tle_node &node)
+{
+    std::swap(m_line1, node.m_line1);
+    std::swap(m_line2, node.m_line2);
+    std::swap(m_line3, node.m_line3);
+
+    std::swap(m_satName, node.m_satName);
+    std::swap(m_satNumber, node.m_satNumber);
+    std::swap(m_designator, node.m_designator);
+
+    std::swap(m_dn, node.m_dn);
+    std::swap(m_d2n, node.m_d2n);
+    std::swap(m_Bstar, node.m_Bstar);
+    std::swap(m_i, node.m_i);
+    std::swap(m_Omega, node.m_Omega);
+    std::swap(m_omega, node.m_omega);
+    std::swap(m_M, node.m_M);
+    std::swap(m_n, node.m_n);
+    std::swap(m_e, node.m_e);
+    std::swap(m_date, node.m_date);
+    std::swap(m_classification, node.m_classification);
+    std::swap(m_ephemerisType, node.m_ephemerisType);
+    std::swap(m_elementNumber, node.m_elementNumber);
+    std::swap(m_revolutionNumber, node.m_revolutionNumber);
+    std::swap(m_file_type, node.m_file_type);
+}
+//------------------------------------------------------------------------------
+
+tle_node& tle_node::operator=(tle_node node)
+{
+    swap(node);
+    return *this;
 }
 //------------------------------------------------------------------------------
 

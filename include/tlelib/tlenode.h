@@ -50,24 +50,6 @@ enum tle_file_type
 */
 class tle_node
 {
-    std::string *m_line1, *m_line2, *m_line3;
-    std::string *m_satName, *m_satNumber, *m_designator;
-    double *m_dn, *m_d2n, *m_Bstar, *m_i, *m_Omega, *m_omega, *m_M, *m_n, *m_e, *m_date; 
-    char *m_classification, *m_ephemerisType;
-    int *m_elementNumber, *m_revolutionNumber;
-    tle_file_type m_file_type;
-
-protected:
-    void init(); //!< Initialize members.
-    void free(); //!< Delete members.
-    void parse_all(); //!< Parse all parameters, presented in *(tle_node::m_line1), *(tle_node::m_line2) and *(tle_node::m_line3)
-    /*!
-        \brief Check whether the line checksum is valid.
-               If the checksum is invalid, the tlelib::tle_checksum_error
-               exception is generated.
-    */
-    void check_line(const std::string &str) const;
-
 public:
     tle_node(); //!< Default constructor.
     /*!
@@ -251,6 +233,30 @@ public:
         \return Output stream
     */
     friend std::ostream &operator<<(std::ostream &stream, tle_node &node);
+    
+    //! Swaps the data of two tle_node objects
+    void swap(tle_node &node);
+
+    tle_node& operator=(tle_node node);
+
+protected:
+    void init(); //!< Initialize members.
+    void free(); //!< Delete members.
+    void parse_all(); //!< Parse all parameters, presented in *(tle_node::m_line1), *(tle_node::m_line2) and *(tle_node::m_line3)
+    /*!
+        \brief Check whether the line checksum is valid.
+               If the checksum is invalid, the tlelib::tle_checksum_error
+               exception is generated.
+    */
+    void check_line(const std::string &str) const;
+
+private:
+    std::string *m_line1, *m_line2, *m_line3;
+    std::string *m_satName, *m_satNumber, *m_designator;
+    double *m_dn, *m_d2n, *m_Bstar, *m_i, *m_Omega, *m_omega, *m_M, *m_n, *m_e, *m_date; 
+    char *m_classification, *m_ephemerisType;
+    int *m_elementNumber, *m_revolutionNumber;
+    tle_file_type m_file_type;
 };
 
 } // namespace
