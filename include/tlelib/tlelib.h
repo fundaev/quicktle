@@ -1,6 +1,6 @@
 /*-----------------------------------------------------------------------------+
  | TLELib                                                                      |
- | Copyright 2011 Sergei V. Fundaev                                            |
+ | Copyright 2011-2014 Sergei Fundaev                                          |
  +-----------------------------------------------------------------------------+
  | This file is part of TLELib.                                                |
  |                                                                             |
@@ -31,7 +31,7 @@
 #ifndef TLELIB_H
 #define TLELIB_H
 
-#define TLELIB_VERSION "1.0.0"
+#define TLELIB_VERSION "1.0.1"
 
 #include <tlelib/tleexception.h>
 #include <tlelib/tlefunc.h>
