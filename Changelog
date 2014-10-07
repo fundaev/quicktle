@@ -1,0 +1,5 @@
+Version 1.1.0
+* The interface of tle_node class has been changed: now the regular setters and getters are used.
+
+Version 1.0.1
+* Copy constructor, assigment operator and swap methods have been added for tle_node class.
