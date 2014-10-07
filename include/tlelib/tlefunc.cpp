@@ -68,13 +68,12 @@ std::string double2string(const double val, const std::size_t fieldLength, const
         n = -pos;
         res.replace(pos, 1, "");
     }
-    else
-        if (decimalPointAssumed && !scientific)
-        {
-            pos = res.find("0.");
-            if (pos != std::string::npos)
-                res.replace(pos, 2, "");
-        }
+    else if (decimalPointAssumed && !scientific)
+    {
+        pos = res.find("0.");
+        if (pos != std::string::npos)
+            res.replace(pos, 2, "");
+    }
 
     // Remove point from scientific format
     if (scientific)
@@ -89,7 +88,8 @@ std::string double2string(const double val, const std::size_t fieldLength, const
             base.replace(pos1, 1, "");
         } 
         int new_a = string2int(a) - n;
-        if (string2double(base) == 0) new_a = 0;
+        if (string2double(base) == 0)
+            new_a = 0;
         res = base + (new_a > 0 ? "+" : "-") + int2string(abs(new_a));
     }
     res = trim(res);
@@ -97,9 +97,8 @@ std::string double2string(const double val, const std::size_t fieldLength, const
     // Correct "0." or "-0."
     if (res.substr(0, 2) == "0.")
         res = res.substr(1, res.length() - 1);
-    else
-        if (res.substr(0, 3) == "-0.")
-            res = "-" + res.substr(2, res.length() - 2);
+    else if (res.substr(0, 3) == "-0.")
+        res = "-" + res.substr(2, res.length() - 2);
 
     return string2string(res, fieldLength, leftAlign, false);
 }
@@ -112,17 +111,17 @@ std::string string2string(const std::string &str, const std::size_t fieldLength,
     {
         res = res.substr(0, fieldLength);
     }
-    else
-        if (res.length() <= fieldLength)
+    else if (res.length() <= fieldLength)
+    {
+        while (res.length() < fieldLength)
         {
-            while (res.length() < fieldLength)
-            {
-                if (leftAlign)
-                    res += " ";
-                else
-                    res = " " + res;
-            }
+            if (leftAlign)
+                res += " ";
+            else
+                res = " " + res;
         }
+    }
+
     return res;
 }
 //------------------------------------------------------------------------------
@@ -153,8 +152,10 @@ int string2int(const std::string &str)
     std::string val = trim(str);
     // Validate string
     for (std::size_t i=0; i<val.length(); i++)
+    {
         if (!isdigit(val[i]) && !( i == 0 && (val[i] == '-' || val[i] == '+') ))
             throw tle_invalid_format(str);
+    }
 
     return atoi(val.c_str());
 }
@@ -187,8 +188,12 @@ double string2double(const std::string &str)
 std::string trim(const std::string &str)
 {
     std::string res(str);
-    while (res.length() && res[0] == ' ') res = res.substr(1, res.length() - 1);
-    while (res.length() && res[res.length() - 1] == ' ') res = res.substr(0, res.length() - 1);
+    while (res.length() && res[0] == ' ')
+        res = res.substr(1, res.length() - 1);
+
+    while (res.length() && res[res.length() - 1] == ' ')
+        res = res.substr(0, res.length() - 1);
+
     return res;
 }
 //------------------------------------------------------------------------------
@@ -233,9 +238,12 @@ int parseInt(const std::string *line, const std::size_t start, const std::size_t
         std::string val = trim(line->substr(start, length));
 
         // Parsing
-        try{
+        try
+        {
             res = string2int(val.c_str());
-        } catch(...) {
+        }
+        catch(...)
+        {
             throw tle_invalid_format(*line);
         }
     }
@@ -275,9 +283,12 @@ double parseDouble(const std::string *line, const std::size_t start, const std::
         }
 
         // Parsing
-        try{
+        try
+        {
             res = string2double(val.c_str());
-        } catch(...) {
+        }
+        catch(...)
+        {
             throw tle_invalid_format(*line);
         }
     }
@@ -330,9 +341,8 @@ double normalize_angle(double angle)
 {
     if (angle >= MAX_ANGLE)
         angle -= MAX_ANGLE * floor(angle / MAX_ANGLE);
-    else
-        if (angle < 0)
-            angle += MAX_ANGLE * ceil(fabs(angle) / MAX_ANGLE);
+    else if (angle < 0)
+        angle += MAX_ANGLE * ceil(fabs(angle) / MAX_ANGLE);
 
     return angle;
 }

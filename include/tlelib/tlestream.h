@@ -36,10 +36,6 @@ namespace tlelib
 */
 class tle_stream
 {
-    std::istream *m_source; //!< Pointer to input stream
-    tle_file_type m_file_type; //!< File type: 2- or 3-lines.
-    bool m_enforce_parsing; //!< Define whether the tle_node objects, obtained by >> operator, should immediately parse the lines.
-    tle_stream() {} //!< Default constructor is unavailable.
 public:
     /*!
         \brief Constructor.
@@ -53,13 +49,11 @@ public:
         \return Reference to input stream
     */
     std::istream &operator>>(tle_node &node);
-
     /*!
         \brief Operator bool()
         \return True if the input stream can be read further.
     */
     operator bool();
-
     /*!
         \brief Set the parsing mode
         \param parsingMode - parsing mode: true means, that the node object,
@@ -68,6 +62,13 @@ public:
         \return Previous value of parsing mode.
     */
     bool enforce_parsing(bool parsingMode);
+
+private:
+    tle_stream() {} //!< Default constructor is unavailable.
+
+    std::istream *m_source; //!< Pointer to input stream
+    tle_file_type m_file_type; //!< File type: 2- or 3-lines.
+    bool m_enforce_parsing; //!< Define whether the tle_node objects, obtained by >> operator, should immediately parse the lines.
 };
 //------------------------------------------------------------------------------
 

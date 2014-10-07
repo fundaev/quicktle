@@ -55,9 +55,9 @@ std::istream &tle_stream::operator>>(tle_node &node)
         node.assign(line1, line2, line3, m_enforce_parsing);
     }
     else
-        {
-            node.assign(line1, line2, m_enforce_parsing);
-        }
+    {
+        node.assign(line1, line2, m_enforce_parsing);
+    }
 
     return *m_source;
 }
@@ -65,15 +65,15 @@ std::istream &tle_stream::operator>>(tle_node &node)
 
 tle_stream::operator bool()
 {
-    if (!(*m_source) || m_source->eof()) return false;
+    if (!(*m_source) || m_source->eof())
+        return false;
 
     // Detect if there are tle lines, not read yet
     m_source->get();
     if (!m_source->good() || m_source->eof())
         return false;
-    else
-        m_source->unget();
 
+    m_source->unget();
     return true;
 }
 //------------------------------------------------------------------------------
