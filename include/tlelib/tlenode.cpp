@@ -83,8 +83,8 @@ tle_node::tle_node(const tle_node &node)
     if (node.m_d2n)
         m_d2n = new double(*node.m_d2n);
 
-    if (node.m_Bstar)
-        m_Bstar = new double(*node.m_Bstar);
+    if (node.m_bstar)
+        m_bstar = new double(*node.m_bstar);
 
     if (node.m_i)
         m_i = new double(*node.m_i);
@@ -110,14 +110,14 @@ tle_node::tle_node(const tle_node &node)
     if (node.m_classification)
         m_classification = new char(*node.m_classification);
 
-    if (node.m_ephemerisType)
-        m_ephemerisType = new char(*node.m_ephemerisType);
+    if (node.m_ephemeris_type)
+        m_ephemeris_type = new char(*node.m_ephemeris_type);
 
-    if (node.m_elementNumber)
-        m_elementNumber = new int(*node.m_elementNumber);
+    if (node.m_element_number)
+        m_element_number = new int(*node.m_element_number);
 
-    if (node.m_revolutionNumber)
-        m_revolutionNumber = new int(*node.m_revolutionNumber);
+    if (node.m_revolution_number)
+        m_revolution_number = new int(*node.m_revolution_number);
 
     m_file_type = node.m_file_type;
 }
@@ -135,7 +135,7 @@ void tle_node::swap(tle_node &node)
 
     std::swap(m_dn, node.m_dn);
     std::swap(m_d2n, node.m_d2n);
-    std::swap(m_Bstar, node.m_Bstar);
+    std::swap(m_bstar, node.m_bstar);
     std::swap(m_i, node.m_i);
     std::swap(m_Omega, node.m_Omega);
     std::swap(m_omega, node.m_omega);
@@ -144,9 +144,9 @@ void tle_node::swap(tle_node &node)
     std::swap(m_e, node.m_e);
     std::swap(m_date, node.m_date);
     std::swap(m_classification, node.m_classification);
-    std::swap(m_ephemerisType, node.m_ephemerisType);
-    std::swap(m_elementNumber, node.m_elementNumber);
-    std::swap(m_revolutionNumber, node.m_revolutionNumber);
+    std::swap(m_ephemeris_type, node.m_ephemeris_type);
+    std::swap(m_element_number, node.m_element_number);
+    std::swap(m_revolution_number, node.m_revolution_number);
     std::swap(m_file_type, node.m_file_type);
 }
 //------------------------------------------------------------------------------
@@ -167,9 +167,9 @@ tle_node::~tle_node()
 void tle_node::init()
 {
     m_line1 = m_line2 = m_line3 = m_satName = m_satNumber = m_designator = NULL;
-    m_dn = m_d2n = m_Bstar = m_i = m_Omega = m_omega = m_M = m_n = m_e = NULL;
-    m_classification = m_ephemerisType = NULL;
-    m_elementNumber = m_revolutionNumber = NULL;
+    m_dn = m_d2n = m_bstar = m_i = m_Omega = m_omega = m_M = m_n = m_e = NULL;
+    m_classification = m_ephemeris_type = NULL;
+    m_element_number = m_revolution_number = NULL;
     m_date = NULL;
 }
 //------------------------------------------------------------------------------
@@ -185,7 +185,7 @@ void tle_node::free()
     if (m_dn) delete m_dn;
     if (m_d2n) delete m_d2n;
     if (m_n) delete m_n;
-    if (m_Bstar) delete m_Bstar;
+    if (m_bstar) delete m_bstar;
     if (m_i) delete m_i;
     if (m_Omega) delete m_Omega;
     if (m_M) delete m_M;
@@ -193,9 +193,9 @@ void tle_node::free()
     if (m_e) delete m_e;
     if (m_classification) delete m_classification;
     if (m_date) delete m_date;
-    if (m_ephemerisType) delete m_ephemerisType;
-    if (m_elementNumber) delete m_elementNumber;
-    if (m_revolutionNumber) delete m_revolutionNumber;
+    if (m_ephemeris_type) delete m_ephemeris_type;
+    if (m_element_number) delete m_element_number;
+    if (m_revolution_number) delete m_revolution_number;
     init();
 }
 //------------------------------------------------------------------------------
@@ -233,7 +233,7 @@ void tle_node::assign(const std::string& line1, const std::string& line2, bool f
 
 void tle_node::parse_all()
 {
-    n(); dn(); d2n(); i(); Omega(); omega(); M(); e(); BSTAR();
+    n(); dn(); d2n(); i(); Omega(); omega(); M(); e(); bstar();
     sat_number(); sat_name(); designator();
     classification(); ephemeris_type();
     element_number(); revolution_number();
@@ -253,7 +253,7 @@ void tle_node::check_line(const std::string &str) const
 }
 //------------------------------------------------------------------------------
 
-std::string &tle_node::sat_number()
+std::string tle_node::sat_number() const
 {
     if (!m_satNumber)
     {
@@ -263,21 +263,28 @@ std::string &tle_node::sat_number()
             m_satNumber = new std::string(trim(parseString(m_line2, 2, 5)));
             // or from third line
             if (*m_satNumber == "")
-            {
-                delete m_satNumber;
-                m_satNumber = new std::string(trim(parseString(m_line3, 2, 5)));
-            }
+                *m_satNumber = trim(parseString(m_line3, 2, 5));
         }
         else
-            {
-                m_satNumber = new std::string("");
-            }
+        {
+            m_satNumber = new std::string("");
+        }
     }
+
     return *m_satNumber;
 }
 //------------------------------------------------------------------------------
 
-std::string &tle_node::sat_name()
+void tle_node::set_sat_number(const std::string &sat_number)
+{
+    if (m_satNumber)
+        *m_satNumber = sat_number;
+    else
+        m_satNumber = new std::string(sat_number);
+}
+//------------------------------------------------------------------------------
+
+std::string tle_node::sat_name() const
 {
     if (!m_satName)
     {
@@ -288,168 +295,311 @@ std::string &tle_node::sat_name()
             m_satName = new std::string(trim(parseString(m_line1, 0, l)));
         }
         else
+        {
             m_satName = new std::string("");
+        }
     }
 
     return *m_satName;
 }
 //------------------------------------------------------------------------------
 
-std::string &tle_node::designator()
+void tle_node::set_sat_name(const std::string &sat_name)
+{
+    if (m_satName)
+        *m_satName = sat_name;
+    else
+        m_satName = new std::string(sat_name);
+}
+//------------------------------------------------------------------------------
+
+std::string tle_node::designator() const
 {
     if (!m_designator)
-    {
         m_designator = m_line2 ? new std::string(trim(parseString(m_line2, 9, 8))) : new std::string("");
-    }
 
     return *m_designator;
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::n()
+void tle_node::set_designator(const std::string &designator)
+{
+    if (m_designator)
+        *m_designator = designator;
+    else
+        m_designator = new std::string(designator);
+}
+//------------------------------------------------------------------------------
+
+double tle_node::n() const
 {
     if (!m_n)
-    {
         m_n = m_line3 ? new double(parseDouble(m_line3, 52, 11)) : new double(0);
-    }
 
     return *m_n;
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::dn()
+void tle_node::set_n(double n)
+{
+    if (m_n)
+        *m_n = n;
+    else
+        m_n = new double(n);
+}
+//------------------------------------------------------------------------------
+
+double tle_node::dn() const
 {
     if (!m_dn)
-    {
         m_dn = m_line2 ? new double(parseDouble(m_line2, 33, 10)) : new double(0);
-    }
 
     return *m_dn;
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::d2n()
+void tle_node::set_dn(double dn)
+{
+    if (m_dn)
+        *m_dn = dn;
+    else
+        m_dn = new double(dn);
+}
+//------------------------------------------------------------------------------
+
+double tle_node::d2n() const
 {
     if (!m_d2n)
-    {
-        m_d2n = m_line2 ? new double(parseDouble(m_line2, 44, 8, true)) : new double(0);
-    }
+        m_d2n = m_line2
+                ? new double(parseDouble(m_line2, 44, 8, true))
+                : new double(0);
 
     return *m_d2n;
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::i()
+void tle_node::set_d2n(double d2n)
+{
+    if (m_d2n)
+        *m_d2n = d2n;
+    else
+        m_d2n = new double(d2n);
+}
+//------------------------------------------------------------------------------
+
+double tle_node::i() const
 {
     if (!m_i)
-    {
         m_i = m_line3 ? new double(parseDouble(m_line3, 8, 8)) : new double(0);
-    }
 
     return *m_i;
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::Omega()
+void tle_node::set_i(double i)
+{
+    if (m_i)
+        *m_i = i;
+    else
+        m_i = new double(i);
+}
+//------------------------------------------------------------------------------
+
+double tle_node::Omega() const
 {
     if (!m_Omega)
     {
-        m_Omega = m_line3 ? new double(parseDouble(m_line3, 17, 8)) : new double(0);
+        m_Omega = m_line3 
+                  ? new double(parseDouble(m_line3, 17, 8))
+                  : new double(0);
     }
 
     return *m_Omega;
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::omega()
+void tle_node::set_Omega(double Omega)
+{
+    if (m_Omega)
+        *m_Omega = Omega;
+    else
+        m_Omega = new double(Omega);
+}
+//------------------------------------------------------------------------------
+
+double tle_node::omega() const
 {
     if (!m_omega)
     {
-        m_omega = m_line3 ? new double(parseDouble(m_line3, 34, 8)) : new double(0);
+        m_omega = m_line3 
+                  ? new double(parseDouble(m_line3, 34, 8))
+                  : new double(0);
     }
 
     return *m_omega;
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::M()
+void tle_node::set_omega(double omega)
+{
+    if (m_omega)
+        *m_omega = omega;
+    else
+        m_omega = new double(omega);
+}
+//------------------------------------------------------------------------------
+
+double tle_node::M() const
 {
     if (!m_M)
-    {
         m_M = m_line3 ? new double(parseDouble(m_line3, 43, 8)) : new double(0);
-    }
 
     return *m_M;
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::BSTAR()
+void tle_node::set_M(double M)
 {
-    if (!m_Bstar)
-    {
-        m_Bstar = m_line2 ? new double(parseDouble(m_line2, 53, 8, true)) : new double(0);
-    }
-
-    return *m_Bstar;
+    if (m_M)
+        *m_M = M;
+    else
+        m_M = new double(M);
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::e()
+double tle_node::bstar() const
+{
+    if (!m_bstar)
+    {
+        m_bstar = m_line2
+                  ? new double(parseDouble(m_line2, 53, 8, true))
+                  : new double(0);
+    }
+
+    return *m_bstar;
+}
+//------------------------------------------------------------------------------
+
+void tle_node::set_bstar(double bstar)
+{
+    if (m_bstar)
+        *m_bstar = bstar;
+    else
+        m_bstar = new double(bstar);
+}
+//------------------------------------------------------------------------------
+
+double tle_node::e() const
 {
     if (!m_e)
     {
-        m_e = m_line3 ? new double(parseDouble(m_line3, 26, 7, true)) : new double(0);
+        m_e = m_line3 
+              ? new double(parseDouble(m_line3, 26, 7, true))
+              : new double(0);
     }
 
     return *m_e;
 }
 //------------------------------------------------------------------------------
 
-char &tle_node::classification()
+void tle_node::set_e(double e)
+{
+    if (m_e)
+        *m_e = e;
+    else
+        m_e = new double(e);
+}
+//------------------------------------------------------------------------------
+
+char tle_node::classification() const
 {
     if (!m_classification)
     {
-        m_classification = m_line2 ? new char(parseChar(m_line2, 7)) : new char('\0');
+        m_classification = m_line2 
+                           ? new char(parseChar(m_line2, 7))
+                           : new char('\0');
     }
 
     return *m_classification;
 }
 //------------------------------------------------------------------------------
 
-char &tle_node::ephemeris_type()
+void tle_node::set_classification(char classification)
 {
-    if (!m_ephemerisType)
-    {
-        m_ephemerisType = m_line2 ? new char(parseChar(m_line2, 62)) : new char('\0');
-    }
-
-    return *m_ephemerisType;
+    if (m_classification)
+        *m_classification = classification;
+    else
+        m_classification = new char(classification);
 }
 //------------------------------------------------------------------------------
 
-int &tle_node::element_number()
+char tle_node::ephemeris_type() const
 {
-    if (!m_elementNumber)
+    if (!m_ephemeris_type)
     {
-        m_elementNumber = m_line2 ? new int(parseInt(m_line2, 64, 4)) : new int(0);
+        m_ephemeris_type = m_line2 
+                           ? new char(parseChar(m_line2, 62))
+                           : new char('\0');
     }
 
-    return *m_elementNumber;
+    return *m_ephemeris_type;
 }
 //------------------------------------------------------------------------------
 
-int &tle_node::revolution_number()
+void tle_node::set_ephemeris_type(char ephemeris_type)
 {
-    if (!m_revolutionNumber)
-    {
-        m_revolutionNumber = m_line3 ? new int(parseInt(m_line3, 63, 5)) : new int(0);
-    }
-
-    return *m_revolutionNumber;
+    if (m_ephemeris_type)
+        *m_ephemeris_type = ephemeris_type;
+    else
+        m_ephemeris_type = new char(ephemeris_type);
 }
 //------------------------------------------------------------------------------
 
-double &tle_node::precise_epoch()
+int tle_node::element_number() const
+{
+    if (!m_element_number)
+    {
+        m_element_number = m_line2 
+                          ? new int(parseInt(m_line2, 64, 4))
+                          : new int(0);
+    }
+
+    return *m_element_number;
+}
+//------------------------------------------------------------------------------
+
+void tle_node::set_element_number(int element_number)
+{
+    if (m_element_number)
+        *m_element_number = element_number;
+    else
+        m_element_number = new int(element_number);
+}
+//------------------------------------------------------------------------------
+
+int tle_node::revolution_number() const
+{
+    if (!m_revolution_number)
+    {
+        m_revolution_number = m_line3
+                             ? new int(parseInt(m_line3, 63, 5))
+                             : new int(0);
+    }
+
+    return *m_revolution_number;
+}
+//------------------------------------------------------------------------------
+
+void tle_node::set_revolution_number(int revolution_number)
+{
+    if (m_revolution_number)
+        *m_revolution_number = revolution_number;
+    else
+        m_revolution_number = new int(revolution_number);
+}
+//------------------------------------------------------------------------------
+
+double tle_node::precise_epoch() const
 {
     if (!m_date)
     {
@@ -459,30 +609,41 @@ double &tle_node::precise_epoch()
             m_date = new double(string2date(date));
         }
         else
-            {
-                m_date = new double(0);
-            }
+        {
+            m_date = new double(0);
+        }
     }
 
     return *m_date;
 }
 //------------------------------------------------------------------------------
 
-std::time_t tle_node::epoch()
+void tle_node::set_precise_epoch(double precise_epoch)
+{
+    if (m_date)
+        *m_date = precise_epoch;
+    else
+        m_date = new double(precise_epoch);
+}
+//------------------------------------------------------------------------------
+
+std::time_t tle_node::epoch() const
 {
     return static_cast<std::time_t>(precise_epoch());
 }
 //------------------------------------------------------------------------------
 
-std::string tle_node::first_string()
+std::string tle_node::first_string() const
 {
     std::string res = sat_name();
-    while (res.length() < 24) res += " ";
+    while (res.length() < 24)
+        res += " ";
+
     return res;
 }
 //------------------------------------------------------------------------------
 
-std::string tle_node::second_string()
+std::string tle_node::second_string() const
 {
     std::string res = "1 ";
     res += string2string(sat_number(), 5);
@@ -492,7 +653,7 @@ std::string tle_node::second_string()
     res += date2string(precise_epoch(), 14) + " ";
     res += double2string(dn(), 10, 8, false, false, false) + " ";
     res += double2string(d2n(), 8, 3, true, true, false) + " ";
-    res += double2string(BSTAR(), 8, 3, true, true, false) + " ";
+    res += double2string(bstar(), 8, 3, true, true, false) + " ";
     const char eph = ephemeris_type();
     res += (isprint(eph) ? std::string(1, eph) : " ") + " ";
     res += int2string(element_number(), 4, false);
@@ -505,7 +666,7 @@ std::string tle_node::second_string()
 }
 //------------------------------------------------------------------------------
 
-std::string tle_node::third_string()
+std::string tle_node::third_string() const
 {
     std::string res = "2 ";
     res += string2string(sat_number(), 5) + " ";
@@ -525,14 +686,14 @@ std::string tle_node::third_string()
 }
 //------------------------------------------------------------------------------
 
-tle_node &tle_node::output_format(const tle_file_type format)
+tle_node& tle_node::output_format(const tle_file_type format)
 {
     m_file_type = format;
     return *this;
 }
 //------------------------------------------------------------------------------
 
-std::ostream &operator<<(std::ostream &stream, tle_node &node)
+std::ostream& operator<<(std::ostream &stream, tle_node &node)
 {
     if (node.m_file_type == three_lines)
     {
