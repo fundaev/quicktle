@@ -48,7 +48,7 @@ int main(int argc, char** argv)
     // How to add the first line into the node2 object?
     // There are 2 ways:
     // 1. Set the sat_name property:
-    node2.sat_name() = "ISS (manually set)";
+    node2.set_sat_name("ISS (manually set)");
     // Check how it's printed now:
     std::cout << node2.output_format(tlelib::three_lines);
 
