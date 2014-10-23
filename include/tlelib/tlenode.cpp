@@ -22,7 +22,7 @@
     \brief File contains the realization of methods of tlelib::tle_node object.
 */
 
-#define CHECKSUM_INDEX 68 //!< Index of checksum symbol in the TLE format line
+#define CHECKSUM_INDEX 68  //!< Index of checksum symbol in the TLE format line
 
 #include <string>
 #include <cstdlib>
@@ -30,11 +30,9 @@
 
 #include <tlelib/tlenode.h>
 #include <tlelib/tlefunc.h>
-#include <tlelib/tleexception.h>
 
 namespace tlelib
 {
-
 tle_node::tle_node()
 {
     init();
@@ -42,21 +40,23 @@ tle_node::tle_node()
 }
 //------------------------------------------------------------------------------
 
-tle_node::tle_node(const std::string& line1, const std::string& line2, const std::string& line3, bool forceParsing)
+tle_node::tle_node(const std::string& line1, const std::string& line2,
+                   const std::string& line3, bool forceParsing)
 {
     init();
     assign(line1, line2, line3, forceParsing);
 }
 //------------------------------------------------------------------------------
 
-tle_node::tle_node(const std::string& line1, const std::string& line2, bool forceParsing)
+tle_node::tle_node(const std::string& line1, const std::string& line2,
+                   bool forceParsing)
 {
     init();
     assign(line1, line2, forceParsing);
 }
 //------------------------------------------------------------------------------
 
-tle_node::tle_node(const tle_node &node)
+tle_node::tle_node(const tle_node& node)
 {
     init();
     if (node.m_line1)
@@ -123,7 +123,7 @@ tle_node::tle_node(const tle_node &node)
 }
 //------------------------------------------------------------------------------
 
-void tle_node::swap(tle_node &node)
+void tle_node::swap(tle_node& node)
 {
     std::swap(m_line1, node.m_line1);
     std::swap(m_line2, node.m_line2);
@@ -171,40 +171,74 @@ void tle_node::init()
     m_classification = m_ephemeris_type = NULL;
     m_element_number = m_revolution_number = NULL;
     m_date = NULL;
+    m_last_error = no_error;
 }
 //------------------------------------------------------------------------------
 
 void tle_node::free()
 {
-    if (m_line1) delete m_line1;
-    if (m_line2) delete m_line2;
-    if (m_line3) delete m_line3;
-    if (m_satName) delete m_satName;
-    if (m_satNumber) delete m_satNumber;
-    if (m_designator) delete m_designator;
-    if (m_dn) delete m_dn;
-    if (m_d2n) delete m_d2n;
-    if (m_n) delete m_n;
-    if (m_bstar) delete m_bstar;
-    if (m_i) delete m_i;
-    if (m_Omega) delete m_Omega;
-    if (m_M) delete m_M;
-    if (m_omega) delete m_omega;
-    if (m_e) delete m_e;
-    if (m_classification) delete m_classification;
-    if (m_date) delete m_date;
-    if (m_ephemeris_type) delete m_ephemeris_type;
-    if (m_element_number) delete m_element_number;
-    if (m_revolution_number) delete m_revolution_number;
+    if (m_line1)
+        delete m_line1;
+    if (m_line2)
+        delete m_line2;
+    if (m_line3)
+        delete m_line3;
+    if (m_satName)
+        delete m_satName;
+    if (m_satNumber)
+        delete m_satNumber;
+    if (m_designator)
+        delete m_designator;
+    if (m_dn)
+        delete m_dn;
+    if (m_d2n)
+        delete m_d2n;
+    if (m_n)
+        delete m_n;
+    if (m_bstar)
+        delete m_bstar;
+    if (m_i)
+        delete m_i;
+    if (m_Omega)
+        delete m_Omega;
+    if (m_M)
+        delete m_M;
+    if (m_omega)
+        delete m_omega;
+    if (m_e)
+        delete m_e;
+    if (m_classification)
+        delete m_classification;
+    if (m_date)
+        delete m_date;
+    if (m_ephemeris_type)
+        delete m_ephemeris_type;
+    if (m_element_number)
+        delete m_element_number;
+    if (m_revolution_number)
+        delete m_revolution_number;
     init();
 }
 //------------------------------------------------------------------------------
 
-void tle_node::assign(const std::string& line1, const std::string& line2, const std::string& line3, bool forceParsing)
+bool tle_node::assign(const std::string& line1, const std::string& line2,
+                      const std::string& line3, bool forceParsing)
 {
     // Check checksums
-    check_line(line2);
-    check_line(line3);
+    error_code error = check_line(line2);
+    if (error != no_error)
+    {
+        m_last_error = error;
+        return false;
+    }
+
+    error = check_line(line3);
+    if (error != no_error)
+    {
+        m_last_error = error;
+        return false;
+    }
+
     // Assign
     free();
     m_line1 = new std::string(line1);
@@ -212,44 +246,72 @@ void tle_node::assign(const std::string& line1, const std::string& line2, const 
     m_line3 = new std::string(line3);
     m_file_type = three_lines;
     // Parse
-    if (forceParsing) parse_all();
+    if (forceParsing)
+        parse_all();
 }
 //------------------------------------------------------------------------------
 
-void tle_node::assign(const std::string& line1, const std::string& line2, bool forceParsing)
+bool tle_node::assign(const std::string& line1, const std::string& line2,
+                      bool forceParsing)
 {
     // Check checksums
-    check_line(line1);
-    check_line(line2);
+    error_code error = check_line(line1);
+    if (error != no_error)
+    {
+        m_last_error = error;
+        return false;
+    }
+
+    error = check_line(line2);
+    if (error != no_error)
+    {
+        m_last_error = error;
+        return false;
+    }
     // Assign
     free();
     m_line2 = new std::string(line1);
     m_line3 = new std::string(line2);
     m_file_type = two_lines;
     // Parse
-    if (forceParsing) parse_all();
+    if (forceParsing)
+        parse_all();
 }
 //------------------------------------------------------------------------------
 
 void tle_node::parse_all()
 {
-    n(); dn(); d2n(); i(); Omega(); omega(); M(); e(); bstar();
-    sat_number(); sat_name(); designator();
-    classification(); ephemeris_type();
-    element_number(); revolution_number();
+    n();
+    dn();
+    d2n();
+    i();
+    Omega();
+    omega();
+    M();
+    e();
+    bstar();
+    sat_number();
+    sat_name();
+    designator();
+    classification();
+    ephemeris_type();
+    element_number();
+    revolution_number();
     precise_epoch();
 }
 //------------------------------------------------------------------------------
 
-void tle_node::check_line(const std::string &str) const
+tle_node::error_code tle_node::check_line(const std::string& str) const
 {
     if (str.length() < CHECKSUM_INDEX + 1)
-        throw tle_too_short_string(str);
+        return too_short_string;
 
     int expected_checksum = checksum(str.substr(0, CHECKSUM_INDEX));
     int actual_checksum = atoi(str.substr(CHECKSUM_INDEX, 1).c_str());
     if (expected_checksum != actual_checksum)
-        throw tle_checksum_error(str, expected_checksum, actual_checksum);
+        return checksum_error;
+
+    return no_error;
 }
 //------------------------------------------------------------------------------
 
@@ -275,7 +337,7 @@ std::string tle_node::sat_number() const
 }
 //------------------------------------------------------------------------------
 
-void tle_node::set_sat_number(const std::string &sat_number)
+void tle_node::set_sat_number(const std::string& sat_number)
 {
     if (m_satNumber)
         *m_satNumber = sat_number;
@@ -291,7 +353,8 @@ std::string tle_node::sat_name() const
         if (m_line1)
         {
             std::size_t l = m_line1->length();
-            if (l > 24) l = 24;
+            if (l > 24)
+                l = 24;
             m_satName = new std::string(trim(parseString(m_line1, 0, l)));
         }
         else
@@ -304,7 +367,7 @@ std::string tle_node::sat_name() const
 }
 //------------------------------------------------------------------------------
 
-void tle_node::set_sat_name(const std::string &sat_name)
+void tle_node::set_sat_name(const std::string& sat_name)
 {
     if (m_satName)
         *m_satName = sat_name;
@@ -316,13 +379,15 @@ void tle_node::set_sat_name(const std::string &sat_name)
 std::string tle_node::designator() const
 {
     if (!m_designator)
-        m_designator = m_line2 ? new std::string(trim(parseString(m_line2, 9, 8))) : new std::string("");
+        m_designator = m_line2
+                           ? new std::string(trim(parseString(m_line2, 9, 8)))
+                           : new std::string("");
 
     return *m_designator;
 }
 //------------------------------------------------------------------------------
 
-void tle_node::set_designator(const std::string &designator)
+void tle_node::set_designator(const std::string& designator)
 {
     if (m_designator)
         *m_designator = designator;
@@ -334,7 +399,8 @@ void tle_node::set_designator(const std::string &designator)
 double tle_node::n() const
 {
     if (!m_n)
-        m_n = m_line3 ? new double(parseDouble(m_line3, 52, 11)) : new double(0);
+        m_n =
+            m_line3 ? new double(parseDouble(m_line3, 52, 11)) : new double(0);
 
     return *m_n;
 }
@@ -352,7 +418,8 @@ void tle_node::set_n(double n)
 double tle_node::dn() const
 {
     if (!m_dn)
-        m_dn = m_line2 ? new double(parseDouble(m_line2, 33, 10)) : new double(0);
+        m_dn =
+            m_line2 ? new double(parseDouble(m_line2, 33, 10)) : new double(0);
 
     return *m_dn;
 }
@@ -370,9 +437,8 @@ void tle_node::set_dn(double dn)
 double tle_node::d2n() const
 {
     if (!m_d2n)
-        m_d2n = m_line2
-                ? new double(parseDouble(m_line2, 44, 8, true))
-                : new double(0);
+        m_d2n = m_line2 ? new double(parseDouble(m_line2, 44, 8, true))
+                        : new double(0);
 
     return *m_d2n;
 }
@@ -409,9 +475,8 @@ double tle_node::Omega() const
 {
     if (!m_Omega)
     {
-        m_Omega = m_line3 
-                  ? new double(parseDouble(m_line3, 17, 8))
-                  : new double(0);
+        m_Omega =
+            m_line3 ? new double(parseDouble(m_line3, 17, 8)) : new double(0);
     }
 
     return *m_Omega;
@@ -431,9 +496,8 @@ double tle_node::omega() const
 {
     if (!m_omega)
     {
-        m_omega = m_line3 
-                  ? new double(parseDouble(m_line3, 34, 8))
-                  : new double(0);
+        m_omega =
+            m_line3 ? new double(parseDouble(m_line3, 34, 8)) : new double(0);
     }
 
     return *m_omega;
@@ -471,9 +535,8 @@ double tle_node::bstar() const
 {
     if (!m_bstar)
     {
-        m_bstar = m_line2
-                  ? new double(parseDouble(m_line2, 53, 8, true))
-                  : new double(0);
+        m_bstar = m_line2 ? new double(parseDouble(m_line2, 53, 8, true))
+                          : new double(0);
     }
 
     return *m_bstar;
@@ -493,9 +556,8 @@ double tle_node::e() const
 {
     if (!m_e)
     {
-        m_e = m_line3 
-              ? new double(parseDouble(m_line3, 26, 7, true))
-              : new double(0);
+        m_e = m_line3 ? new double(parseDouble(m_line3, 26, 7, true))
+                      : new double(0);
     }
 
     return *m_e;
@@ -515,9 +577,8 @@ char tle_node::classification() const
 {
     if (!m_classification)
     {
-        m_classification = m_line2 
-                           ? new char(parseChar(m_line2, 7))
-                           : new char('\0');
+        m_classification =
+            m_line2 ? new char(parseChar(m_line2, 7)) : new char('\0');
     }
 
     return *m_classification;
@@ -537,9 +598,8 @@ char tle_node::ephemeris_type() const
 {
     if (!m_ephemeris_type)
     {
-        m_ephemeris_type = m_line2 
-                           ? new char(parseChar(m_line2, 62))
-                           : new char('\0');
+        m_ephemeris_type =
+            m_line2 ? new char(parseChar(m_line2, 62)) : new char('\0');
     }
 
     return *m_ephemeris_type;
@@ -559,9 +619,8 @@ int tle_node::element_number() const
 {
     if (!m_element_number)
     {
-        m_element_number = m_line2 
-                          ? new int(parseInt(m_line2, 64, 4))
-                          : new int(0);
+        m_element_number =
+            m_line2 ? new int(parseInt(m_line2, 64, 4)) : new int(0);
     }
 
     return *m_element_number;
@@ -581,9 +640,8 @@ int tle_node::revolution_number() const
 {
     if (!m_revolution_number)
     {
-        m_revolution_number = m_line3
-                             ? new int(parseInt(m_line3, 63, 5))
-                             : new int(0);
+        m_revolution_number =
+            m_line3 ? new int(parseInt(m_line3, 63, 5)) : new int(0);
     }
 
     return *m_revolution_number;
@@ -671,9 +729,11 @@ std::string tle_node::third_string() const
     std::string res = "2 ";
     res += string2string(sat_number(), 5) + " ";
     res += double2string(normalize_angle(i()), 8, 4, false, false, false) + " ";
-    res += double2string(normalize_angle(Omega()), 8, 4, false, false, false) + " ";
+    res += double2string(normalize_angle(Omega()), 8, 4, false, false, false) +
+           " ";
     res += double2string(e(), 7, 7, false, true, false) + " ";
-    res += double2string(normalize_angle(omega()), 8, 4, false, false, false) + " ";
+    res += double2string(normalize_angle(omega()), 8, 4, false, false, false) +
+           " ";
     res += double2string(normalize_angle(M()), 8, 4, false, false, false) + " ";
     res += double2string(n(), 11, 8, false, false, false);
     res += int2string(revolution_number(), 5, false);
@@ -693,7 +753,7 @@ tle_node& tle_node::output_format(const tle_file_type format)
 }
 //------------------------------------------------------------------------------
 
-std::ostream& operator<<(std::ostream &stream, tle_node &node)
+std::ostream& operator<<(std::ostream& stream, tle_node& node)
 {
     if (node.m_file_type == three_lines)
     {
@@ -707,4 +767,4 @@ std::ostream& operator<<(std::ostream &stream, tle_node &node)
 }
 //------------------------------------------------------------------------------
 
-} // namespace tlelib
+}  // namespace tlelib

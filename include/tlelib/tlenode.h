@@ -30,8 +30,6 @@
 #include <ctime>
 #include <iostream>
 
-#include <tlelib/tlefunc.h>
-
 namespace tlelib
 {
 
@@ -51,22 +49,35 @@ enum tle_file_type
 class tle_node
 {
 public:
+    //! Code of line parsing error
+    enum error_code
+    {
+        no_error = 0,     //!< There is no error
+        too_short_string, //!< String is too short
+        checksum_error,   //!< String has invalid checksum
+        invalid_format    //!< Invalid format
+    };
+
     tle_node(); //!< Default constructor.
     /*!
         \brief Constructor
         \param line1 - first TLE line (satellite name)
         \param line2 - second TLE line ("1 ...")
         \param line3 - third TLE line ("2 ...")
-        \param forceParsing - defines, if the data, specified in the given lines should be immediately parsed.
+        \param forceParsing - defines, if the data, specified in the given
+                              lines should be immediately parsed.
     */
-    tle_node(const std::string &line1, const std::string &line2, const std::string &line3, bool forceParsing = false);
+    tle_node(const std::string &line1, const std::string &line2,
+             const std::string &line3, bool forceParsing = false);
     /*!
         \brief Constructor
         \param line1 - second TLE line ("1 ...")
         \param line2 - third TLE line ("2 ...")
-        \param forceParsing - defines, if the data, specified in the given lines should be immediately parsed.
+        \param forceParsing - defines, if the data, specified in the given
+                              lines should be immediately parsed.
     */
-    tle_node(const std::string &line1, const std::string &line2, bool forceParsing = false);
+    tle_node(const std::string &line1, const std::string &line2,
+             bool forceParsing = false);
     //! Copy constructor
     tle_node(const tle_node &node);
     virtual ~tle_node(); //!< Destructor.
@@ -77,14 +88,14 @@ public:
         \param line3 - third TLE line ("2 ...")
         \param forceParsing - defines, if the data, specified in the given lines should be immediately parsed.
     */
-    void assign(const std::string& line1, const std::string& line2, const std::string& line3, bool forceParsing = false);
+    bool assign(const std::string& line1, const std::string& line2, const std::string& line3, bool forceParsing = false);
     /*!
         \brief Assign the TLE lines to tlelib::tle_node object.
         \param line1 - second TLE line ("1 ...")
         \param line2 - third TLE line ("2 ...")
         \param forceParsing - defines, if the data, specified in the given lines should be immediately parsed.
     */
-    void assign(const std::string& line1, const std::string& line2, bool forceParsing = false);
+    bool assign(const std::string& line1, const std::string& line2, bool forceParsing = false);
     //! Get the satellite number (\see http://celestrak.com/NORAD/documentation/tle-fmt.asp)
     std::string sat_number() const;
     //! Set the satellite number (\see http://celestrak.com/NORAD/documentation/tle-fmt.asp)
@@ -211,6 +222,7 @@ private:
     mutable int *m_element_number;
     mutable int *m_revolution_number;
     tle_file_type m_file_type;
+    error_code m_last_error;
 };
 
 } // namespace

@@ -31,7 +31,7 @@
 #ifndef TLELIB_H
 #define TLELIB_H
 
-#define TLELIB_VERSION "1.0.1"
+#define TLELIB_VERSION "1.2.0"
 
 #include <tlelib/tleexception.h>
 #include <tlelib/tlefunc.h>
