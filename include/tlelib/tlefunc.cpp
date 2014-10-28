@@ -92,8 +92,9 @@ std::string double2string(const double val, const std::size_t field_length,
             n = base.length() - pos1 - 1;
             base.replace(pos1, 1, "");
         }
-        int new_a = string2int(a) - n;
-        if (string2double(base) == 0)
+        tle_node::error_code error;
+        int new_a = string2int(a, error) - n;
+        if (string2double(base, error) == 0)
             new_a = 0;
         res = base + (new_a > 0 ? "+" : "-") + int2string(abs(new_a));
     }
@@ -120,7 +121,7 @@ std::string string2string(const std::string &str,
         return str.substr(0, field_length);
 
     std::string fill_str(field_length - str.length(), ' ');
-    return (left_align ? res + fill_str : fill_str + res);
+    return (left_align ? str + fill_str : fill_str + str);
 }
 //------------------------------------------------------------------------------
 
@@ -248,7 +249,7 @@ int parseInt(const std::string *line, const std::size_t start,
         return 0;
     }
 
-    return string2int(val.c_str(), error);
+    return string2int(trim(line->substr(start, length)), error);
 }
 //------------------------------------------------------------------------------
 

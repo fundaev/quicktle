@@ -198,7 +198,7 @@ protected:
                If the checksum is invalid, the tlelib::tle_checksum_error
                exception is generated.
     */
-    void check_line(const std::string &str) const;
+    error_code check_line(const std::string &str) const;
 
 private:
     mutable std::string *m_line1;
@@ -222,7 +222,7 @@ private:
     mutable int *m_element_number;
     mutable int *m_revolution_number;
     tle_file_type m_file_type;
-    error_code m_last_error;
+    mutable error_code m_last_error;
 };
 
 } // namespace

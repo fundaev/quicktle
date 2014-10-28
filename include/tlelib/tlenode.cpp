@@ -248,6 +248,8 @@ bool tle_node::assign(const std::string& line1, const std::string& line2,
     // Parse
     if (forceParsing)
         parse_all();
+
+    return (m_last_error == no_error);
 }
 //------------------------------------------------------------------------------
 
@@ -301,7 +303,7 @@ void tle_node::parse_all()
 }
 //------------------------------------------------------------------------------
 
-tle_node::error_code tle_node::check_line(const std::string& str) const
+tle_node::error_code tle_node::check_line(const std::string &str) const
 {
     if (str.length() < CHECKSUM_INDEX + 1)
         return too_short_string;
@@ -317,19 +319,35 @@ tle_node::error_code tle_node::check_line(const std::string& str) const
 
 std::string tle_node::sat_number() const
 {
-    if (!m_satNumber)
+    if (m_satNumber)
+        return *m_satNumber;
+
+    if (m_line2)
     {
-        if (m_line2)
+        // Try to obtain the satellite number from the second line...
+        error_code error = no_error;
+        m_satNumber = new std::string(trim(parseString(m_line2, 2, 5, error)));
+        if (error != no_error)
         {
-            // Try to obtain the satellite number from the second line...
-            m_satNumber = new std::string(trim(parseString(m_line2, 2, 5)));
-            // or from third line
-            if (*m_satNumber == "")
-                *m_satNumber = trim(parseString(m_line3, 2, 5));
+            m_last_error = error;
+            *m_satNumber = "";
         }
-        else
+
+        if (*m_satNumber != "")
+            return *m_satNumber;
+    }
+
+    if (m_line3)
+    {
+        if (!m_satNumber)
+            m_satNumber = new std::string();
+
+        error_code error = no_error;
+        *m_satNumber = trim(parseString(m_line3, 2, 5, error));
+        if (error != no_error)
         {
-            m_satNumber = new std::string("");
+            m_last_error = error;
+            *m_satNumber = "";
         }
     }
 
@@ -355,7 +373,14 @@ std::string tle_node::sat_name() const
             std::size_t l = m_line1->length();
             if (l > 24)
                 l = 24;
-            m_satName = new std::string(trim(parseString(m_line1, 0, l)));
+
+            error_code error = no_error;
+            m_satName = new std::string(trim(parseString(m_line1, 0, l, error)));
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_satName = "";
+            }
         }
         else
         {
@@ -379,9 +404,19 @@ void tle_node::set_sat_name(const std::string& sat_name)
 std::string tle_node::designator() const
 {
     if (!m_designator)
-        m_designator = m_line2
-                           ? new std::string(trim(parseString(m_line2, 9, 8)))
-                           : new std::string("");
+    {
+        m_designator = new std::string;
+        if (m_line2)
+        {
+            error_code error = no_error;
+            *m_designator = trim(parseString(m_line2, 9, 8, error));
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_designator = "";
+            }
+        }
+    }
 
     return *m_designator;
 }
@@ -399,8 +434,19 @@ void tle_node::set_designator(const std::string& designator)
 double tle_node::n() const
 {
     if (!m_n)
-        m_n =
-            m_line3 ? new double(parseDouble(m_line3, 52, 11)) : new double(0);
+    {
+        m_n = new double(0);
+        if (m_line3)
+        {
+            error_code error = no_error;
+            *m_n = parseDouble(m_line3, 52, 11, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_n = 0;
+            }
+        }
+    }
 
     return *m_n;
 }
@@ -418,8 +464,19 @@ void tle_node::set_n(double n)
 double tle_node::dn() const
 {
     if (!m_dn)
-        m_dn =
-            m_line2 ? new double(parseDouble(m_line2, 33, 10)) : new double(0);
+    {
+        m_dn = new double(0);
+        if (m_line2)
+        {
+            error_code error = no_error;
+            *m_dn = parseDouble(m_line2, 33, 10, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_dn = 0;
+            }
+        }
+    }
 
     return *m_dn;
 }
@@ -437,8 +494,19 @@ void tle_node::set_dn(double dn)
 double tle_node::d2n() const
 {
     if (!m_d2n)
-        m_d2n = m_line2 ? new double(parseDouble(m_line2, 44, 8, true))
-                        : new double(0);
+    {
+        m_d2n = new double(0);
+        if (m_line2)
+        {
+            error_code error = no_error;
+            *m_d2n = parseDouble(m_line2, 44, 8, error, true);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_d2n = 0;
+            }
+        }
+    }
 
     return *m_d2n;
 }
@@ -456,7 +524,19 @@ void tle_node::set_d2n(double d2n)
 double tle_node::i() const
 {
     if (!m_i)
-        m_i = m_line3 ? new double(parseDouble(m_line3, 8, 8)) : new double(0);
+    {
+        m_i = new double(0);
+        if (m_line3)
+        {
+            error_code error = no_error;
+            *m_i = parseDouble(m_line3, 8, 8, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_i = 0;
+            }
+        }
+    }
 
     return *m_i;
 }
@@ -475,8 +555,17 @@ double tle_node::Omega() const
 {
     if (!m_Omega)
     {
-        m_Omega =
-            m_line3 ? new double(parseDouble(m_line3, 17, 8)) : new double(0);
+        m_Omega = new double(0);
+        if (m_line3)
+        {
+            error_code error = no_error;
+            *m_Omega = parseDouble(m_line3, 17, 8, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_Omega = 0;
+            }
+        }
     }
 
     return *m_Omega;
@@ -496,8 +585,17 @@ double tle_node::omega() const
 {
     if (!m_omega)
     {
-        m_omega =
-            m_line3 ? new double(parseDouble(m_line3, 34, 8)) : new double(0);
+        m_omega = new double(0);
+        if (m_line3)
+        {
+            error_code error = no_error;
+            *m_omega = parseDouble(m_line3, 34, 8, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_omega = 0;
+            }
+        }
     }
 
     return *m_omega;
@@ -516,7 +614,19 @@ void tle_node::set_omega(double omega)
 double tle_node::M() const
 {
     if (!m_M)
-        m_M = m_line3 ? new double(parseDouble(m_line3, 43, 8)) : new double(0);
+    {
+        m_M = new double(0);
+        if (m_line3)
+        {
+            error_code error = no_error;
+            *m_M = parseDouble(m_line3, 43, 8, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_M = 0;
+            }
+        }
+    }
 
     return *m_M;
 }
@@ -535,8 +645,17 @@ double tle_node::bstar() const
 {
     if (!m_bstar)
     {
-        m_bstar = m_line2 ? new double(parseDouble(m_line2, 53, 8, true))
-                          : new double(0);
+        m_bstar = new double(0);
+        if (m_line3)
+        {
+            error_code error = no_error;
+            *m_bstar = parseDouble(m_line3, 53, 8, error, true);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_bstar = 0;
+            }
+        }
     }
 
     return *m_bstar;
@@ -556,8 +675,17 @@ double tle_node::e() const
 {
     if (!m_e)
     {
-        m_e = m_line3 ? new double(parseDouble(m_line3, 26, 7, true))
-                      : new double(0);
+        m_e = new double(0);
+        if (m_line3)
+        {
+            error_code error = no_error;
+            *m_e = parseDouble(m_line3, 26, 8, error, true);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_e = 0;
+            }
+        }
     }
 
     return *m_e;
@@ -577,8 +705,17 @@ char tle_node::classification() const
 {
     if (!m_classification)
     {
-        m_classification =
-            m_line2 ? new char(parseChar(m_line2, 7)) : new char('\0');
+        m_classification = new char('\0');
+        if (m_line2)
+        {
+            error_code error = no_error;
+            *m_classification = parseChar(m_line2, 7, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_classification = '\0';
+            }
+        }
     }
 
     return *m_classification;
@@ -598,8 +735,17 @@ char tle_node::ephemeris_type() const
 {
     if (!m_ephemeris_type)
     {
-        m_ephemeris_type =
-            m_line2 ? new char(parseChar(m_line2, 62)) : new char('\0');
+        m_ephemeris_type = new char('\0');
+        if (m_line2)
+        {
+            error_code error = no_error;
+            *m_ephemeris_type = parseChar(m_line2, 62, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_ephemeris_type = '\0';
+            }
+        }
     }
 
     return *m_ephemeris_type;
@@ -619,8 +765,17 @@ int tle_node::element_number() const
 {
     if (!m_element_number)
     {
-        m_element_number =
-            m_line2 ? new int(parseInt(m_line2, 64, 4)) : new int(0);
+        m_element_number = new int(0);
+        if (m_line2)
+        {
+            error_code error = no_error;
+            *m_element_number = parseInt(m_line2, 64, 4, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_element_number = 0;
+            }
+        }
     }
 
     return *m_element_number;
@@ -640,8 +795,17 @@ int tle_node::revolution_number() const
 {
     if (!m_revolution_number)
     {
-        m_revolution_number =
-            m_line3 ? new int(parseInt(m_line3, 63, 5)) : new int(0);
+        m_revolution_number = new int(0);
+        if (m_line3)
+        {
+            error_code error = no_error;
+            *m_revolution_number = parseInt(m_line3, 63, 5, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_revolution_number = 0;
+            }
+        }
     }
 
     return *m_revolution_number;
@@ -663,8 +827,20 @@ double tle_node::precise_epoch() const
     {
         if (m_line2)
         {
-            std::string date = parseString(m_line2, 18, 14);
-            m_date = new double(string2date(date));
+            error_code error =no_error;
+            std::string date = parseString(m_line2, 18, 14, error);
+            if (error != no_error)
+            {
+                m_last_error = error;
+                return 0;
+            }
+
+            m_date = new double(string2date(date, error));
+            if (error != no_error)
+            {
+                m_last_error = error;
+                *m_date = 0;
+            }
         }
         else
         {
