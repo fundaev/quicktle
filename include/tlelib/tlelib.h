@@ -33,7 +33,6 @@
 
 #define TLELIB_VERSION "1.2.0"
 
-#include <tlelib/tleexception.h>
 #include <tlelib/tlefunc.h>
 #include <tlelib/tlenode.h>
 #include <tlelib/tlestream.h>

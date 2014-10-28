@@ -24,7 +24,6 @@
 
 #include <gtest/gtest.h>
 #include <tlelib/tlenode.h>
-#include <tlelib/tleexception.h>
 
 using namespace tlelib;
 
@@ -61,7 +60,7 @@ TEST(tle_node_test, tle_node_exceptions)
     // Too short lines
     node = tle_node("1 16609U 86017A   ", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394");
     EXPECT_EQ(tle_node::too_short_string, node.last_error());
-    
+
     node = tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158");
     EXPECT_EQ(tle_node::too_short_string, node.last_error());
 

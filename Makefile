@@ -32,7 +32,7 @@ TLELIB_HEADERS = $(TLELIB_DIR)/*.h
 TLELIB_SRCS    = $(TLELIB_DIR)/*.cpp
 OBJECTS        = $(GTEST_DIR)/src/gtest-all.o tlenode.o tlestream.o tlefunc.o main.o
 PACK_FILES     = include/ test/ samples/ Makefile Doxyfile COPYING.LESSER COPYING README
-PACK_NAME      = tlelib_1_1_0.zip
+PACK_NAME      = tlelib_1_2_0.zip
 
 .PHONY: purge clean
 
@@ -41,7 +41,7 @@ build-test: $(TEST_SRCS) $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(INCPATH) $(OBJECTS) $(LIBS) -o $(TARGET)
 
 main.o: $(TEST_SRCS)
-tlenode.o: $(TLELIB_DIR)/tlenode.cpp $(TLELIB_DIR)/tlenode.h $(TLELIB_DIR)/tleexception.h
+tlenode.o: $(TLELIB_DIR)/tlenode.cpp $(TLELIB_DIR)/tlenode.h
 tlestream.o: $(TLELIB_DIR)/tlestream.cpp $(TLELIB_DIR)/tlestream.h $(TLELIB_DIR)/tlenode.h
 tlefunc.o: $(TLELIB_DIR)/tlefunc.cpp $(TLELIB_DIR)/tlefunc.h
 
