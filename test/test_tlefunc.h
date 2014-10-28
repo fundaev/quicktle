@@ -52,7 +52,6 @@ TEST(Functions, double2string)
     EXPECT_TRUE(double2string(0, 1, 0) == "0");
     EXPECT_TRUE(double2string(0, 4, 1, true) == "000-0");
     EXPECT_TRUE(double2string(0, 8, 3, true, true, false) == " 00000-0");
-    //std::cout << "\"" << double2string(0.00010191, 8, 3, true, true, false) << "\"" << std::endl;
 }
 //------------------------------------------------------------------------------
 
@@ -106,40 +105,51 @@ TEST(Functions, string2int)
     EXPECT_EQ(0, string2int("0", error));
     EXPECT_EQ(tle_node::no_error, error);
 
+    error = tle_node::no_error;
     EXPECT_EQ(1, string2int("1", error));
     EXPECT_EQ(tle_node::no_error, error);
 
+    error = tle_node::no_error;
     EXPECT_EQ(-1, string2int("-1", error));
     EXPECT_EQ(tle_node::no_error, error);
 
+    error = tle_node::no_error;
     EXPECT_EQ(32000, string2int(" 32000", error));
     EXPECT_EQ(tle_node::no_error, error);
 
+    error = tle_node::no_error;
     EXPECT_EQ(-32000, string2int("-32000  ", error));
     EXPECT_EQ(tle_node::no_error, error);
 
+    error = tle_node::no_error;
     EXPECT_EQ(10, string2int(" 10  ", error));
     EXPECT_EQ(tle_node::no_error, error);
 
+    error = tle_node::no_error;
     EXPECT_EQ(0, string2int("-0 ", error));
     EXPECT_EQ(tle_node::no_error, error);
 
-    //Exceptions
+    error = tle_node::no_error;
     string2int("e123", error);
     EXPECT_EQ(tle_node::invalid_format, error);
 
+    error = tle_node::no_error;
     string2int("123-", error);
     EXPECT_EQ(tle_node::invalid_format, error);
 
+    error = tle_node::no_error;
     string2int(".123", error);
     EXPECT_EQ(tle_node::invalid_format, error);
 
+    error = tle_node::no_error;
     string2int("+123.", error);
     EXPECT_EQ(tle_node::invalid_format, error);
 
+    error = tle_node::no_error;
     EXPECT_EQ(123, string2int("+123 ", error));
     EXPECT_EQ(tle_node::no_error, error);
 
+    error = tle_node::no_error;
     EXPECT_EQ(-123, string2int("-123 ", error));
     EXPECT_EQ(tle_node::no_error, error);
 }
@@ -338,7 +348,7 @@ TEST(Functions, parseDouble)
     str = "-58797-4";
 
     error = tle_node::no_error;
-    EXPECT_DOUBLE_EQ(-0.000058797, parseDouble(&str, 0, 8, error));
+    EXPECT_DOUBLE_EQ(-0.000058797, parseDouble(&str, 0, 8, error, true));
     EXPECT_EQ(tle_node::no_error, error);
 
     str = "abc123e-4";

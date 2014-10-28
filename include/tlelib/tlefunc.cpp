@@ -114,11 +114,11 @@ std::string string2string(const std::string &str,
                           const std::size_t field_length, const bool left_align,
                           const bool allow_cut_off)
 {
-    if (str.length() == field_length)
+    if (!field_length || str.length() == field_length)
         return str;
 
-    if (str.length() > field_length && allow_cut_off)
-        return str.substr(0, field_length);
+    if (str.length() > field_length)
+        return (allow_cut_off ? str.substr(0, field_length) : str);
 
     std::string fill_str(field_length - str.length(), ' ');
     return (left_align ? str + fill_str : fill_str + str);
@@ -217,7 +217,10 @@ std::string trim(const std::string &str)
 char parseChar(const std::string *line, const std::size_t index,
                tle_node::error_code &error)
 {
-    if (!line || (line->length() - 1 < index))
+    if (!line)
+        return '\0';
+
+    if (line->length() - 1 < index)
     {
         error = tle_node::too_short_string;
         return '\0';
@@ -230,7 +233,10 @@ char parseChar(const std::string *line, const std::size_t index,
 std::string parseString(const std::string *line, const std::size_t start,
                         const std::size_t length, tle_node::error_code &error)
 {
-    if (!line || (line->length() - 1 < start + length))
+    if (!line)
+        return std::string();
+
+    if (line->length() < start + length)
     {
         error = tle_node::too_short_string;
         return std::string();
@@ -243,7 +249,10 @@ std::string parseString(const std::string *line, const std::size_t start,
 int parseInt(const std::string *line, const std::size_t start,
              const std::size_t length, tle_node::error_code &error)
 {
-    if (!line || (line->length() - 1 < start + length))
+    if (!line)
+        return 0;
+
+    if (line->length() < start + length)
     {
         error = tle_node::too_short_string;
         return 0;
@@ -257,7 +266,10 @@ double parseDouble(const std::string *line, const std::size_t start,
                    const std::size_t length, tle_node::error_code &error,
                    const bool decimal_point_assumed)
 {
-    if (!line || (line->length() - 1 < start + length))
+    if (!line)
+        return 0;
+
+    if (line->length() < start + length)
     {
         error = tle_node::too_short_string;
         return 0;

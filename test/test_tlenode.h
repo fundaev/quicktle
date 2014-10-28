@@ -42,21 +42,35 @@ TEST(tle_node_test, tle_node_exceptions)
     std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
 
     EXPECT_NO_THROW(tle_node());
+    EXPECT_EQ(tle_node::no_error, tle_node().last_error());
+
     EXPECT_NO_THROW(tle_node(line1, line2, line3, true));
+    EXPECT_EQ(tle_node::no_error, tle_node(line1, line2, line3, true).last_error());
+
     EXPECT_NO_THROW(tle_node(line2, line3, true));
+    EXPECT_EQ(tle_node::no_error, tle_node(line2, line3, true).last_error());
 
     // Opearating with existing node
-    tle_node node;//(line1, line2, line3);
+    tle_node node;
     EXPECT_NO_THROW(node.assign(line1, line2, line3));
+    EXPECT_EQ(tle_node::no_error, node.last_error());
+
     EXPECT_NO_THROW(node.assign(line2, line3));
+    EXPECT_EQ(tle_node::no_error, node.last_error());
 
     // Too short lines
-    EXPECT_THROW(tle_node("1 16609U 86017A   ", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394"), tle_too_short_string);
-    EXPECT_THROW(tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158"), tle_too_short_string);
+    node = tle_node("1 16609U 86017A   ", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394");
+    EXPECT_EQ(tle_node::too_short_string, node.last_error());
+    
+    node = tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158");
+    EXPECT_EQ(tle_node::too_short_string, node.last_error());
 
     // Checksum error
-    EXPECT_THROW(tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   115", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394"), tle_checksum_error);
-    EXPECT_THROW(tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   398"), tle_checksum_error);
+    node = tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   115", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394");
+    EXPECT_EQ(tle_node::checksum_error, node.last_error());
+
+    node = tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   398");
+    EXPECT_EQ(tle_node::checksum_error, node.last_error());
 }
 //------------------------------------------------------------------------------
 

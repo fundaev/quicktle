@@ -114,11 +114,15 @@ TEST(tle_stream_test, parsingMode)
 
     tle_stream tle(lines, three_lines);
     tle_node node;
-    EXPECT_NO_THROW(tle >> node); // second line is invalid, but node does not parse it here
+    EXPECT_NO_THROW(tle >> node);
+    // second line is invalid, but node does not parse it here
+    EXPECT_EQ(tle_node::no_error, node.last_error());
 
     // Set enforce parsing
     lines.seekg(0, std::ios::beg);
     tle.enforce_parsing(true);
-    EXPECT_THROW(tle >> node, tle_invalid_format); // second line is invalid and node tries to parse it here
+    EXPECT_NO_THROW(tle >> node); 
+    // second line is invalid and node tries to parse it here
+    EXPECT_EQ(tle_node::invalid_format, node.last_error()); 
 }
 //------------------------------------------------------------------------------

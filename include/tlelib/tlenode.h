@@ -189,6 +189,11 @@ public:
     void swap(tle_node &node);
     tle_node& operator=(tle_node node);
 
+    error_code last_error() const
+    {
+        return m_last_error;
+    }
+
 protected:
     void init(); //!< Initialize members.
     void free(); //!< Delete members.

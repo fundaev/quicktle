@@ -148,6 +148,8 @@ void tle_node::swap(tle_node& node)
     std::swap(m_element_number, node.m_element_number);
     std::swap(m_revolution_number, node.m_revolution_number);
     std::swap(m_file_type, node.m_file_type);
+
+    std::swap(m_last_error, node.m_last_error);
 }
 //------------------------------------------------------------------------------
 
@@ -278,6 +280,8 @@ bool tle_node::assign(const std::string& line1, const std::string& line2,
     // Parse
     if (forceParsing)
         parse_all();
+
+    return (m_last_error == no_error);
 }
 //------------------------------------------------------------------------------
 
@@ -646,10 +650,10 @@ double tle_node::bstar() const
     if (!m_bstar)
     {
         m_bstar = new double(0);
-        if (m_line3)
+        if (m_line2)
         {
             error_code error = no_error;
-            *m_bstar = parseDouble(m_line3, 53, 8, error, true);
+            *m_bstar = parseDouble(m_line2, 53, 8, error, true);
             if (error != no_error)
             {
                 m_last_error = error;
