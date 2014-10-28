@@ -75,7 +75,8 @@ TEST(tle_stream_test, output)
     node.set_sat_number("16609");
     node.set_classification('U');
     node.set_designator("86017A");
-    node.set_precise_epoch(string2date("86053.30522506"));
+    tle_node::error_code error;
+    node.set_precise_epoch(string2date("86053.30522506", error));
     node.set_dn(0.00057349);
     node.set_d2n(0);
     node.set_bstar(0.00031166);
