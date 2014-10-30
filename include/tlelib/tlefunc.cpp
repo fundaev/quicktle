@@ -27,6 +27,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include <tlelib/tlefunc.h>
 
 #define UNIX_FIRST_YEAR 1970
@@ -38,12 +39,9 @@ namespace tlelib
 std::string int2string(const int val, const std::size_t field_length,
                        const bool left_align)
 {
-    char *str = new char(6);
-    sprintf(str, "%d", val);
-    std::string res(str);
-    delete str;
-
-    return string2string(trim(res), field_length, left_align, false);
+    std::stringstream buf;
+    buf << val;
+    return string2string(trim(buf.str()), field_length, left_align, false);
 }
 //------------------------------------------------------------------------------
 
