@@ -19,27 +19,27 @@
  +----------------------------------------------------------------------------*/
 /*!
     \file tlestream.cpp
-    \brief File contains the realization of tle_stream object.
+    \brief File contains the realization of Stream object.
 */
 
 #define TLE_LINE_LENGTH 72 //!< Length of TLE line
 
 #include <string>
 #include <iostream>
-
 #include <tlelib/tlestream.h>
 
-using namespace tlelib;
-
-tle_stream::tle_stream(std::istream &source, const tle_file_type file_type)
+namespace tlelib
 {
-    m_source = &source;
-    m_file_type = file_type;
-    m_enforce_parsing = false;
+
+Stream::Stream(std::istream &source, const FileType fileType)
+    : m_source(&source),
+      m_fileType(fileType),
+      m_enforceParsing(false)
+{
 }
 //------------------------------------------------------------------------------
 
-std::istream &tle_stream::operator>>(tle_node &node)
+std::istream &Stream::operator>>(Node &node)
 {
     char buf[TLE_LINE_LENGTH] = "";
 
@@ -48,22 +48,22 @@ std::istream &tle_stream::operator>>(tle_node &node)
     m_source->getline(buf, TLE_LINE_LENGTH);
     std::string line2(buf);
 
-    if (m_file_type == three_lines)
+    if (m_fileType == ThreeLines)
     {
         m_source->getline(buf, TLE_LINE_LENGTH);
         std::string line3(buf);
-        node.assign(line1, line2, line3, m_enforce_parsing);
+        node.assign(line1, line2, line3, m_enforceParsing);
     }
     else
     {
-        node.assign(line1, line2, m_enforce_parsing);
+        node.assign(line1, line2, m_enforceParsing);
     }
 
     return *m_source;
 }
 //------------------------------------------------------------------------------
 
-tle_stream::operator bool()
+Stream::operator bool()
 {
     if (!(*m_source) || m_source->eof())
         return false;
@@ -78,10 +78,12 @@ tle_stream::operator bool()
 }
 //------------------------------------------------------------------------------
 
-bool tle_stream::enforce_parsing(bool parsingMode)
+bool Stream::enforceParsing(bool parsingMode)
 {
-    bool res = m_enforce_parsing;
-    m_enforce_parsing = parsingMode;
+    bool res = m_enforceParsing;
+    m_enforceParsing = parsingMode;
     return res;
 }
 //------------------------------------------------------------------------------
+
+}  // namespace tlelib

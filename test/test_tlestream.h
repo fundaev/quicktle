@@ -28,29 +28,31 @@
 
 using namespace tlelib;
 
-class tle_stream_test: public tle_stream, public ::testing::Test
+class StreamTest: public Stream, public ::testing::Test
 {
 };
 
 //
 //---- TESTS -------------------------------------------------------------------
 
-TEST(tle_stream_test, input)
+TEST(StreamTest, input)
 {
     std::string line1 = "Mir                     \n";
-    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112\n";
-    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394\n";
+    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
+                                                          "  31166-3 0   112\n";
+    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076"
+                                                         " 15.79438158   394\n";
 
     std::stringstream lines(std::stringstream::in | std::stringstream::out);
     lines << line1 << line2 << line3;
 
-    tle_stream tle(lines, three_lines);
-    tle_node node;
+    Stream tle(lines, ThreeLines);
+    Node node;
     tle >> node;
 
     // Check values
-    EXPECT_EQ("Mir", node.sat_name());
-    EXPECT_EQ("16609", node.sat_number());
+    EXPECT_EQ("Mir", node.satelliteName());
+    EXPECT_EQ("16609", node.satelliteNumber());
     EXPECT_EQ("86017A", node.designator());
     EXPECT_EQ('U', node.classification());
     EXPECT_DOUBLE_EQ(0.00057349,  node.dn());
@@ -62,21 +64,21 @@ TEST(tle_stream_test, input)
     EXPECT_DOUBLE_EQ(160.8295, node.omega());
     EXPECT_DOUBLE_EQ(196.0076, node.M());
     EXPECT_DOUBLE_EQ(15.79438158, node.n());
-    EXPECT_EQ(39, node.revolution_number());
-    EXPECT_EQ(11, node.element_number());
-    EXPECT_EQ('0', node.ephemeris_type());
+    EXPECT_EQ(39, node.revolutionNumber());
+    EXPECT_EQ(11, node.elementNumber());
+    EXPECT_EQ('0', node.ephemerisType());
 }
 //------------------------------------------------------------------------------
 
-TEST(tle_stream_test, output)
+TEST(StreamTest, output)
 {
-    tle_node node;
-    node.set_sat_name("Mir");
-    node.set_sat_number("16609");
-    node.set_classification('U');
-    node.set_designator("86017A");
-    tle_node::error_code error;
-    node.set_precise_epoch(string2date("86053.30522506", error));
+    Node node;
+    node.setSatelliteName("Mir");
+    node.setSatelliteNumber("16609");
+    node.setClassification('U');
+    node.setDesignator("86017A");
+    Node::ErrorCode error;
+    node.setPreciseEpoch(string2date("86053.30522506", error));
     node.set_dn(0.00057349);
     node.set_d2n(0);
     node.set_bstar(0.00031166);
@@ -86,9 +88,9 @@ TEST(tle_stream_test, output)
     node.set_omega(160.8295);
     node.set_M(196.0076);
     node.set_n(15.79438158);
-    node.set_revolution_number(39);
-    node.set_element_number(11);
-    node.set_ephemeris_type('0');
+    node.setRevolutionNumber(39);
+    node.setElementNumber(11);
+    node.setEphemerisType('0');
 
     // Output
     std::stringstream lines(std::stringstream::in | std::stringstream::out);
@@ -96,33 +98,37 @@ TEST(tle_stream_test, output)
     // Get first line
     char str[72] = "";
     lines.getline(str, 72);
-    EXPECT_EQ("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", std::string(str));
+    EXPECT_EQ("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0"
+                                                    "   112", std::string(str));
     // Get second line
     lines.getline(str, 72);
-    EXPECT_EQ("2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394", std::string(str));
+    EXPECT_EQ("2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158"
+                                                    "   394", std::string(str));
 }
 //------------------------------------------------------------------------------
 
-TEST(tle_stream_test, parsingMode)
+TEST(StreamTest, parsingMode)
 {
     std::string line1 = "Mir                     \n";
-    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112\n";
-    std::string line3 = "2zsdfgsdfdsggsdfsdfsdfsdfsdfsdfsdfdsgdgrsasdfasdfsdfsdfgfdgdfgdsfgsd2\n"; // invalid line with valid checksum
+    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
+                                                          "  31166-3 0   112\n";
+    std::string line3 = "2zsdfgsdfdsggsdfsdfsdfsdfsdfsdfsdfdsgdgrsasdfasdfsdf"
+                    "sdfgfdgdfgdsfgsd2\n"; // invalid line with valid checksum
 
     std::stringstream lines(std::stringstream::in | std::stringstream::out);
     lines << line1 << line2 << line3;
 
-    tle_stream tle(lines, three_lines);
-    tle_node node;
+    Stream tle(lines, ThreeLines);
+    Node node;
     EXPECT_NO_THROW(tle >> node);
     // second line is invalid, but node does not parse it here
-    EXPECT_EQ(tle_node::no_error, node.last_error());
+    EXPECT_EQ(Node::NoError, node.lastError());
 
     // Set enforce parsing
     lines.seekg(0, std::ios::beg);
-    tle.enforce_parsing(true);
+    tle.enforceParsing(true);
     EXPECT_NO_THROW(tle >> node); 
     // second line is invalid and node tries to parse it here
-    EXPECT_EQ(tle_node::invalid_format, node.last_error()); 
+    EXPECT_EQ(Node::InvalidFormat, node.lastError()); 
 }
 //------------------------------------------------------------------------------

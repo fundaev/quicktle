@@ -1,6 +1,6 @@
 /*
   The bellow example demonstrates, how top read
-  the TLE files by tle_stream object.
+  the TLE files by Stream object.
   We will read two files:
       * mir.tle      - 2-lines format file
       * stations.tle - 3-lines format
@@ -21,26 +21,27 @@ int main(int argc, char** argv)
     // to read the file: ifstream or fstream
     fstream f("sample3/mir.tle");
 
-    // Create the tle_stream object on basis of existing inout stream.
+    // Create the Stream object on basis of existing inout stream.
     // Generally speaking, we can use any object of istream class.
-    tlelib::tle_stream tle(f, tlelib::two_lines);
+    tlelib::Stream tle(f, tlelib::TwoLines);
     while (tle) // it is more accurate, than 'while (f)'
     {
-        tlelib::tle_node node;
+        tlelib::Node node;
         tle >> node;
         cout << node;
     }
     f.close();
 
 
-    std::cout << "----------------------8<---------------------8<----------------------" << std::endl;
+    std::cout << "----------------------8<----------"
+                 "-----------8<----------------------" << std::endl;
 
     // === READ stations.tle FILE ===
     f.open("sample3/stations.tle");
-    tlelib::tle_stream tle1(f, tlelib::three_lines);
+    tlelib::Stream tle1(f, tlelib::ThreeLines);
     while (tle1)
     {
-        tlelib::tle_node node;
+        tlelib::Node node;
         tle1 >> node;
         cout << node;
     }

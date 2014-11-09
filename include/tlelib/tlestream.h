@@ -19,7 +19,7 @@
  +----------------------------------------------------------------------------*/
 /*!
     \file tlestream.h
-    \brief File contains the definition of tle_stream object.
+    \brief File contains the definition of Stream object.
 */
 
 #ifndef TLESTREAM_H
@@ -34,7 +34,7 @@ namespace tlelib
 /*!
     \brief Class for operations with an input stream.
 */
-class tle_stream
+class Stream
 {
 public:
     /*!
@@ -42,13 +42,13 @@ public:
         \param source - input stream
         \param file_type - TLE file type (2- or 3-lines)
     */
-    tle_stream(std::istream &source, const tle_file_type file_type = two_lines);
+    Stream(std::istream &source, const FileType fileType = TwoLines);
     /*!
-        \brief Extract the tle_node object from the input stream.
-        \param node - the tle_node object
+        \brief Extract the Node object from the input stream.
+        \param node - the Node object
         \return Reference to input stream
     */
-    std::istream &operator>>(tle_node &node);
+    std::istream &operator>>(Node &node);
     /*!
         \brief Operator bool()
         \return True if the input stream can be read further.
@@ -57,18 +57,19 @@ public:
     /*!
         \brief Set the parsing mode
         \param parsingMode - parsing mode: true means, that the node object,
-                             obtained by >> operator, shoud parse the lines immediately,
-                             false - should parse the lines when it is required (lazy initalization).
+                             obtained by >> operator, shoud parse the lines
+                             immediately, false - should parse the lines
+                             when it is required (lazy initalization).
         \return Previous value of parsing mode.
     */
-    bool enforce_parsing(bool parsingMode);
+    bool enforceParsing(bool parsingMode);
 
 private:
-    tle_stream() {} //!< Default constructor is unavailable.
+    Stream() {} //!< Default constructor is unavailable.
 
-    std::istream *m_source; //!< Pointer to input stream
-    tle_file_type m_file_type; //!< File type: 2- or 3-lines.
-    bool m_enforce_parsing; //!< Define whether the tle_node objects, obtained by >> operator, should immediately parse the lines.
+    std::istream *m_source;
+    FileType m_fileType;
+    bool m_enforceParsing;
 };
 //------------------------------------------------------------------------------
 

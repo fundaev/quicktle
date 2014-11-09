@@ -27,66 +27,78 @@
 
 using namespace tlelib;
 
-class tle_node_test: public tle_node, public ::testing::Test
+class NodeTest: public Node, public ::testing::Test
 {
 };
 
 //
 //---- TESTS -------------------------------------------------------------------
 
-TEST(tle_node_test, tle_node_exceptions)
+TEST(NodeTest, Node_exceptions)
 {
     std::string line1 = "Mir";
-    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112";
-    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
+    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349"
+                                                   "  00000-0  31166-3 0   112";
+    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295"
+                                                  " 196.0076 15.79438158   394";
 
-    EXPECT_NO_THROW(tle_node());
-    EXPECT_EQ(tle_node::no_error, tle_node().last_error());
+    EXPECT_NO_THROW(Node());
+    EXPECT_EQ(Node::NoError, Node().lastError());
 
-    EXPECT_NO_THROW(tle_node(line1, line2, line3, true));
-    EXPECT_EQ(tle_node::no_error, tle_node(line1, line2, line3, true).last_error());
+    EXPECT_NO_THROW(Node(line1, line2, line3, true));
+    EXPECT_EQ(Node::NoError,
+                         Node(line1, line2, line3, true).lastError());
 
-    EXPECT_NO_THROW(tle_node(line2, line3, true));
-    EXPECT_EQ(tle_node::no_error, tle_node(line2, line3, true).last_error());
+    EXPECT_NO_THROW(Node(line2, line3, true));
+    EXPECT_EQ(Node::NoError, Node(line2, line3, true).lastError());
 
     // Opearating with existing node
-    tle_node node;
+    Node node;
     EXPECT_NO_THROW(node.assign(line1, line2, line3));
-    EXPECT_EQ(tle_node::no_error, node.last_error());
+    EXPECT_EQ(Node::NoError, node.lastError());
 
     EXPECT_NO_THROW(node.assign(line2, line3));
-    EXPECT_EQ(tle_node::no_error, node.last_error());
+    EXPECT_EQ(Node::NoError, node.lastError());
 
     // Too short lines
-    node = tle_node("1 16609U 86017A   ", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394");
-    EXPECT_EQ(tle_node::too_short_string, node.last_error());
+    node = Node("1 16609U 86017A   ", "2 16609  51.6129 108.0599 0012107"
+                                        " 160.8295 196.0076 15.79438158   394");
+    EXPECT_EQ(Node::TooShortString, node.lastError());
 
-    node = tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158");
-    EXPECT_EQ(tle_node::too_short_string, node.last_error());
+    node = Node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3"
+                " 0   112", "2 16609  51.6129 108.0599 0012107 160.8295"
+                " 196.0076 15.79438158");
+    EXPECT_EQ(Node::TooShortString, node.lastError());
 
     // Checksum error
-    node = tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   115", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394");
-    EXPECT_EQ(tle_node::checksum_error, node.last_error());
+    node = Node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3"
+                " 0   115", "2 16609  51.6129 108.0599 0012107 160.8295"
+                " 196.0076 15.79438158   394");
+    EXPECT_EQ(Node::ChecksumError, node.lastError());
 
-    node = tle_node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112", "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   398");
-    EXPECT_EQ(tle_node::checksum_error, node.last_error());
+    node = Node("1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3"
+                " 0   112", "2 16609  51.6129 108.0599 0012107 160.8295"
+                " 196.0076 15.79438158   398");
+    EXPECT_EQ(Node::ChecksumError, node.lastError());
 }
 //------------------------------------------------------------------------------
 
-TEST(tle_node_test, tle_node_Elements)
+TEST(NodeTest, Node_Elements)
 {
     std::string line1 = "Mir                     ";
-    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112";
-    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
+    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
+                                                            "  31166-3 0   112";
+    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076"
+                                                           " 15.79438158   394";
 
-    tle_node node(line1, line2, line3);
-    EXPECT_EQ("Mir", node.sat_name());
-    EXPECT_EQ("16609", node.sat_number());
+    Node node(line1, line2, line3);
+    EXPECT_EQ("Mir", node.satelliteName());
+    EXPECT_EQ("16609", node.satelliteNumber());
     EXPECT_EQ('U', node.classification());
     EXPECT_EQ("86017A", node.designator());
-    EXPECT_EQ('0', node.ephemeris_type());
-    EXPECT_EQ(11, node.element_number());
-    EXPECT_EQ(39, node.revolution_number());
+    EXPECT_EQ('0', node.ephemerisType());
+    EXPECT_EQ(11, node.elementNumber());
+    EXPECT_EQ(39, node.revolutionNumber());
     EXPECT_DOUBLE_EQ(0.00057349, node.dn());
     EXPECT_DOUBLE_EQ(0, node.d2n());
     EXPECT_DOUBLE_EQ(0.31166e-3, node.bstar());
@@ -108,35 +120,39 @@ TEST(tle_node_test, tle_node_Elements)
 }
 //------------------------------------------------------------------------------
 
-TEST(tle_node_test, tle_node_Output)
+TEST(NodeTest, Node_Output)
 {
     std::string line1 = "Mir                     ";
-    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112";
-    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
-
-    EXPECT_EQ(line1, tle_node(line1, line2, line3).first_string());
-    EXPECT_EQ(line2, tle_node(line1, line2, line3).second_string());
-    EXPECT_EQ(line3, tle_node(line1, line2, line3).third_string());
+    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
+                                                            "  31166-3 0   112";
+    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076"
+                                                           " 15.79438158   394";
+    EXPECT_EQ(line1, Node(line1, line2, line3).firstString());
+    EXPECT_EQ(line2, Node(line1, line2, line3).secondString());
+    EXPECT_EQ(line3, Node(line1, line2, line3).thirdString());
 }
 //------------------------------------------------------------------------------
 
-TEST(tle_node_test, tle_node_swap)
+TEST(NodeTest, Node_swap)
 {
     std::string line1 = "Mir                     ";
-    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112";
-    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
-    tle_node node1(line1, line2, line3);
-    tle_node node1_origin(line1, line2, line3);
+    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
+                                                            "  31166-3 0   112";
+    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076"
+                                                           " 15.79438158   394";
+    Node node1(line1, line2, line3);
+    Node node1_origin(line1, line2, line3);
 
     line1 = "ASIASAT 6               ";
-    line2 = "1 40141U 14052A   14277.84589631 -.00000387  00000-0  10000-3 0   362";
-    line3 = "2 40141   0.0409 337.4123 0002696 277.4110 182.9520  1.00272844   312";
-    tle_node node2(line1, line2, line3);
-
+    line2 = "1 40141U 14052A   14277.84589631 -.00000387  00000-0  10000-3 0"
+                                                                       "   362";
+    line3 = "2 40141   0.0409 337.4123 0002696 277.4110 182.9520  1.00272844"
+                                                                       "   312";
+    Node node2(line1, line2, line3);
     node1.swap(node2);
 
-    EXPECT_EQ(node1_origin.sat_name(), node2.sat_name());
-    EXPECT_EQ(node1_origin.sat_number(), node2.sat_number());
+    EXPECT_EQ(node1_origin.satelliteName(), node2.satelliteName());
+    EXPECT_EQ(node1_origin.satelliteNumber(), node2.satelliteNumber());
     EXPECT_EQ(node1_origin.designator(), node2.designator());
 
     EXPECT_DOUBLE_EQ(node1_origin.n(), node2.n());
@@ -148,32 +164,34 @@ TEST(tle_node_test, tle_node_swap)
     EXPECT_DOUBLE_EQ(node1_origin.M(), node2.M());
     EXPECT_DOUBLE_EQ(node1_origin.bstar(), node2.bstar());
     EXPECT_DOUBLE_EQ(node1_origin.e(), node2.e());
-    EXPECT_DOUBLE_EQ(node1_origin.precise_epoch(), node2.precise_epoch());
+    EXPECT_DOUBLE_EQ(node1_origin.preciseEpoch(), node2.preciseEpoch());
 
     EXPECT_EQ(node1_origin.epoch(), node2.epoch());
-    EXPECT_EQ(node1_origin.element_number(), node2.element_number());
-    EXPECT_EQ(node1_origin.revolution_number(), node2.revolution_number());
+    EXPECT_EQ(node1_origin.elementNumber(), node2.elementNumber());
+    EXPECT_EQ(node1_origin.revolutionNumber(), node2.revolutionNumber());
 
-    EXPECT_EQ(node1_origin.first_string(), node2.first_string());
-    EXPECT_EQ(node1_origin.second_string(), node2.second_string());
-    EXPECT_EQ(node1_origin.third_string(), node2.third_string());
+    EXPECT_EQ(node1_origin.firstString(), node2.firstString());
+    EXPECT_EQ(node1_origin.secondString(), node2.secondString());
+    EXPECT_EQ(node1_origin.thirdString(), node2.thirdString());
 }
 //------------------------------------------------------------------------------
 
-TEST(tle_node_test, tle_node_copy_constructor)
+TEST(NodeTest, Node_copy_constructor)
 {
     std::string line1 = "Mir                     ";
-    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112";
-    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
-    tle_node node1(line1, line2, line3);
-    tle_node node2(node1);
+    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
+                                                            "  31166-3 0   112";
+    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076"
+                                                           " 15.79438158   394";
+    Node node1(line1, line2, line3);
+    Node node2(node1);
 
-    EXPECT_NO_THROW(node2.first_string());
-    EXPECT_NO_THROW(node2.second_string());
-    EXPECT_NO_THROW(node2.third_string());
+    EXPECT_NO_THROW(node2.firstString());
+    EXPECT_NO_THROW(node2.secondString());
+    EXPECT_NO_THROW(node2.thirdString());
 
-    EXPECT_EQ(node1.sat_name(), node2.sat_name());
-    EXPECT_EQ(node1.sat_number(), node2.sat_number());
+    EXPECT_EQ(node1.satelliteName(), node2.satelliteName());
+    EXPECT_EQ(node1.satelliteNumber(), node2.satelliteNumber());
     EXPECT_EQ(node1.designator(), node2.designator());
 
     EXPECT_DOUBLE_EQ(node1.n(), node2.n());
@@ -185,37 +203,39 @@ TEST(tle_node_test, tle_node_copy_constructor)
     EXPECT_DOUBLE_EQ(node1.M(), node2.M());
     EXPECT_DOUBLE_EQ(node1.bstar(), node2.bstar());
     EXPECT_DOUBLE_EQ(node1.e(), node2.e());
-    EXPECT_DOUBLE_EQ(node1.precise_epoch(), node2.precise_epoch());
+    EXPECT_DOUBLE_EQ(node1.preciseEpoch(), node2.preciseEpoch());
 
     EXPECT_EQ(node1.epoch(), node2.epoch());
-    EXPECT_EQ(node1.element_number(), node2.element_number());
-    EXPECT_EQ(node1.revolution_number(), node2.revolution_number());
+    EXPECT_EQ(node1.elementNumber(), node2.elementNumber());
+    EXPECT_EQ(node1.revolutionNumber(), node2.revolutionNumber());
 
-    EXPECT_EQ(node1.first_string(), node2.first_string());
-    EXPECT_EQ(node1.second_string(), node2.second_string());
-    EXPECT_EQ(node1.third_string(), node2.third_string());
+    EXPECT_EQ(node1.firstString(), node2.firstString());
+    EXPECT_EQ(node1.secondString(), node2.secondString());
+    EXPECT_EQ(node1.thirdString(), node2.thirdString());
 }
 //------------------------------------------------------------------------------
 
-TEST(tle_node_test, tle_node_assigment)
+TEST(NodeTest, Node_assigment)
 {
     std::string line1 = "Mir                     ";
-    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0  31166-3 0   112";
-    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076 15.79438158   394";
-    tle_node node1;
+    std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
+                                                            "  31166-3 0   112";
+    std::string line3 = "2 16609  51.6129 108.0599 0012107 160.8295 196.0076"
+                                                           " 15.79438158   394";
+    Node node1;
 
     {
-        tle_node tmp_node(line1, line2, line3);
+        Node tmp_node(line1, line2, line3);
         node1 = tmp_node;
     }
 
-    EXPECT_NO_THROW(node1.first_string());
-    EXPECT_NO_THROW(node1.second_string());
-    EXPECT_NO_THROW(node1.third_string());
+    EXPECT_NO_THROW(node1.firstString());
+    EXPECT_NO_THROW(node1.secondString());
+    EXPECT_NO_THROW(node1.thirdString());
 
-    tle_node node2(line1, line2, line3);
-    EXPECT_EQ(node1.sat_name(), node2.sat_name());
-    EXPECT_EQ(node1.sat_number(), node2.sat_number());
+    Node node2(line1, line2, line3);
+    EXPECT_EQ(node1.satelliteName(), node2.satelliteName());
+    EXPECT_EQ(node1.satelliteNumber(), node2.satelliteNumber());
     EXPECT_EQ(node1.designator(), node2.designator());
 
     EXPECT_DOUBLE_EQ(node1.n(), node2.n());
@@ -227,14 +247,14 @@ TEST(tle_node_test, tle_node_assigment)
     EXPECT_DOUBLE_EQ(node1.M(), node2.M());
     EXPECT_DOUBLE_EQ(node1.bstar(), node2.bstar());
     EXPECT_DOUBLE_EQ(node1.e(), node2.e());
-    EXPECT_DOUBLE_EQ(node1.precise_epoch(), node2.precise_epoch());
+    EXPECT_DOUBLE_EQ(node1.preciseEpoch(), node2.preciseEpoch());
 
     EXPECT_EQ(node1.epoch(), node2.epoch());
-    EXPECT_EQ(node1.element_number(), node2.element_number());
-    EXPECT_EQ(node1.revolution_number(), node2.revolution_number());
+    EXPECT_EQ(node1.elementNumber(), node2.elementNumber());
+    EXPECT_EQ(node1.revolutionNumber(), node2.revolutionNumber());
 
-    EXPECT_EQ(node1.first_string(), node2.first_string());
-    EXPECT_EQ(node1.second_string(), node2.second_string());
-    EXPECT_EQ(node1.third_string(), node2.third_string());
+    EXPECT_EQ(node1.firstString(), node2.firstString());
+    EXPECT_EQ(node1.secondString(), node2.secondString());
+    EXPECT_EQ(node1.thirdString(), node2.thirdString());
 }
 //------------------------------------------------------------------------------

@@ -36,28 +36,28 @@
 namespace tlelib
 {
 
-std::string int2string(const int val, const std::size_t field_length,
-                       const bool left_align)
+std::string int2string(const int val, const std::size_t fieldLength,
+                       const bool leftAlign)
 {
     std::stringstream buf;
     buf << val;
-    return string2string(trim(buf.str()), field_length, left_align, false);
+    return string2string(trim(buf.str()), fieldLength, leftAlign, false);
 }
 //------------------------------------------------------------------------------
 
-std::string double2string(const double val, const std::size_t field_length,
+std::string double2string(const double val, const std::size_t fieldLength,
                           const std::size_t precission, const bool scientific,
-                          const bool decimal_point_assumed,
-                          const bool left_align)
+                          const bool decimalPointAssumed,
+                          const bool leftAlign)
 {
-    char str[field_length];
+    char str[fieldLength];
     double val1 = val;
-    if (decimal_point_assumed)
+    if (decimalPointAssumed)
     {
         double val3;
         val1 = modf(val, &val3);
     }
-    sprintf(str, ("%" + int2string(field_length) + "." +
+    sprintf(str, ("%" + int2string(fieldLength) + "." +
                   int2string(precission + (scientific ? 1 : 0)) +
                   (scientific ? "e" : "f")).c_str(),
             val1);
@@ -66,12 +66,12 @@ std::string double2string(const double val, const std::size_t field_length,
     // Remove decimal point
     std::size_t pos = res.find(".");
     int n = 0;
-    if (decimal_point_assumed && pos != std::string::npos && scientific)
+    if (decimalPointAssumed && pos != std::string::npos && scientific)
     {
         n = -pos;
         res.replace(pos, 1, "");
     }
-    else if (decimal_point_assumed && !scientific)
+    else if (decimalPointAssumed && !scientific)
     {
         pos = res.find("0.");
         if (pos != std::string::npos)
@@ -90,7 +90,7 @@ std::string double2string(const double val, const std::size_t field_length,
             n = base.length() - pos1 - 1;
             base.replace(pos1, 1, "");
         }
-        tle_node::error_code error;
+        Node::ErrorCode error;
         int new_a = string2int(a, error) - n;
         if (string2double(base, error) == 0)
             new_a = 0;
@@ -104,27 +104,27 @@ std::string double2string(const double val, const std::size_t field_length,
     else if (res.substr(0, 3) == "-0.")
         res = "-" + res.substr(2, res.length() - 2);
 
-    return string2string(res, field_length, left_align, false);
+    return string2string(res, fieldLength, leftAlign, false);
 }
 //------------------------------------------------------------------------------
 
 std::string string2string(const std::string &str,
-                          const std::size_t field_length, const bool left_align,
+                          const std::size_t fieldLength, const bool leftAlign,
                           const bool allow_cut_off)
 {
-    if (!field_length || str.length() == field_length)
+    if (!fieldLength || str.length() == fieldLength)
         return str;
 
-    if (str.length() > field_length)
-        return (allow_cut_off ? str.substr(0, field_length) : str);
+    if (str.length() > fieldLength)
+        return (allow_cut_off ? str.substr(0, fieldLength) : str);
 
-    std::string fill_str(field_length - str.length(), ' ');
-    return (left_align ? str + fill_str : fill_str + str);
+    std::string fill_str(fieldLength - str.length(), ' ');
+    return (leftAlign ? str + fill_str : fill_str + str);
 }
 //------------------------------------------------------------------------------
 
-std::string date2string(const double date, const std::size_t field_length,
-                        const bool left_align)
+std::string date2string(const double date, const std::size_t fieldLength,
+                        const bool leftAlign)
 {
     double dt = date;
     std::size_t year = UNIX_FIRST_YEAR;
@@ -141,13 +141,13 @@ std::string date2string(const double date, const std::size_t field_length,
     double res = year * 1000 + dt / 86400.0 + 1;
 
     std::string pref = year < 10 ? "0" : "";
-    std::size_t length = year < 10 ? field_length - 1 : field_length;
-    return (pref + double2string(res, length, field_length - 6,
-                                 false, false,  left_align));
+    std::size_t length = year < 10 ? fieldLength - 1 : fieldLength;
+    return (pref + double2string(res, length, fieldLength - 6,
+                                 false, false,  leftAlign));
 }
 //------------------------------------------------------------------------------
 
-int string2int(const std::string &str, tle_node::error_code &error)
+int string2int(const std::string &str, Node::ErrorCode &error)
 {
     std::string val = trim(str);
     // Validate string
@@ -155,7 +155,7 @@ int string2int(const std::string &str, tle_node::error_code &error)
     {
         if (!isdigit(val[i]) && !(i == 0 && (val[i] == '-' || val[i] == '+')))
         {
-            error = tle_node::invalid_format;
+            error = Node::InvalidFormat;
             return 0;
         }
     }
@@ -164,7 +164,7 @@ int string2int(const std::string &str, tle_node::error_code &error)
 }
 //------------------------------------------------------------------------------
 
-double string2double(const std::string &str, tle_node::error_code &error)
+double string2double(const std::string &str, Node::ErrorCode &error)
 {
     std::string val = trim(str);
     // Validate string
@@ -191,7 +191,7 @@ double string2double(const std::string &str, tle_node::error_code &error)
 
         if (!valid)
         {
-            error = tle_node::invalid_format;
+            error = Node::InvalidFormat;
             return 0;
         }
     }
@@ -213,14 +213,14 @@ std::string trim(const std::string &str)
 //------------------------------------------------------------------------------
 
 char parseChar(const std::string *line, const std::size_t index,
-               tle_node::error_code &error)
+               Node::ErrorCode &error)
 {
     if (!line)
         return '\0';
 
     if (line->length() - 1 < index)
     {
-        error = tle_node::too_short_string;
+        error = Node::TooShortString;
         return '\0';
     }
 
@@ -229,14 +229,14 @@ char parseChar(const std::string *line, const std::size_t index,
 //------------------------------------------------------------------------------
 
 std::string parseString(const std::string *line, const std::size_t start,
-                        const std::size_t length, tle_node::error_code &error)
+                        const std::size_t length, Node::ErrorCode &error)
 {
     if (!line)
         return std::string();
 
     if (line->length() < start + length)
     {
-        error = tle_node::too_short_string;
+        error = Node::TooShortString;
         return std::string();
     }
 
@@ -245,14 +245,14 @@ std::string parseString(const std::string *line, const std::size_t start,
 //------------------------------------------------------------------------------
 
 int parseInt(const std::string *line, const std::size_t start,
-             const std::size_t length, tle_node::error_code &error)
+             const std::size_t length, Node::ErrorCode &error)
 {
     if (!line)
         return 0;
 
     if (line->length() < start + length)
     {
-        error = tle_node::too_short_string;
+        error = Node::TooShortString;
         return 0;
     }
 
@@ -261,21 +261,21 @@ int parseInt(const std::string *line, const std::size_t start,
 //------------------------------------------------------------------------------
 
 double parseDouble(const std::string *line, const std::size_t start,
-                   const std::size_t length, tle_node::error_code &error,
-                   const bool decimal_point_assumed)
+                   const std::size_t length, Node::ErrorCode &error,
+                   const bool decimalPointAssumed)
 {
     if (!line)
         return 0;
 
     if (line->length() < start + length)
     {
-        error = tle_node::too_short_string;
+        error = Node::TooShortString;
         return 0;
     }
 
     std::string val = trim(line->substr(start, length));
     // Prepare string
-    if (decimal_point_assumed)
+    if (decimalPointAssumed)
     {
         if (val[0] == '-' || val[0] == '+')
             val = val.substr(0, 1) + "0." + val.substr(1, val.length() - 1);
@@ -300,20 +300,20 @@ double parseDouble(const std::string *line, const std::size_t start,
 }
 //------------------------------------------------------------------------------
 
-double string2date(const std::string &str, tle_node::error_code &error)
+double string2date(const std::string &str, Node::ErrorCode &error)
 {
     std::string str1(trim(str));
     // Validate
     if (str1.find('-') != std::string::npos)
     {
-        error = tle_node::invalid_format;
+        error = Node::InvalidFormat;
         return 0;
     }
 
     // Year
-    error = tle_node::no_error;
+    error = Node::NoError;
     int year = string2int(str1.substr(0, 2).c_str(), error);
-    if (error != tle_node::no_error)
+    if (error != Node::NoError)
         return 0;
 
     year += (year < (UNIX_FIRST_YEAR - (UNIX_FIRST_YEAR / 100) * 100))
@@ -350,7 +350,7 @@ int checksum(const std::string &str)
 }
 //------------------------------------------------------------------------------
 
-double normalize_angle(double angle)
+double normalizeAngle(double angle)
 {
     if (angle >= MAX_ANGLE)
         angle -= MAX_ANGLE * floor(angle / MAX_ANGLE);
