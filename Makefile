@@ -18,12 +18,14 @@
 # along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
 #-----------------------------------------------------------------------------+
 
+TARGET         = tletest
+TLELIB_VERSION = 1.2.0
+
 TEST_DIR       = ./test
 TEST_SRCS      = $(TEST_DIR)/test_tlefunc.h $(TEST_DIR)/test_tlenode.h $(TEST_DIR)/test_tlestream.h $(TEST_DIR)/main.cpp
 INCPATH        += -I$(TEST_DIR) -I$(GTEST_DIR)/src -I$(GTEST_DIR)/include -I./include/
 CXXFLAGS       += -Wall $(INCPATH) 
 LIBS           += -lpthread
-TARGET         = tletest
 GTEST_HEADERS  = $(GTEST_DIR)/*.h $(GTEST_DIR)/internal/*.h
 GTEST_SRCS     = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 TLELIB_DIR     = ./include/tlelib
@@ -31,8 +33,8 @@ VPATH          = $(TLELIB_DIR) $(TEST_DIR)
 TLELIB_HEADERS = $(TLELIB_DIR)/*.h
 TLELIB_SRCS    = $(TLELIB_DIR)/*.cpp
 OBJECTS        = $(GTEST_DIR)/src/gtest-all.o tlenode.o tlestream.o tlefunc.o main.o
-PACK_FILES     = include/ test/ samples/ Makefile Doxyfile COPYING.LESSER COPYING README
-PACK_NAME      = tlelib_1_2_0.zip
+PACK_FILES     = include/ test/ samples/ Makefile Doxyfile COPYING.LESSER COPYING README Changelog
+PACK_NAME      = tlelib_$(subst .,_,$(TLELIB_VERSION)).zip
 
 .PHONY: purge clean
 

@@ -31,8 +31,6 @@
 #ifndef TLELIB_H
 #define TLELIB_H
 
-#define TLELIB_VERSION "1.2.0"
-
 #include <tlelib/tlefunc.h>
 #include <tlelib/tlenode.h>
 #include <tlelib/tlestream.h>
