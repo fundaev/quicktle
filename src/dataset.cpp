@@ -22,7 +22,7 @@
     \brief File contains the realization of methods of tlelib::DataSet class
 */
 
-#include <tlelib/tledataset.h>
+#include <dataset.h>
 
 namespace tlelib
 {

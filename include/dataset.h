@@ -26,7 +26,7 @@
 #define TLEDATASET_H
 
 #include <vector>
-#include <tlelib/tlenode.h>
+#include <node.h>
 
 namespace tlelib
 {

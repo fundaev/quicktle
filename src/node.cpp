@@ -29,9 +29,8 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
-
-#include <tlelib/tlenode.h>
-#include <tlelib/tlefunc.h>
+#include <node.h>
+#include <func.h>
 
 namespace tlelib
 {

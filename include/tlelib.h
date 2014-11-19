@@ -31,8 +31,9 @@
 #ifndef TLELIB_H
 #define TLELIB_H
 
-#include <tlelib/tlefunc.h>
-#include <tlelib/tlenode.h>
-#include <tlelib/tlestream.h>
+#include <func.h>
+#include <node.h>
+#include <stream.h>
+#include <dataset.h>
 
 #endif

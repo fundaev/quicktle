@@ -26,7 +26,7 @@
 
 #include <string>
 #include <iostream>
-#include <tlelib/tlestream.h>
+#include <stream.h>
 
 namespace tlelib
 {

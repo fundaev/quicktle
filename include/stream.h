@@ -26,7 +26,7 @@
 #define TLESTREAM_H
 
 #include <iostream>
-#include <tlelib/tlenode.h>
+#include <node.h>
 
 namespace tlelib
 {

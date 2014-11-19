@@ -27,8 +27,7 @@
 
 #include <string>
 #include <ctime>
-
-#include <tlelib/tlenode.h>
+#include <node.h>
 
 namespace tlelib
 {
