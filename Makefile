@@ -32,7 +32,7 @@ TLELIB_DIR     = ./include/tlelib
 VPATH          = $(TLELIB_DIR) $(TEST_DIR)
 TLELIB_HEADERS = $(TLELIB_DIR)/*.h
 TLELIB_SRCS    = $(TLELIB_DIR)/*.cpp
-OBJECTS        = $(GTEST_DIR)/src/gtest-all.o tlenode.o tlestream.o tlefunc.o main.o
+OBJECTS        = $(GTEST_DIR)/src/gtest-all.o tlenode.o tlestream.o tledataset.o tlefunc.o main.o
 PACK_FILES     = include/ test/ samples/ Makefile Doxyfile COPYING.LESSER COPYING README Changelog
 PACK_NAME      = tlelib_$(subst .,_,$(TLELIB_VERSION)).zip
 
@@ -46,6 +46,7 @@ main.o: $(TEST_SRCS)
 tlenode.o: $(TLELIB_DIR)/tlenode.cpp $(TLELIB_DIR)/tlenode.h
 tlestream.o: $(TLELIB_DIR)/tlestream.cpp $(TLELIB_DIR)/tlestream.h $(TLELIB_DIR)/tlenode.h
 tlefunc.o: $(TLELIB_DIR)/tlefunc.cpp $(TLELIB_DIR)/tlefunc.h
+tledataset.o: $(TLELIB_DIR)/tledataset.h $(TLELIB_DIR)/tledataset.cpp $(TLELIB_DIR)/tlefunc.h $(TLELIB_DIR)/tlefunc.cpp $(TLELIB_DIR)/tlenode.h $(TLELIB_DIR)/tlenode.cpp
 
 pack: clean-all
 	zip -r $(PACK_NAME) $(PACK_FILES)
