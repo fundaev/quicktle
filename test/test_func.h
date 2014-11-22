@@ -21,9 +21,8 @@
 #include <string>
 #include <iostream>
 #include <ctime>
-
 #include <gtest/gtest.h>
-#include <tlelib/tlefunc.h>
+#include <func.h>
 
 using namespace tlelib;
 

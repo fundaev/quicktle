@@ -19,9 +19,9 @@
  +----------------------------------------------------------------------------*/
 
 #include <gtest/gtest.h>
-#include "test_tlefunc.h"
-#include "test_tlenode.h"
-#include "test_tlestream.h"
+#include "test_func.h"
+#include "test_node.h"
+#include "test_stream.h"
 
 /**
   function: main

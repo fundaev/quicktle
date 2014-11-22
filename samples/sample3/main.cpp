@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <tlelib/tlelib.h>
+#include <tlelib.h>
 
 using namespace std;
 
@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 
     // First of all, we should create the file stream
     // to read the file: ifstream or fstream
-    fstream f("sample3/mir.tle");
+    fstream f("mir.tle");
 
     // Create the Stream object on basis of existing inout stream.
     // Generally speaking, we can use any object of istream class.
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
                  "-----------8<----------------------" << std::endl;
 
     // === READ stations.tle FILE ===
-    f.open("sample3/stations.tle");
+    f.open("stations.tle");
     tlelib::Stream tle1(f, tlelib::ThreeLines);
     while (tle1)
     {

@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <string>
-#include <tlelib/tlelib.h>
+#include <tlelib.h>
 
 int main(int argc, char** argv)
 {

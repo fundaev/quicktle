@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <ctime>
-#include <tlelib/tlelib.h>
+#include <tlelib.h>
 
 int main(int argc, char** argv)
 {
