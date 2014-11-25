@@ -39,7 +39,7 @@ public:
         \param node - TLE-node
         \return Reference to itself
     */
-	DataSet& append(const Node &node);
+    DataSet& append(const Node &node);
 
 private:
 	unsigned long nearestNotLess(const time_t &t, bool &found);
