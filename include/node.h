@@ -18,8 +18,8 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 /*!
-    \file tlenode.h
-    \brief File contains the definition of tlelib::Node object
+    \file node.h
+    \brief File contains the definition of tlelib::Node class
            - main object of TLELib library.
 */
 

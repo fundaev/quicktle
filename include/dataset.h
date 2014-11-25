@@ -18,8 +18,8 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 /*!
-    \file tledataset.h
-    \brief File contains the definition of DataSet object.
+    \file dataset.h
+    \brief File contains the definition of tlelib::DataSet class.
 */
 
 #ifndef TLEDATASET_H
@@ -34,6 +34,11 @@ namespace tlelib
 class DataSet
 {
 public:
+    /*!
+        \brief Append new node to data set
+        \param node - TLE-node
+        \return Reference to itself
+    */
 	DataSet& append(const Node &node);
 
 private:

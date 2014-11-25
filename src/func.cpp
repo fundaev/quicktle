@@ -18,9 +18,9 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 /*!
-    \file tlefunc.cpp
+    \file func.cpp
     \brief File contains the realizations of the functions, defined
-           in the tlefunc.h file and used by the TLELib library.
+           in the func.h file and used by the TLELib library.
 */
 
 #include <cmath>

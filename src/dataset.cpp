@@ -18,7 +18,7 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 /*!
-    \file tledataset.cpp
+    \file dataset.cpp
     \brief File contains the realization of methods of tlelib::DataSet class
 */
 
@@ -41,6 +41,7 @@ DataSet& DataSet::append(const Node &node)
 
 	return *this;
 }
+//------------------------------------------------------------------------------
 
 unsigned long DataSet::nearestNotLess(const time_t &t, bool &found)
 {
@@ -77,5 +78,6 @@ unsigned long DataSet::nearestNotLess(const time_t &t, bool &found)
 
     return end;
 }
+//------------------------------------------------------------------------------
 
 } //namespace tlelib

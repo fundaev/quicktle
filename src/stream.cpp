@@ -18,8 +18,8 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 /*!
-    \file tlestream.cpp
-    \brief File contains the realization of Stream object.
+    \file stream.cpp
+    \brief File contains the realization of Stream class.
 */
 
 #define TLE_LINE_LENGTH 72 //!< Length of TLE line
@@ -39,7 +39,7 @@ Stream::Stream(std::istream &source, const FileType fileType)
 }
 //------------------------------------------------------------------------------
 
-std::istream &Stream::operator>>(Node &node)
+Stream& Stream::operator>>(Node &node)
 {
     char buf[TLE_LINE_LENGTH] = "";
 
@@ -59,7 +59,17 @@ std::istream &Stream::operator>>(Node &node)
         node.assign(line1, line2, m_enforceParsing);
     }
 
-    return *m_source;
+    return *this;
+}
+//------------------------------------------------------------------------------
+
+Stream& Stream::operator>>(DataSet &dataSet)
+{
+    Node node;
+    operator>>(node);
+    dataSet.append(node);
+
+    return *this;
 }
 //------------------------------------------------------------------------------
 

@@ -18,8 +18,8 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 /*!
-    \file tlenode.cpp
-    \brief File contains the realization of methods of tlelib::Node object.
+    \file node.cpp
+    \brief File contains the realization of methods of tlelib::Node class.
 */
 
 #define CHECKSUM_INDEX 68  //!< Index of checksum symbol in the TLE format line

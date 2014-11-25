@@ -18,7 +18,7 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 /*!
-    \file  tlefunc.h
+    \file  func.h
     \brief File contains the prototypes of functions, used by TLELib library.
 */
 

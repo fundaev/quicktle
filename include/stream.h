@@ -18,15 +18,15 @@
  | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
  +----------------------------------------------------------------------------*/
 /*!
-    \file tlestream.h
-    \brief File contains the definition of Stream object.
+    \file stream.h
+    \brief File contains the definition of tlelib::Stream class.
 */
 
 #ifndef TLESTREAM_H
 #define TLESTREAM_H
 
 #include <iostream>
-#include <node.h>
+#include <dataset.h>
 
 namespace tlelib
 {
@@ -48,7 +48,14 @@ public:
         \param node - the Node object
         \return Reference to input stream
     */
-    std::istream &operator>>(Node &node);
+    Stream& operator>>(Node &node);
+    /*!
+        \brief Extract the Node object from the input stream
+               and put it into data set
+        \param dataSet - data set
+        \return Reference to input stream
+    */
+    Stream& operator>>(DataSet &dataSet);
     /*!
         \brief Operator bool()
         \return True if the input stream can be read further.
