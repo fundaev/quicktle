@@ -42,7 +42,9 @@ public:
     DataSet& append(const Node &node);
 
 private:
-	unsigned long nearestNotLess(const time_t &t, bool &found);
+    typedef std::vector<Node>::size_type IndexType;
+
+    IndexType nearestNotLess(const time_t &t, bool &found);
 
 	std::vector<Node> m_data;
 };

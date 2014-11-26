@@ -30,7 +30,7 @@ namespace tlelib
 DataSet& DataSet::append(const Node &node)
 {
     bool found = false;
-    unsigned long index = nearestNotLess(node.epoch(), found);
+    IndexType index = nearestNotLess(node.epoch(), found);
 
     if (found)
         m_data[index] = node;
@@ -43,10 +43,10 @@ DataSet& DataSet::append(const Node &node)
 }
 //------------------------------------------------------------------------------
 
-unsigned long DataSet::nearestNotLess(const time_t &t, bool &found)
+DataSet::IndexType DataSet::nearestNotLess(const time_t &t, bool &found)
 {
     found = false;
-    unsigned long size = m_data.size();
+    IndexType size = m_data.size();
     if (!size)
         return 0;
 
@@ -63,11 +63,11 @@ unsigned long DataSet::nearestNotLess(const time_t &t, bool &found)
         return 0;
     }
 
-    unsigned long begin = 0;
-    unsigned long end = size - 1;
+    IndexType begin = 0;
+    IndexType end = size - 1;
     while (begin < end)
     {
-        unsigned long middle = begin + (end - begin) / 2;
+        IndexType middle = begin + (end - begin) / 2;
         if (m_data.at(middle).epoch() < t)
             begin = middle + 1;
         else
