@@ -34,15 +34,20 @@ namespace tlelib
 class DataSet
 {
 public:
+    typedef std::vector<Node>::size_type IndexType;
     /*!
         \brief Append new node to data set
         \param node - TLE-node
         \return Reference to itself
     */
     DataSet& append(const Node &node);
+    /*!
+        \brief Number of nodes in data set
+        \return Number of nodes in data set
+    */
+    IndexType size() const;
 
 private:
-    typedef std::vector<Node>::size_type IndexType;
 
     IndexType nearestNotLess(const time_t &t, bool &found);
 

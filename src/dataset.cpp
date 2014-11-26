@@ -80,4 +80,10 @@ DataSet::IndexType DataSet::nearestNotLess(const time_t &t, bool &found)
 }
 //------------------------------------------------------------------------------
 
+DataSet::IndexType DataSet::size() const
+{
+    return m_data.size();
+}
+//------------------------------------------------------------------------------
+
 } //namespace tlelib
