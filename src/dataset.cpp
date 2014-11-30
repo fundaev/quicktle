@@ -86,4 +86,26 @@ DataSet::IndexType DataSet::size() const
 }
 //------------------------------------------------------------------------------
 
+bool DataSet::remove(const Node &node)
+{
+    bool found = false;
+    IndexType index = nearestNotLess(node.epoch(), found);
+
+    if (!found)
+        return false;
+
+    m_data.erase(m_data.begin() + index);
+    return true;
+}
+//------------------------------------------------------------------------------
+
+const Node* DataSet::node(const IndexType &index) const
+{
+    if (index < 0 || index > m_data.size())
+        return NULL;
+
+    return &m_data.at(index);
+}
+//------------------------------------------------------------------------------
+
 } //namespace tlelib

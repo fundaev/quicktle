@@ -42,10 +42,19 @@ public:
     */
     DataSet& append(const Node &node);
     /*!
+        \brief Removes \a node from data set
+        \param node - TLE-node
+        \return True if specified node is found and removed,
+                else returns false
+    */
+    bool remove(const Node &node);
+    /*!
         \brief Number of nodes in data set
         \return Number of nodes in data set
     */
     IndexType size() const;
+
+    const Node* node(const IndexType &index) const;
 
 private:
 
