@@ -101,7 +101,7 @@ bool DataSet::remove(const Node &node)
 
 const Node* DataSet::node(const IndexType &index) const
 {
-    if (index < 0 || index > m_data.size())
+    if (index < 0 || index >= m_data.size())
         return NULL;
 
     return &m_data.at(index);
