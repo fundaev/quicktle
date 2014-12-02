@@ -43,7 +43,7 @@ DataSet& DataSet::append(const Node &node)
 }
 //------------------------------------------------------------------------------
 
-DataSet::IndexType DataSet::nearestNotLess(const time_t &t, bool &found)
+DataSet::IndexType DataSet::nearestNotLess(const time_t &t, bool &found) const
 {
     found = false;
     IndexType size = m_data.size();
@@ -105,6 +105,36 @@ const Node* DataSet::node(const IndexType &index) const
         return NULL;
 
     return &m_data.at(index);
+}
+//------------------------------------------------------------------------------
+
+Node DataSet::nearestNode(const time_t &t) const
+{
+    IndexType size = m_data.size();
+    if (!size)
+        return Node();
+
+    bool found = false;
+    IndexType index = nearestNotLess(t, found);
+
+    if (index == size)
+        index = size - 1;
+
+    if (index > 0)
+    {
+        time_t dtLeft = t - m_data.at(index - 1).epoch();
+        time_t dtRight = m_data.at(index).epoch() - t;
+        if (dtLeft < dtRight)
+            --index;
+    }
+
+    return Node(m_data.at(index));
+}
+//------------------------------------------------------------------------------
+
+void DataSet::clear()
+{
+    m_data.clear();
 }
 //------------------------------------------------------------------------------
 

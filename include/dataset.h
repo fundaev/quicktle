@@ -49,16 +49,30 @@ public:
     */
     bool remove(const Node &node);
     /*!
+        \brief Clear data set
+    */
+    void clear();
+    /*!
         \brief Number of nodes in data set
         \return Number of nodes in data set
     */
     IndexType size() const;
-
+    /*!
+        \brief Get node at the given index
+        \param index - node index
+        \return Node at the given index
+    */
     const Node* node(const IndexType &index) const;
+    /*!
+        \brief Find the node with nearest to \a t date and time
+               and returns its copy
+        \param t - date and time
+        \return Copy of the nearest node
+    */
+    Node nearestNode(const time_t &t) const;
 
 private:
-
-    IndexType nearestNotLess(const time_t &t, bool &found);
+    IndexType nearestNotLess(const time_t &t, bool &found) const;
 
 	std::vector<Node> m_data;
 };
