@@ -40,7 +40,7 @@ public:
     /*!
         \brief Constructor.
         \param source - input stream
-        \param file_type - TLE file type (2- or 3-lines)
+        \param fileType - TLE file type (2- or 3-lines)
     */
     Stream(std::istream &source, const FileType fileType = TwoLines);
     /*!
@@ -64,9 +64,9 @@ public:
     /*!
         \brief Set the parsing mode
         \param parsingMode - parsing mode: true means, that the node object,
-                             obtained by >> operator, shoud parse the lines
+                             obtained by >> operator, should parse the lines
                              immediately, false - should parse the lines
-                             when it is required (lazy initalization).
+                             when it is required (lazy initialization).
         \return Previous value of parsing mode.
     */
     bool enforceParsing(bool parsingMode);

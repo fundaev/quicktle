@@ -42,7 +42,7 @@ public:
     */
     DataSet& append(const Node &node);
     /*!
-        \brief Removes \a node from data set
+        \brief Remove \a node from data set
         \param node - TLE-node
         \return True if specified node is found and removed,
                 else returns false

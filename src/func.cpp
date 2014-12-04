@@ -46,7 +46,7 @@ std::string int2string(const int val, const std::size_t fieldLength,
 //------------------------------------------------------------------------------
 
 std::string double2string(const double val, const std::size_t fieldLength,
-                          const std::size_t precission, const bool scientific,
+                          const std::size_t precision, const bool scientific,
                           const bool decimalPointAssumed,
                           const bool leftAlign)
 {
@@ -58,7 +58,7 @@ std::string double2string(const double val, const std::size_t fieldLength,
         val1 = modf(val, &val3);
     }
     sprintf(str, ("%" + int2string(fieldLength) + "." +
-                  int2string(precission + (scientific ? 1 : 0)) +
+                  int2string(precision + (scientific ? 1 : 0)) +
                   (scientific ? "e" : "f")).c_str(),
             val1);
     std::string res(str);

@@ -196,11 +196,11 @@ public:
     char ephemerisType() const;
     //! Set the Ephemeris type
     void setEphemerisType(char ephemerisType);
-    //! Get the precise epoch - number of seconds from Jan 1, #UNIX_FIRST_YEAR
+    //! Get the precise epoch - number of seconds from Jan 1, 1970
     double preciseEpoch() const;
     //! Set the precise epoch (including the fractional part of seconds)
     void setPreciseEpoch(double preciseEpoch);
-    //! Get the epoch - number of seconds from Jan 1, #UNIX_FIRST_YEAR.
+    //! Get the epoch - number of seconds from Jan 1, 1970
     std::time_t epoch() const;
     /*!
         Get the Element number
