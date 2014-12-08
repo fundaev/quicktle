@@ -46,4 +46,6 @@ int main(int argc, char** argv)
         cout << node;
     }
     f.close();
+
+    return 0;
 }

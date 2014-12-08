@@ -61,4 +61,6 @@ int main(int argc, char** argv)
     // now we set 3 lines, and the output format
     // is automatically set to 'tlelib::ThreeLines'
     std::cout << node2;
+
+    return 0;
 }

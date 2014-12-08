@@ -42,4 +42,6 @@ int main(int argc, char** argv)
     node.set_M(node.M() + node.n() * 1 * 360);
     std::cout << "One day later:" << std::endl;
     std::cout << node;
+
+    return 0;
 }
