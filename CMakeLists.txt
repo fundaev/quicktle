@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(quicktle)
+set(VERSION "2.0.0")
+
+if (UNIX)
+set(CMAKE_INSTALL_PREFIX "/usr")
+endif(UNIX)
 
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -17,6 +22,13 @@ ${TLELIB_SRC_DIR}/node.cpp
 ${TLELIB_SRC_DIR}/stream.cpp
 ${TLELIB_SRC_DIR}/dataset.cpp
 )
+set(TLELIB_HEADERS
+${TLELIB_INC_DIR}/func.h
+${TLELIB_INC_DIR}/node.h
+${TLELIB_INC_DIR}/stream.h
+${TLELIB_INC_DIR}/dataset.h
+)
+
 
 include_directories(${TLELIB_INC_DIR})
 
@@ -33,3 +45,19 @@ if (BUILD_TESTS)
 endif(BUILD_TESTS)
 
 add_library(${PROJECT_NAME} SHARED ${TLELIB_SOURCES})
+
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib COMPONENT bin)
+install(FILES ${TLELIB_HEADERS} DESTINATION include/quicktle COMPONENT hdr)
+install(FILES ${TLELIB_SOURCES} DESTINATION src/quicktle COMPONENT src)
+
+#if (UNIX)
+#	execute_process(COMMAND dpkg --print-architecture OUTPUT_VARIABLE ARTITECTURE)
+#endif (UNIX)
+
+
+set(CPACK_GENERATOR "TGZ;DEB;RPM")
+set(CPACK_PROJECT_CONFIG_FILE ${CMAKE_SOURCE_DIR}/CPackConfig.cmake)
+set(CPACK_PACKAGE_VERSION ${VERSION})
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Provides C++ library for operations with TLE-files")
+set(CPACK_PACKAGE_FILE_NAME ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
+include(CPack)
