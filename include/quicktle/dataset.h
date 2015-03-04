@@ -26,7 +26,7 @@
 #define TLEDATASET_H
 
 #include <vector>
-#include <node.h>
+#include <quicktle/node.h>
 
 namespace quicktle
 {

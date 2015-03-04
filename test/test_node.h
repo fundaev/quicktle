@@ -22,7 +22,7 @@
 #include <iostream>
 #include <ctime>
 #include <gtest/gtest.h>
-#include <node.h>
+#include <quicktle/node.h>
 
 using namespace quicktle;
 
@@ -51,7 +51,7 @@ TEST(NodeTest, Node_exceptions)
     EXPECT_NO_THROW(Node(line2, line3, true));
     EXPECT_EQ(Node::NoError, Node(line2, line3, true).lastError());
 
-    // Opearating with existing node
+    // Operating with existing node
     Node node;
     EXPECT_NO_THROW(node.assign(line1, line2, line3));
     EXPECT_EQ(Node::NoError, node.lastError());

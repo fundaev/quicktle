@@ -1,5 +1,5 @@
 /*
-  The bellow example demonstrates, how top read
+  Example bellow demonstrates, how top read
   the TLE files by Stream object.
   We will read two files:
       * mir.tle      - 2-lines format file
@@ -9,7 +9,8 @@
 
 #include <iostream>
 #include <fstream>
-#include <tlelib.h>
+#include <quicktle/node.h>
+#include <quicktle/stream.h>
 
 using namespace std;
 

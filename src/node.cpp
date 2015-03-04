@@ -29,8 +29,8 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
-#include <node.h>
-#include <func.h>
+#include <quicktle/node.h>
+#include <quicktle/func.h>
 
 namespace quicktle
 {

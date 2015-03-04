@@ -1,10 +1,10 @@
 /*
-  The bellow example demonstrates, how one may use the Node object.
+  Example bellow demonstrates, how one may use the Node object.
 */
 
 #include <iostream>
 #include <ctime>
-#include <tlelib.h>
+#include <quicktle/node.h>
 
 int main(int argc, char** argv)
 {

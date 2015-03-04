@@ -27,7 +27,7 @@
 
 #include <string>
 #include <ctime>
-#include <node.h>
+#include <quicktle/node.h>
 
 namespace quicktle
 {

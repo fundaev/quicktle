@@ -1,11 +1,10 @@
 /*
-  The bellow example demonstrates, how one can initialize the Node
+  Example bellow demonstrates, how one can initialize the Node
   objects on basis of the TLE strings and how one can print them.
 */
 
 #include <iostream>
-#include <string>
-#include <tlelib.h>
+#include <quicktle/node.h>
 
 int main(int argc, char** argv)
 {

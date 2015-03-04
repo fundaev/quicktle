@@ -26,7 +26,7 @@
 
 #include <string>
 #include <iostream>
-#include <stream.h>
+#include <quicktle/stream.h>
 
 namespace quicktle
 {

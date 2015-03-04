@@ -28,7 +28,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
-#include <func.h>
+#include <quicktle/func.h>
 
 #define UNIX_FIRST_YEAR 1970
 #define MAX_ANGLE 360.0

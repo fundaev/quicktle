@@ -19,7 +19,7 @@
  +----------------------------------------------------------------------------*/
 
 #include <gtest/gtest.h>
-#include <dataset.h>
+#include <quicktle/dataset.h>
 
 using namespace quicktle;
 

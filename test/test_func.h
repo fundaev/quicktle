@@ -22,7 +22,7 @@
 #include <iostream>
 #include <ctime>
 #include <gtest/gtest.h>
-#include <func.h>
+#include <quicktle/func.h>
 
 using namespace quicktle;
 

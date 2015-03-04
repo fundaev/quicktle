@@ -26,7 +26,7 @@
 #define TLESTREAM_H
 
 #include <iostream>
-#include <dataset.h>
+#include <quicktle/dataset.h>
 
 namespace quicktle
 {

@@ -22,7 +22,7 @@
     \brief File contains the realization of methods of quicktle::DataSet class
 */
 
-#include <dataset.h>
+#include <quicktle/dataset.h>
 
 namespace quicktle
 {

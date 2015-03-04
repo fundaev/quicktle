@@ -22,9 +22,9 @@
 #include <string>
 #include <sstream>
 #include <gtest/gtest.h>
-#include <func.h>
-#include <node.h>
-#include <stream.h>
+#include <quicktle/func.h>
+#include <quicktle/node.h>
+#include <quicktle/stream.h>
 
 using namespace quicktle;
 
