@@ -1,26 +1,26 @@
 /*-----------------------------------------------------------------------------+
- | TLELib                                                                      |
- | Copyright 2011-2014 Sergei Fundaev                                          |
+ | QuickTle                                                                    |
+ | Copyright 2011-2015 Sergei Fundaev                                          |
  +-----------------------------------------------------------------------------+
- | This file is part of TLELib.                                                |
+ | This file is part of QuickTle library.                                      |
  |                                                                             |
- | TLELib is free software: you can redistribute it and/or modify              |
+ | QuickTle is free software: you can redistribute it and/or modify            |
  | it under the terms of the GNU Lesser General Public License as published by |
  | the Free Software Foundation, either version 3 of the License, or           |
  | (at your option) any later version.                                         |
  |                                                                             |
- | TLELib is distributed in the hope that it will be useful,                   |
+ | QuickTle is distributed in the hope that it will be useful,                 |
  | but WITHOUT ANY WARRANTY; without even the implied warranty of              |
  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               |
  | GNU Lesser General Public License for more details.                         |
  |                                                                             |
  | You should have received a copy of the GNU Lesser General Public License    |
- | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
+ | along with QuickTle. If not, see <http://www.gnu.org/licenses/>.            |
  +----------------------------------------------------------------------------*/
 /*!
     \file func.cpp
     \brief File contains the realizations of the functions, defined
-           in the func.h file and used by the TLELib library.
+           in the func.h file and used by the QuickTle library.
 */
 
 #include <cmath>
@@ -33,7 +33,7 @@
 #define UNIX_FIRST_YEAR 1970
 #define MAX_ANGLE 360.0
 
-namespace tlelib
+namespace quicktle
 {
 
 std::string int2string(const int val, const std::size_t fieldLength,
@@ -361,4 +361,4 @@ double normalizeAngle(double angle)
 }
 //------------------------------------------------------------------------------
 
-}  // namespace tlelib
+}  // namespace quicktle

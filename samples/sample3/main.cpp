@@ -23,10 +23,10 @@ int main(int argc, char** argv)
 
     // Create the Stream object on basis of existing inout stream.
     // Generally speaking, we can use any object of istream class.
-    tlelib::Stream tle(f, tlelib::TwoLines);
+    quicktle::Stream tle(f, quicktle::TwoLines);
     while (tle) // it is more accurate, than 'while (f)'
     {
-        tlelib::Node node;
+        quicktle::Node node;
         tle >> node;
         cout << node;
     }
@@ -38,10 +38,10 @@ int main(int argc, char** argv)
 
     // === READ stations.tle FILE ===
     f.open("stations.tle");
-    tlelib::Stream tle1(f, tlelib::ThreeLines);
+    quicktle::Stream tle1(f, quicktle::ThreeLines);
     while (tle1)
     {
-        tlelib::Node node;
+        quicktle::Node node;
         tle1 >> node;
         cout << node;
     }

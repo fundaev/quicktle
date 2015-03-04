@@ -21,8 +21,8 @@ int main(int argc, char** argv)
     // To enforce the parsing use the last parameter as true, i.e.:
     //     tlelib::Node node1(line1, line2, line3, true);
     //     tlelib::Node node2(line2, line3, true);
-    tlelib::Node node1(line1, line2, line3);
-    tlelib::Node node2(line2, line3); // use 2 lines only as usual TLE file
+    quicktle::Node node1(line1, line2, line3);
+    quicktle::Node node2(line2, line3); // use 2 lines only as usual TLE file
 
     // Output in default format
     std::cout << "Node #1:" << std::endl << node1;
@@ -31,8 +31,8 @@ int main(int argc, char** argv)
     std::cout << "-------------------" << std::endl << std::endl;
 
     // Set 3-lines output frmat for both objects:
-    node1.outputFormat(tlelib::ThreeLines);
-    node2.outputFormat(tlelib::ThreeLines);
+    node1.outputFormat(quicktle::ThreeLines);
+    node2.outputFormat(quicktle::ThreeLines);
     std::cout << "Node #1:" << std::endl << node1;
     std::cout << "Node #2:" << std::endl << node2;
 
@@ -43,9 +43,9 @@ int main(int argc, char** argv)
     // As a result one may set the format and output the node in the same line,
     // as it is presented bellow.
     std::cout << "Node #1:" << std::endl
-              << node1.outputFormat(tlelib::TwoLines);
+              << node1.outputFormat(quicktle::TwoLines);
     std::cout << "Node #2:" << std::endl
-              << node2.outputFormat(tlelib::TwoLines);
+              << node2.outputFormat(quicktle::TwoLines);
 
     std::cout << "-------------------" << std::endl << std::endl;
 
@@ -54,12 +54,12 @@ int main(int argc, char** argv)
     // 1. Set the sat_name property:
     node2.setSatelliteName("ISS (manually set)");
     // Check how it's printed now:
-    std::cout << node2.outputFormat(tlelib::ThreeLines);
+    std::cout << node2.outputFormat(quicktle::ThreeLines);
 
     // 2. Alternatively one may re-assign the lines by 'assign' method:
     node2.assign(line1, line2, line3);
     // now we set 3 lines, and the output format
-    // is automatically set to 'tlelib::ThreeLines'
+    // is automatically set to 'quicktle::ThreeLines'
     std::cout << node2;
 
     return 0;

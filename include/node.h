@@ -1,26 +1,26 @@
 /*-----------------------------------------------------------------------------+
- | TLELib                                                                      |
- | Copyright 2011-2014 Sergei Fundaev                                          |
+ | QuickTle                                                                    |
+ | Copyright 2011-2015 Sergei Fundaev                                          |
  +-----------------------------------------------------------------------------+
- | This file is part of TLELib.                                                |
+ | This file is part of QuickTle library.                                      |
  |                                                                             |
- | TLELib is free software: you can redistribute it and/or modify              |
+ | QuickTle is free software: you can redistribute it and/or modify            |
  | it under the terms of the GNU Lesser General Public License as published by |
  | the Free Software Foundation, either version 3 of the License, or           |
  | (at your option) any later version.                                         |
  |                                                                             |
- | TLELib is distributed in the hope that it will be useful,                   |
+ | QuickTle is distributed in the hope that it will be useful,                 |
  | but WITHOUT ANY WARRANTY; without even the implied warranty of              |
  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               |
  | GNU Lesser General Public License for more details.                         |
  |                                                                             |
  | You should have received a copy of the GNU Lesser General Public License    |
- | along with TLELib. If not, see <http://www.gnu.org/licenses/>.              |
+ | along with QuickTle. If not, see <http://www.gnu.org/licenses/>.            |
  +----------------------------------------------------------------------------*/
 /*!
     \file node.h
-    \brief File contains the definition of tlelib::Node class
-           - main object of TLELib library.
+    \brief File contains the definition of quicktle::Node class
+           - main object of QuickTle library.
 */
 
 #ifndef TLENODE_H
@@ -30,7 +30,7 @@
 #include <ctime>
 #include <iostream>
 
-namespace tlelib
+namespace quicktle
 {
 
 /*!
@@ -83,7 +83,7 @@ public:
     //! Destructor.
     virtual ~Node();
     /*!
-        \brief Assign the TLE lines to tlelib::Node object.
+        \brief Assign the TLE lines to quicktle::Node object.
         \param line1 - first TLE line (satellite name)
         \param line2 - second TLE line ("1 ...")
         \param line3 - third TLE line ("2 ...")
@@ -93,7 +93,7 @@ public:
     bool assign(const std::string &line1, const std::string &line2,
                 const std::string &line3, bool forceParsing = false);
     /*!
-        \brief Assign the TLE lines to tlelib::Node object.
+        \brief Assign the TLE lines to quicktle::Node object.
         \param line1 - second TLE line ("1 ...")
         \param line2 - third TLE line ("2 ...")
         \param forceParsing - defines, if the data, specified in the given
@@ -283,6 +283,6 @@ private:
     mutable ErrorCode m_lastError;
 };
 
-} // namespace
+} // namespace quicktle
 
 #endif // TLENODE_H

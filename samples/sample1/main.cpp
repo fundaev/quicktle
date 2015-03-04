@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv)
 {
-    tlelib::Node node;              // create "empty" node
+    quicktle::Node node;              // create "empty" node
 
     node.setSatelliteName("ISS");    // set satellite name
     node.setSatelliteNumber("25544");// NORAD number
