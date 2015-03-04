@@ -24,11 +24,13 @@
 
 #define CHECKSUM_INDEX 68  //!< Index of checksum symbol in the TLE format line
 
-#define TLELIB_FREE(x) if (x) { delete x; x = NULL; }
+#define QUICKTLE_FREE(x) if (x) { delete x; x = NULL; }
+#define SECS_IN_DAY 86400
 
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 #include <quicktle/node.h>
 #include <quicktle/func.h>
 
@@ -181,26 +183,26 @@ void Node::init()
 
 void Node::free()
 {
-    TLELIB_FREE(m_line1)
-    TLELIB_FREE(m_line2)
-    TLELIB_FREE(m_line3)
-    TLELIB_FREE(m_satelliteName)
-    TLELIB_FREE(m_satelliteNumber)
-    TLELIB_FREE(m_designator)
-    TLELIB_FREE(m_dn)
-    TLELIB_FREE(m_d2n)
-    TLELIB_FREE(m_n)
-    TLELIB_FREE(m_bstar)
-    TLELIB_FREE(m_i)
-    TLELIB_FREE(m_Omega)
-    TLELIB_FREE(m_M)
-    TLELIB_FREE(m_omega)
-    TLELIB_FREE(m_e)
-    TLELIB_FREE(m_classification)
-    TLELIB_FREE(m_date)
-    TLELIB_FREE(m_ephemerisType)
-    TLELIB_FREE(m_elementNumber)
-    TLELIB_FREE(m_revolutionNumber)
+    QUICKTLE_FREE(m_line1)
+    QUICKTLE_FREE(m_line2)
+    QUICKTLE_FREE(m_line3)
+    QUICKTLE_FREE(m_satelliteName)
+    QUICKTLE_FREE(m_satelliteNumber)
+    QUICKTLE_FREE(m_designator)
+    QUICKTLE_FREE(m_dn)
+    QUICKTLE_FREE(m_d2n)
+    QUICKTLE_FREE(m_n)
+    QUICKTLE_FREE(m_bstar)
+    QUICKTLE_FREE(m_i)
+    QUICKTLE_FREE(m_Omega)
+    QUICKTLE_FREE(m_M)
+    QUICKTLE_FREE(m_omega)
+    QUICKTLE_FREE(m_e)
+    QUICKTLE_FREE(m_classification)
+    QUICKTLE_FREE(m_date)
+    QUICKTLE_FREE(m_ephemerisType)
+    QUICKTLE_FREE(m_elementNumber)
+    QUICKTLE_FREE(m_revolutionNumber)
 }
 //------------------------------------------------------------------------------
 
@@ -427,7 +429,7 @@ double Node::n() const
         if (m_line3)
         {
             ErrorCode error = NoError;
-            *m_n = parseDouble(m_line3, 52, 11, error);
+            *m_n = parseDouble(m_line3, 52, 11, error) * 2 * M_PI / SECS_IN_DAY;
             if (error != NoError)
             {
                 m_lastError = error;
@@ -457,7 +459,8 @@ double Node::dn() const
         if (m_line2)
         {
             ErrorCode error = NoError;
-            *m_dn = parseDouble(m_line2, 33, 10, error);
+            *m_dn = parseDouble(m_line2, 33, 10, error)
+                    * 2 * M_PI / SECS_IN_DAY / SECS_IN_DAY;
             if (error != NoError)
             {
                 m_lastError = error;
@@ -487,7 +490,8 @@ double Node::d2n() const
         if (m_line2)
         {
             ErrorCode error = NoError;
-            *m_d2n = parseDouble(m_line2, 44, 8, error, true);
+            *m_d2n = parseDouble(m_line2, 44, 8, error, true)
+                    * 2 * M_PI / SECS_IN_DAY / SECS_IN_DAY / SECS_IN_DAY;
             if (error != NoError)
             {
                 m_lastError = error;
@@ -517,7 +521,7 @@ double Node::i() const
         if (m_line3)
         {
             ErrorCode error = NoError;
-            *m_i = parseDouble(m_line3, 8, 8, error);
+            *m_i = deg2rad(parseDouble(m_line3, 8, 8, error));
             if (error != NoError)
             {
                 m_lastError = error;
@@ -547,7 +551,7 @@ double Node::Omega() const
         if (m_line3)
         {
             ErrorCode error = NoError;
-            *m_Omega = parseDouble(m_line3, 17, 8, error);
+            *m_Omega = deg2rad(parseDouble(m_line3, 17, 8, error));
             if (error != NoError)
             {
                 m_lastError = error;
@@ -577,7 +581,7 @@ double Node::omega() const
         if (m_line3)
         {
             ErrorCode error = NoError;
-            *m_omega = parseDouble(m_line3, 34, 8, error);
+            *m_omega = deg2rad(parseDouble(m_line3, 34, 8, error));
             if (error != NoError)
             {
                 m_lastError = error;
@@ -607,7 +611,7 @@ double Node::M() const
         if (m_line3)
         {
             ErrorCode error = NoError;
-            *m_M = parseDouble(m_line3, 43, 8, error);
+            *m_M = deg2rad(parseDouble(m_line3, 43, 8, error));
             if (error != NoError)
             {
                 m_lastError = error;
@@ -873,8 +877,10 @@ std::string Node::secondString() const
     res += (isprint(cl) ? std::string(1, cl) : " ") + " ";
     res += string2string(designator(), 8) + " ";
     res += date2string(preciseEpoch(), 14) + " ";
-    res += double2string(dn(), 10, 8, false, false, false) + " ";
-    res += double2string(d2n(), 8, 3, true, true, false) + " ";
+    res += double2string(dn() * SECS_IN_DAY * SECS_IN_DAY / 2 / M_PI,
+                         10, 8, false, false, false) + " ";
+    res += double2string(d2n()*SECS_IN_DAY*SECS_IN_DAY*SECS_IN_DAY/2/M_PI,
+                         8, 3, true, true, false) + " ";
     res += double2string(bstar(), 8, 3, true, true, false) + " ";
     const char eph = ephemerisType();
     res += (isprint(eph) ? std::string(1, eph) : " ") + " ";
@@ -892,14 +898,14 @@ std::string Node::thirdString() const
 {
     std::string res = "2 ";
     res += string2string(satelliteNumber(), 5) + " ";
-    res += double2string(normalizeAngle(i()), 8, 4, false, false, false) + " ";
-    res += double2string(normalizeAngle(Omega()), 8, 4, false, false, false) +
+    res += double2string(rad2deg(normalizeAngle(i())), 8, 4, false, false, false) + " ";
+    res += double2string(rad2deg(normalizeAngle(Omega())), 8, 4, false, false, false) +
            " ";
     res += double2string(e(), 7, 7, false, true, false) + " ";
-    res += double2string(normalizeAngle(omega()), 8, 4, false, false, false) +
+    res += double2string(rad2deg(normalizeAngle(omega())), 8, 4, false, false, false) +
            " ";
-    res += double2string(normalizeAngle(M()), 8, 4, false, false, false) + " ";
-    res += double2string(n(), 11, 8, false, false, false);
+    res += double2string(rad2deg(normalizeAngle(M())), 8, 4, false, false, false) + " ";
+    res += double2string(n() * SECS_IN_DAY / 2 / M_PI, 11, 8, false, false, false);
     res += int2string(revolutionNumber(), 5, false);
 
     // Checksum

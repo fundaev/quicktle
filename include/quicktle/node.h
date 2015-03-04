@@ -120,11 +120,11 @@ public:
     //! Set the International Designator
     void setDesignator(const std::string &designator);
     /*!
-        Get the Mean Motion [Revs per day] 
+        Get the Mean Motion [radians per second]
         \see http://celestrak.com/NORAD/documentation/tle-fmt.asp
     */
     double n() const;
-    //! Set the Mean Motion [Revs per day]
+    //! Set the Mean Motion [radians per second]
     void set_n(double n);
     /*!
         Get the First Time Derivative of the Mean Motion
@@ -141,32 +141,32 @@ public:
     //! Set the Second Time Derivative of the Mean Motion
     void set_d2n(double d2n);
     /*!
-        Get the Inclination [Degrees]
+        Get the Inclination [Radians]
         \see http://celestrak.com/NORAD/documentation/tle-fmt.asp
     */
     double i() const;
-    //! Set the Inclination [Degrees]
+    //! Set the Inclination [Radians]
     void set_i(double i);
     /*!
-        Get the Right Ascension of the Ascending Node [Degrees]
+        Get the Right Ascension of the Ascending Node [Radians]
         \see http://celestrak.com/NORAD/documentation/tle-fmt.asp
     */
     double Omega() const;
-    //! Set the Right Ascension of the Ascending Node [Degrees]
+    //! Set the Right Ascension of the Ascending Node [Radians]
     void set_Omega(double Omega);
     /*!
-        Get the Argument of Perigee [Degrees]
+        Get the Argument of Perigee [Radians]
         \see http://celestrak.com/NORAD/documentation/tle-fmt.asp
     */
     double omega() const;
-    //! Set the Argument of Perigee [Degrees]
+    //! Set the Argument of Perigee [Radians]
     void set_omega(double omega);
     /*!
-        Get the Mean Anomaly [Degrees]
+        Get the Mean Anomaly [Radians]
         \see http://celestrak.com/NORAD/documentation/tle-fmt.asp
     */
     double M() const;
-    //! Set the Mean Anomaly [Degrees]
+    //! Set the Mean Anomaly [Radians]
     void set_M(double M);
     /*!
         Get the BSTAR drag term
@@ -176,11 +176,11 @@ public:
     //! Set the BSTAR drag term
     void set_bstar(double bstar);
     /*!
-        Get the Eccentricity [Degrees]
+        Get the Eccentricity [Radians]
         \see http://celestrak.com/NORAD/documentation/tle-fmt.asp
     */
     double e() const;
-    //! Set the Eccentricity [Degrees]
+    //! Set the Eccentricity [Radians]
     void set_e(double e);
     /*!
         Get the Classification

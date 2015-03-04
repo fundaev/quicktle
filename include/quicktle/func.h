@@ -192,6 +192,18 @@ int checksum(const std::string &str);
 */
 double normalizeAngle(double angle);
 
+/*!
+    \brief Converts angle from degrees to radians
+    \return Angle converted to radians
+*/
+double deg2rad(double angle);
+
+/*!
+    \brief Converts angle from radians to degrees
+    \return Angle converted to degrees
+*/
+double rad2deg(double angle);
+
 } // namespace quicktle
 
 #endif // FUNC_H

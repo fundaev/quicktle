@@ -31,7 +31,7 @@
 #include <quicktle/func.h>
 
 #define UNIX_FIRST_YEAR 1970
-#define MAX_ANGLE 360.0
+#define MAX_ANGLE (2 * M_PI)
 
 namespace quicktle
 {
@@ -358,6 +358,18 @@ double normalizeAngle(double angle)
         angle += MAX_ANGLE * ceil(fabs(angle) / MAX_ANGLE);
 
     return angle;
+}
+//------------------------------------------------------------------------------
+
+double deg2rad(double angle)
+{
+    return angle * M_PI / 180.;
+}
+//------------------------------------------------------------------------------
+
+double rad2deg(double angle)
+{
+    return angle * 180. / M_PI;
 }
 //------------------------------------------------------------------------------
 

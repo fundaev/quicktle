@@ -21,8 +21,10 @@
 #include <string>
 #include <iostream>
 #include <ctime>
+#include <cmath>
 #include <gtest/gtest.h>
 #include <quicktle/node.h>
+#include <quicktle/func.h>
 
 using namespace quicktle;
 
@@ -98,15 +100,15 @@ TEST(NodeTest, Node_Elements)
     EXPECT_EQ('0', node.ephemerisType());
     EXPECT_EQ(11, node.elementNumber());
     EXPECT_EQ(39, node.revolutionNumber());
-    EXPECT_DOUBLE_EQ(0.00057349, node.dn());
-    EXPECT_DOUBLE_EQ(0, node.d2n());
+    EXPECT_DOUBLE_EQ(0.00057349 * 2 * M_PI / 86400 / 86400, node.dn());
+    EXPECT_DOUBLE_EQ(0 * 2 * M_PI / 86400 / 86400 / 86400, node.d2n());
     EXPECT_DOUBLE_EQ(0.31166e-3, node.bstar());
-    EXPECT_DOUBLE_EQ(51.6129, node.i());
-    EXPECT_DOUBLE_EQ(108.0599, node.Omega());
+    EXPECT_DOUBLE_EQ(deg2rad(51.6129), node.i());
+    EXPECT_DOUBLE_EQ(deg2rad(108.0599), node.Omega());
     EXPECT_DOUBLE_EQ(0.0012107, node.e());
-    EXPECT_DOUBLE_EQ(160.8295, node.omega());
-    EXPECT_DOUBLE_EQ(196.0076, node.M());
-    EXPECT_DOUBLE_EQ(15.79438158, node.n());
+    EXPECT_DOUBLE_EQ(deg2rad(160.8295), node.omega());
+    EXPECT_DOUBLE_EQ(deg2rad(196.0076), node.M());
+    EXPECT_DOUBLE_EQ(15.79438158 * 2 * M_PI / 86400, node.n());
     // Epoch: Feb 23, 1986 07:19:23 UTC
     std::time_t dt = node.epoch();
     std::tm *t = gmtime(&dt);

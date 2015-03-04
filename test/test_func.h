@@ -21,6 +21,7 @@
 #include <string>
 #include <iostream>
 #include <ctime>
+#include <cmath>
 #include <gtest/gtest.h>
 #include <quicktle/func.h>
 
@@ -409,11 +410,11 @@ TEST(Functions, checksum)
 
 TEST(Functions, normalizeAngle)
 {
-    EXPECT_DOUBLE_EQ(124, normalizeAngle(124));
-    EXPECT_DOUBLE_EQ(274.15, normalizeAngle(274.15));
-    EXPECT_DOUBLE_EQ(45.237, normalizeAngle(405.237));
-    EXPECT_DOUBLE_EQ(17.64, normalizeAngle(-342.36));
-    EXPECT_DOUBLE_EQ(0, normalizeAngle(360));
-    EXPECT_DOUBLE_EQ(0, normalizeAngle(720));
+    EXPECT_NEAR(deg2rad(124), normalizeAngle(deg2rad(124)), 1e-12);
+    EXPECT_NEAR(deg2rad(274.15), normalizeAngle(deg2rad(274.15)), 1e-12);
+    EXPECT_NEAR(deg2rad(45.237), normalizeAngle(deg2rad(405.237)), 1e-12);
+    EXPECT_NEAR(deg2rad(17.64), normalizeAngle(deg2rad(-342.36)), 1e-12);
+    EXPECT_NEAR(0, normalizeAngle(2 * M_PI), 1e-12);
+    EXPECT_NEAR(0, normalizeAngle(4 * M_PI), 1e-12);
 }
 //------------------------------------------------------------------------------

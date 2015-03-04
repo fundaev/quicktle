@@ -12,7 +12,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 set(QUICKTLE_SRC_DIR ${CMAKE_SOURCE_DIR}/src)
-set(QUICKTLE_INC_DIR ${CMAKE_SOURCE_DIR}/include/quicktle)
+set(QUICKTLE_INC_DIR ${CMAKE_SOURCE_DIR}/include)
 set(QUICKTLE_SAMPLES_DIR ${CMAKE_SOURCE_DIR}/samples)
 set(QUICKTLE_TESTS_DIR ${CMAKE_SOURCE_DIR}/test)
 
@@ -23,10 +23,10 @@ ${QUICKTLE_SRC_DIR}/stream.cpp
 ${QUICKTLE_SRC_DIR}/dataset.cpp
 )
 set(QUICKTLE_HEADERS
-${QUICKTLE_INC_DIR}/func.h
-${QUICKTLE_INC_DIR}/node.h
-${QUICKTLE_INC_DIR}/stream.h
-${QUICKTLE_INC_DIR}/dataset.h
+${QUICKTLE_INC_DIR}/quicktle/func.h
+${QUICKTLE_INC_DIR}/quicktle/node.h
+${QUICKTLE_INC_DIR}/quicktle/stream.h
+${QUICKTLE_INC_DIR}/quicktle/dataset.h
 )
 
 
