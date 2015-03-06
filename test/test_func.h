@@ -408,6 +408,36 @@ TEST(Functions, checksum)
 }
 //------------------------------------------------------------------------------
 
+TEST(Functions, rad2deg)
+{
+    EXPECT_DOUBLE_EQ(0, rad2deg(0));
+    EXPECT_DOUBLE_EQ(45, rad2deg(M_PI_4));
+    EXPECT_DOUBLE_EQ(90, rad2deg(M_PI_2));
+    EXPECT_DOUBLE_EQ(135, rad2deg(3 * M_PI_4));
+    EXPECT_DOUBLE_EQ(180, rad2deg(M_PI));
+    EXPECT_DOUBLE_EQ(225, rad2deg(5 * M_PI_4));
+    EXPECT_DOUBLE_EQ(270, rad2deg(3 * M_PI_2));
+    EXPECT_DOUBLE_EQ(315, rad2deg(7 * M_PI_4));
+    EXPECT_DOUBLE_EQ(360, rad2deg(2 * M_PI));
+    EXPECT_DOUBLE_EQ(720, rad2deg(4 * M_PI));
+}
+//------------------------------------------------------------------------------
+
+TEST(Functions, deg2rad)
+{
+    EXPECT_DOUBLE_EQ(0, deg2rad(0));
+    EXPECT_DOUBLE_EQ(M_PI_4, deg2rad(45));
+    EXPECT_DOUBLE_EQ(M_PI_2, deg2rad(90));
+    EXPECT_DOUBLE_EQ(3 * M_PI_4, deg2rad(135));
+    EXPECT_DOUBLE_EQ(M_PI, deg2rad(180));
+    EXPECT_DOUBLE_EQ(5 * M_PI_4, deg2rad(225));
+    EXPECT_DOUBLE_EQ(3 * M_PI_2, deg2rad(270));
+    EXPECT_DOUBLE_EQ(7 * M_PI_4, deg2rad(315));
+    EXPECT_DOUBLE_EQ(2 * M_PI, deg2rad(360));
+    EXPECT_DOUBLE_EQ(4 * M_PI, deg2rad(720));
+}
+//------------------------------------------------------------------------------
+
 TEST(Functions, normalizeAngle)
 {
     EXPECT_NEAR(deg2rad(124), normalizeAngle(deg2rad(124)), 1e-12);
