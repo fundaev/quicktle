@@ -56,7 +56,7 @@ TEST(StreamTest, input)
     EXPECT_EQ("16609", node.satelliteNumber());
     EXPECT_EQ("86017A", node.designator());
     EXPECT_EQ('U', node.classification());
-    EXPECT_DOUBLE_EQ(0.00057349 * 2 * M_PI / 86400 / 86400,  node.dn());
+    EXPECT_DOUBLE_EQ(2 * 0.00057349 * 2 * M_PI / 86400 / 86400,  node.dn());
     EXPECT_DOUBLE_EQ(0, node.d2n());
     EXPECT_DOUBLE_EQ(0.00031166, node.bstar());
     EXPECT_DOUBLE_EQ(deg2rad(51.6129), node.i());
@@ -80,7 +80,7 @@ TEST(StreamTest, output)
     node.setDesignator("86017A");
     Node::ErrorCode error;
     node.setPreciseEpoch(string2date("86053.30522506", error));
-    node.set_dn(0.00057349 * 2 * M_PI / 86400 / 86400);
+    node.set_dn(2 * 0.00057349 * 2 * M_PI / 86400 / 86400);
     node.set_d2n(0);
     node.set_bstar(0.00031166);
     node.set_i(deg2rad(51.6129));

@@ -100,8 +100,8 @@ TEST(NodeTest, Node_Elements)
     EXPECT_EQ('0', node.ephemerisType());
     EXPECT_EQ(11, node.elementNumber());
     EXPECT_EQ(39, node.revolutionNumber());
-    EXPECT_DOUBLE_EQ(0.00057349 * 2 * M_PI / 86400 / 86400, node.dn());
-    EXPECT_DOUBLE_EQ(0 * 2 * M_PI / 86400 / 86400 / 86400, node.d2n());
+    EXPECT_DOUBLE_EQ(2 * 0.00057349 * 2 * M_PI / 86400 / 86400, node.dn());
+    EXPECT_DOUBLE_EQ(6 * 0 * 2 * M_PI / 86400 / 86400 / 86400, node.d2n());
     EXPECT_DOUBLE_EQ(0.31166e-3, node.bstar());
     EXPECT_DOUBLE_EQ(deg2rad(51.6129), node.i());
     EXPECT_DOUBLE_EQ(deg2rad(108.0599), node.Omega());

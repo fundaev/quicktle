@@ -459,7 +459,7 @@ double Node::dn() const
         if (m_line2)
         {
             ErrorCode error = NoError;
-            *m_dn = parseDouble(m_line2, 33, 10, error)
+            *m_dn = 2 * parseDouble(m_line2, 33, 10, error)
                     * 2 * M_PI / SECS_IN_DAY / SECS_IN_DAY;
             if (error != NoError)
             {
@@ -490,7 +490,7 @@ double Node::d2n() const
         if (m_line2)
         {
             ErrorCode error = NoError;
-            *m_d2n = parseDouble(m_line2, 44, 8, error, true)
+            *m_d2n = 6 * parseDouble(m_line2, 44, 8, error, true)
                     * 2 * M_PI / SECS_IN_DAY / SECS_IN_DAY / SECS_IN_DAY;
             if (error != NoError)
             {
@@ -877,9 +877,9 @@ std::string Node::secondString() const
     res += (isprint(cl) ? std::string(1, cl) : " ") + " ";
     res += string2string(designator(), 8) + " ";
     res += date2string(preciseEpoch(), 14) + " ";
-    res += double2string(dn() * SECS_IN_DAY * SECS_IN_DAY / 2 / M_PI,
+    res += double2string(dn() / 2. * SECS_IN_DAY * SECS_IN_DAY / 2 / M_PI,
                          10, 8, false, false, false) + " ";
-    res += double2string(d2n()*SECS_IN_DAY*SECS_IN_DAY*SECS_IN_DAY/2/M_PI,
+    res += double2string(d2n()/6.*SECS_IN_DAY*SECS_IN_DAY*SECS_IN_DAY/2/M_PI,
                          8, 3, true, true, false) + " ";
     res += double2string(bstar(), 8, 3, true, true, false) + " ";
     const char eph = ephemerisType();
