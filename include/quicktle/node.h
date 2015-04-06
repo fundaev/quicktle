@@ -214,6 +214,28 @@ public:
         \see http://celestrak.com/NORAD/documentation/tle-fmt.asp
     */
     int revolutionNumber() const;
+
+    //! Get eccentric anomaly
+    double E() const;
+    //! Get true anomaly
+    double nu() const;
+    //! Get orbit semi-major axis
+    double a() const;
+    //! Get orbit focal parameter
+    double p() const;
+    //! Get radius-vector
+    double r() const;
+    //! Get X-coordinate
+    double x() const;
+    //! Get Y-coordinate
+    double y() const;
+    //! Get Z-coordinate
+    double z() const;
+    //! Set eccentric anomaly
+    void set_E(double value);
+    //! Set true anomaly
+    void set_nu(double value);
+
     //! Set the Revolution number [Revs]
     void setRevolutionNumber(int revolutionNumber);
     //! Convert this object to the first string of TLE format.
@@ -235,7 +257,7 @@ public:
         \return Output stream
     */
     friend std::ostream& operator<<(std::ostream &stream, Node &node);
-    //! Swaps the data of two Node objects
+    //! Swap the data of two Node objects
     void swap(Node &node);
     //! Get the code of last error
     ErrorCode lastError() const

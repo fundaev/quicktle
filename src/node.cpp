@@ -26,6 +26,8 @@
 
 #define QUICKTLE_FREE(x) if (x) { delete x; x = NULL; }
 #define SECS_IN_DAY 86400
+#define GM 3.986004418e14
+#define E_RELATIVE_ERROR 1e-7
 
 #include <string>
 #include <cstdlib>
@@ -934,6 +936,79 @@ std::ostream& operator<<(std::ostream& stream, Node& node)
     stream << node.thirdString() << std::endl;
 
     return stream;
+}
+//------------------------------------------------------------------------------
+
+double Node::E() const
+{
+    double E = M();
+    double oldE;
+    do
+    {
+        oldE = E;
+        E = M() + e() * sin(oldE);
+    }
+    while (fabs((oldE - E) / E) > E_RELATIVE_ERROR);
+
+    return E;
+}
+//------------------------------------------------------------------------------
+
+double Node::nu() const
+{
+    return 2 * atan(sqrt( (1 + e()) / (1 - e()) ) * tan(E() / 2) );
+}
+//------------------------------------------------------------------------------
+
+double Node::a() const
+{
+    return pow(GM / pow(n(), 2), 1./3.);
+}
+//------------------------------------------------------------------------------
+
+double Node::p() const
+{
+    return a() * (1 - pow(e(), 2));
+}
+//------------------------------------------------------------------------------
+
+double Node::r() const
+{
+    return p() / (1 + e() * cos(nu()));
+}
+//------------------------------------------------------------------------------
+
+double Node::x() const
+{
+    double nu = Node::nu();
+    return r() * (cos(Omega()) * cos(omega() + nu)
+                  - sin(Omega()) * sin(omega() + nu) * cos(i()));
+}
+//------------------------------------------------------------------------------
+
+double Node::y() const
+{
+    double nu = Node::nu();
+    return r() * (sin(Omega()) * cos(omega() + nu)
+                  + cos(Omega()) * sin(omega() + nu) * cos(i()));
+}
+//------------------------------------------------------------------------------
+
+double Node::z() const
+{
+    return r() * sin(omega() + nu()) * sin(i());
+}
+//------------------------------------------------------------------------------
+
+void Node::set_E(double value)
+{
+    set_M(value - e() * sin(value));
+}
+//------------------------------------------------------------------------------
+
+void Node::set_nu(double value)
+{
+    set_E(2 * atan(sqrt( (1 - e()) / (1 + e()) ) * tan(value / 2) ));
 }
 //------------------------------------------------------------------------------
 

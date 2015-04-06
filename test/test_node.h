@@ -26,16 +26,52 @@
 #include <quicktle/node.h>
 #include <quicktle/func.h>
 
+#define E_RELATIVE_ERROR 1e-7
+#define GM 3.986004418e14
+
 using namespace quicktle;
 
 class NodeTest: public Node, public ::testing::Test
 {
+public:
+    double dE() const
+    {
+        return fabs(E()) * E_RELATIVE_ERROR;
+    }
+    double dnu() const
+    {
+        return fabs( 2 * sqrt( (1 + e()) / (1 - e()) ) * dE()
+               / ( 1 - e() * cos(E()) ) );
+    }
+    double dr() const
+    {
+        return fabs(p() * e() * sin(nu()) * dnu() / pow(1 + e() * cos(nu()), 2));
+    }
+    double dx() const
+    {
+        return fabs( -r() * (
+                cos(Omega()) * sin(omega() + nu())
+                + sin(Omega()) * cos(omega() + nu()) * cos(i())
+        ) * dnu() + x() * dr() / r() );
+    }
+    double dy() const
+    {
+        return fabs( r() * (
+                -sin(Omega()) * sin(omega() + nu())
+                + cos(Omega()) * cos(omega() + nu()) * cos(i())
+        ) * dnu() + y() * dr() / r() );
+    }
+    double dz() const
+    {
+        return fabs( r() * cos(omega() + nu()) * sin(i()) * dnu()
+                     + z() * dr() / r() );
+    }
 };
 
 //
 //---- TESTS -------------------------------------------------------------------
 
-TEST(NodeTest, Node_exceptions)
+TEST_F(NodeTest, exceptions)
 {
     std::string line1 = "Mir";
     std::string line2 = "1 16609U 86017A   86053.30522506  .00057349"
@@ -84,7 +120,7 @@ TEST(NodeTest, Node_exceptions)
 }
 //------------------------------------------------------------------------------
 
-TEST(NodeTest, Node_Elements)
+TEST_F(NodeTest, elements)
 {
     std::string line1 = "Mir                     ";
     std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
@@ -121,7 +157,7 @@ TEST(NodeTest, Node_Elements)
 }
 //------------------------------------------------------------------------------
 
-TEST(NodeTest, Node_Output)
+TEST_F(NodeTest, output)
 {
     std::string line1 = "Mir                     ";
     std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
@@ -134,7 +170,7 @@ TEST(NodeTest, Node_Output)
 }
 //------------------------------------------------------------------------------
 
-TEST(NodeTest, Node_swap)
+TEST_F(NodeTest, swap)
 {
     std::string line1 = "Mir                     ";
     std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
@@ -177,7 +213,7 @@ TEST(NodeTest, Node_swap)
 }
 //------------------------------------------------------------------------------
 
-TEST(NodeTest, Node_copy_constructor)
+TEST_F(NodeTest, copyConstructor)
 {
     std::string line1 = "Mir                     ";
     std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
@@ -216,7 +252,7 @@ TEST(NodeTest, Node_copy_constructor)
 }
 //------------------------------------------------------------------------------
 
-TEST(NodeTest, Node_assigment)
+TEST_F(NodeTest, assigment)
 {
     std::string line1 = "Mir                     ";
     std::string line2 = "1 16609U 86017A   86053.30522506  .00057349  00000-0"
@@ -257,5 +293,127 @@ TEST(NodeTest, Node_assigment)
     EXPECT_EQ(node1.firstString(), node2.firstString());
     EXPECT_EQ(node1.secondString(), node2.secondString());
     EXPECT_EQ(node1.thirdString(), node2.thirdString());
+}
+//------------------------------------------------------------------------------
+
+TEST_F(NodeTest, nu_E_M)
+{
+    set_e(0.5);
+
+    set_M(0);
+    EXPECT_DOUBLE_EQ(0, E());
+    EXPECT_DOUBLE_EQ(0, nu());
+
+    set_M(M_PI);
+    EXPECT_NEAR(M_PI, E(), dE());
+    EXPECT_NEAR(M_PI, nu(), dE());
+
+    set_M(M_PI_4);
+    EXPECT_NE(M(), E());
+    EXPECT_NE(M(), nu());
+    EXPECT_NE(nu(), E());
+
+    set_M(M_PI_2);
+    EXPECT_NE(M(), E());
+    EXPECT_NE(M(), nu());
+    EXPECT_NE(nu(), E());
+
+    set_M(-M_PI_4);
+    EXPECT_NE(M(), E());
+    EXPECT_NE(M(), nu());
+    EXPECT_NE(nu(), E());
+
+    set_M(-M_PI_2);
+    EXPECT_NE(M(), E());
+    EXPECT_NE(M(), nu());
+    EXPECT_NE(nu(), E());
+
+    set_e(0);
+
+    set_M(M_PI_4);
+    EXPECT_NEAR(M(), E(), dE());
+    EXPECT_NEAR(M(), nu(), dE());
+    EXPECT_DOUBLE_EQ(nu(), E());
+
+    set_M(M_PI_2);
+    EXPECT_NEAR(M(), E(), dE());
+    EXPECT_NEAR(M(), nu(), dE());
+    EXPECT_DOUBLE_EQ(nu(), E());
+
+    set_M(-M_PI_4);
+    EXPECT_NEAR(M(), E(), dE());
+    EXPECT_NEAR(M(), nu(), dE());
+    EXPECT_DOUBLE_EQ(nu(), E());
+
+    set_M(-M_PI_2);
+    EXPECT_NEAR(M(), E(), dE());
+    EXPECT_NEAR(M(), nu(), dE());
+    EXPECT_DOUBLE_EQ(nu(), E());
+}
+//------------------------------------------------------------------------------
+
+TEST_F(NodeTest, set_E_set_nu)
+{
+    set_e(0.3);
+    double angle = M_PI / 7;
+    set_E(angle);
+    EXPECT_DOUBLE_EQ(angle - 0.3 * sin(angle), M());
+    EXPECT_NEAR(angle, E(), dE());
+
+    set_nu(angle);
+    EXPECT_NEAR(angle, nu(), dE());
+
+    Node node;
+    node.set_e(e());
+
+    node.set_M(M());
+    EXPECT_NEAR(E(), node.E(), dE());
+    EXPECT_NEAR(nu(), node.nu(), dE());
+}
+//------------------------------------------------------------------------------
+
+TEST_F(NodeTest, a_p_r)
+{
+    set_e(0);
+    set_n(15);
+    set_nu(M_PI / 7);
+    EXPECT_DOUBLE_EQ(15, n());
+    EXPECT_DOUBLE_EQ(p(), a());
+    EXPECT_DOUBLE_EQ(p(), r());
+
+    double e = 0.6;
+    double nu = M_PI / 7;
+
+    set_e(e);
+    set_nu(nu);
+    EXPECT_NE(p(), a());
+    EXPECT_NE(p(), r());
+
+    double r = p() / (1 + e * cos(nu));
+    EXPECT_NEAR(r, NodeTest::r(), dr());
+}
+//------------------------------------------------------------------------------
+
+TEST_F(NodeTest, x_y_z)
+{
+    double a = 10000;
+    double e = 0;
+    double i = 0;
+    double nu = M_PI / 3;
+
+    set_e(e);
+    set_n(sqrt(GM / pow(a, 3)));
+    set_i(i);
+    set_nu(nu);
+
+    EXPECT_NEAR(a * cos(nu), x(), dx());
+    EXPECT_NEAR(a * sin(nu), y(), dy());
+    EXPECT_NEAR(0, z(), dz());
+
+    i = M_PI / 5;
+    set_i(i);
+    EXPECT_NEAR(a * cos(nu), x(), dx());
+    EXPECT_NEAR(a * sin(nu) * cos(i), y(), dy());
+    EXPECT_NEAR(a * sin(nu) * sin(i), z(), dz());
 }
 //------------------------------------------------------------------------------
