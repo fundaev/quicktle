@@ -214,7 +214,8 @@ public:
         \see http://celestrak.com/NORAD/documentation/tle-fmt.asp
     */
     int revolutionNumber() const;
-
+    //! Set the Revolution number [Revs]
+    void setRevolutionNumber(int revolutionNumber);
     //! Get eccentric anomaly
     double E() const;
     //! Get true anomaly
@@ -235,9 +236,6 @@ public:
     void set_E(double value);
     //! Set true anomaly
     void set_nu(double value);
-
-    //! Set the Revolution number [Revs]
-    void setRevolutionNumber(int revolutionNumber);
     //! Convert this object to the first string of TLE format.
     std::string firstString() const;
     //! Convert this object to the second string of TLE format.
