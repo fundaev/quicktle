@@ -954,9 +954,21 @@ double Node::E() const
 }
 //------------------------------------------------------------------------------
 
+void Node::set_E(double value)
+{
+    set_M(value - e() * sin(value));
+}
+//------------------------------------------------------------------------------
+
 double Node::nu() const
 {
     return 2 * atan(sqrt( (1 + e()) / (1 - e()) ) * tan(E() / 2) );
+}
+//------------------------------------------------------------------------------
+
+void Node::set_nu(double value)
+{
+    set_E(2 * atan(sqrt( (1 - e()) / (1 + e()) ) * tan(value / 2) ));
 }
 //------------------------------------------------------------------------------
 
@@ -1000,15 +1012,47 @@ double Node::z() const
 }
 //------------------------------------------------------------------------------
 
-void Node::set_E(double value)
+double Node::vx() const
 {
-    set_M(value - e() * sin(value));
+    double nu = Node::nu();
+    double v0 = sqrt(GM/p());
+    double r_dot = v0 * e() * sin(nu);
+    double r_nu_dot = v0 * (1 + e() * cos(nu));
+    double omega_nu = omega() + nu;
+
+    return (
+            (r_dot * cos(omega_nu) - r_nu_dot * sin(omega_nu)) * cos(Omega())
+            - (r_dot * sin(omega_nu) + r_nu_dot * cos(omega_nu))
+                * sin(Omega()) * cos(i())
+    );
 }
 //------------------------------------------------------------------------------
 
-void Node::set_nu(double value)
+double Node::vy() const
 {
-    set_E(2 * atan(sqrt( (1 - e()) / (1 + e()) ) * tan(value / 2) ));
+    double nu = Node::nu();
+    double v0 = sqrt(GM/p());
+    double r_dot = v0 * e() * sin(nu);
+    double r_nu_dot = v0 * (1 + e() * cos(nu));
+    double omega_nu = omega() + nu;
+
+    return (
+            (r_dot * cos(omega_nu) - r_nu_dot * sin(omega_nu)) * sin(Omega())
+            + (r_dot * sin(omega_nu) + r_nu_dot * cos(omega_nu))
+              * cos(Omega()) * cos(i())
+    );
+}
+//------------------------------------------------------------------------------
+
+double Node::vz() const
+{
+    double nu = Node::nu();
+    double v0 = sqrt(GM/p());
+    double r_dot = v0 * e() * sin(nu);
+    double r_nu_dot = v0 * (1 + e() * cos(nu));
+    double omega_nu = omega() + nu;
+
+    return ( (r_dot * sin(omega_nu) + r_nu_dot * cos(omega_nu)) * sin(i()) );
 }
 //------------------------------------------------------------------------------
 

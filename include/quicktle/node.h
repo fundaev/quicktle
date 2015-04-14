@@ -218,8 +218,12 @@ public:
     void setRevolutionNumber(int revolutionNumber);
     //! Get eccentric anomaly
     double E() const;
+    //! Set eccentric anomaly
+    void set_E(double value);
     //! Get true anomaly
     double nu() const;
+    //! Set true anomaly
+    void set_nu(double value);
     //! Get orbit semi-major axis
     double a() const;
     //! Get orbit focal parameter
@@ -232,10 +236,12 @@ public:
     double y() const;
     //! Get Z-coordinate
     double z() const;
-    //! Set eccentric anomaly
-    void set_E(double value);
-    //! Set true anomaly
-    void set_nu(double value);
+    //! Get X-coordinate of velocity
+    double vx() const;
+    //! Get Y-coordinate of velocity
+    double vy() const;
+    //! Get Z-coordinate of velocity
+    double vz() const;
     //! Convert this object to the first string of TLE format.
     std::string firstString() const;
     //! Convert this object to the second string of TLE format.

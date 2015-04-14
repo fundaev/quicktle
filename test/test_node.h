@@ -66,6 +66,41 @@ public:
         return fabs( r() * cos(omega() + nu()) * sin(i()) * dnu()
                      + z() * dr() / r() );
     }
+    double dvx() const
+    {
+        double nu = Node::nu();
+        double v0 = sqrt(GM/p());
+        double r_dot = v0 * e() * sin(nu);
+        double r_nu_dot = v0 * (1 + e() * cos(nu));
+        double gamma = r_dot / tan(nu) - r_nu_dot;
+        double dAlpha = gamma * cos(omega() + nu);
+        double dBetta = gamma * sin(omega() + nu);
+
+        return fabs(dAlpha * cos(Omega()) - dBetta * sin(Omega()) * cos(i())) * dnu();
+    }
+    double dvy() const
+    {
+        double nu = Node::nu();
+        double v0 = sqrt(GM/p());
+        double r_dot = v0 * e() * sin(nu);
+        double r_nu_dot = v0 * (1 + e() * cos(nu));
+        double gamma = r_dot / tan(nu) - r_nu_dot;
+        double dAlpha = gamma * cos(omega() + nu);
+        double dBetta = gamma * sin(omega() + nu);
+
+        return fabs(dAlpha * sin(Omega()) + dBetta * cos(Omega()) * cos(i())) * dnu();
+    }
+    double dvz() const
+    {
+        double nu = Node::nu();
+        double v0 = sqrt(GM/p());
+        double r_dot = v0 * e() * sin(nu);
+        double r_nu_dot = v0 * (1 + e() * cos(nu));
+        double gamma = r_dot / tan(nu) - r_nu_dot;
+        double dBetta = gamma * sin(omega() + nu);
+
+        return fabs(dBetta * sin(i())) * dnu();
+    }
 };
 
 //
@@ -415,5 +450,22 @@ TEST_F(NodeTest, x_y_z)
     EXPECT_NEAR(a * cos(nu), x(), dx());
     EXPECT_NEAR(a * sin(nu) * cos(i), y(), dy());
     EXPECT_NEAR(a * sin(nu) * sin(i), z(), dz());
+}
+//------------------------------------------------------------------------------
+
+TEST_F(NodeTest, vx_vy_vz)
+{
+    double a = 7e6;
+
+    set_e(0);
+    set_n(sqrt(GM/pow(a, 3)));
+    set_M(M_PI_2);
+    set_i(0);
+    set_omega(0);
+    set_Omega(0);
+
+    EXPECT_DOUBLE_EQ(-sqrt(GM / a), vx());
+    EXPECT_NEAR(0, vy(), dvy());
+    EXPECT_NEAR(0, vz(), dvz());
 }
 //------------------------------------------------------------------------------
