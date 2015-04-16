@@ -212,68 +212,56 @@ std::string trim(const std::string &str)
 }
 //------------------------------------------------------------------------------
 
-char parseChar(const std::string *line, const std::size_t index,
+char parseChar(const std::string &line, const std::size_t index,
                Node::ErrorCode &error)
 {
-    if (!line)
-        return '\0';
-
-    if (line->length() - 1 < index)
+    if (line.length() - 1 < index)
     {
         error = Node::TooShortString;
         return '\0';
     }
 
-    return (*line)[index];
+    return line[index];
 }
 //------------------------------------------------------------------------------
 
-std::string parseString(const std::string *line, const std::size_t start,
+std::string parseString(const std::string &line, const std::size_t start,
                         const std::size_t length, Node::ErrorCode &error)
 {
-    if (!line)
-        return std::string();
-
-    if (line->length() < start + length)
+    if (line.length() < start + length)
     {
         error = Node::TooShortString;
         return std::string();
     }
 
-    return line->substr(start, length);
+    return line.substr(start, length);
 }
 //------------------------------------------------------------------------------
 
-int parseInt(const std::string *line, const std::size_t start,
+int parseInt(const std::string &line, const std::size_t start,
              const std::size_t length, Node::ErrorCode &error)
 {
-    if (!line)
-        return 0;
-
-    if (line->length() < start + length)
+    if (line.length() < start + length)
     {
         error = Node::TooShortString;
         return 0;
     }
 
-    return string2int(trim(line->substr(start, length)), error);
+    return string2int(trim(line.substr(start, length)), error);
 }
 //------------------------------------------------------------------------------
 
-double parseDouble(const std::string *line, const std::size_t start,
+double parseDouble(const std::string &line, const std::size_t start,
                    const std::size_t length, Node::ErrorCode &error,
                    const bool decimalPointAssumed)
 {
-    if (!line)
-        return 0;
-
-    if (line->length() < start + length)
+    if (line.length() < start + length)
     {
         error = Node::TooShortString;
         return 0;
     }
 
-    std::string val = trim(line->substr(start, length));
+    std::string val = trim(line.substr(start, length));
     // Prepare string
     if (decimalPointAssumed)
     {

@@ -29,6 +29,7 @@
 #include <string>
 #include <ctime>
 #include <iostream>
+#include <bitset>
 
 namespace quicktle
 {
@@ -94,12 +95,12 @@ public:
                 const std::string &line3, bool forceParsing = false);
     /*!
         \brief Assign the TLE lines to quicktle::Node object.
-        \param line1 - second TLE line ("1 ...")
-        \param line2 - third TLE line ("2 ...")
+        \param line2 - second TLE line ("1 ...")
+        \param line3 - third TLE line ("2 ...")
         \param forceParsing - defines, if the data, specified in the given
                               lines should be immediately parsed.
     */
-    bool assign(const std::string &line1, const std::string &line2,
+    bool assign(const std::string &line2, const std::string &line3,
                 bool forceParsing = false);
     /*!
         Get the satellite number
@@ -285,28 +286,52 @@ protected:
     ErrorCode checkLine(const std::string &str) const;
 
 private:
-    mutable std::string *m_line1;
-    mutable std::string *m_line2;
-    mutable std::string *m_line3;
-    mutable std::string *m_satelliteName;
-    mutable std::string *m_satelliteNumber;
-    mutable std::string *m_designator;
-    mutable double *m_dn;
-    mutable double *m_d2n;
-    mutable double *m_bstar;
-    mutable double *m_i;
-    mutable double *m_Omega;
-    mutable double *m_omega;
-    mutable double *m_M;
-    mutable double *m_n;
-    mutable double *m_e;
-    mutable double *m_date; 
-    mutable char *m_classification;
-    mutable char *m_ephemerisType;
-    mutable int *m_elementNumber;
-    mutable int *m_revolutionNumber;
+    enum Field
+    {
+        Field_SatName = 0,
+        Field_SatNumber,
+        Field_Designator,
+        Field_dn,
+        Field_d2n,
+        Field_bstar,
+        Field_i,
+        Field_Omega,
+        Field_omega,
+        Field_M,
+        Field_n,
+        Field_e,
+        Field_date,
+        Field_Classification,
+        Field_EphemerisType,
+        Field_ElementNumber,
+        Field_RevolutionNumber,
+        FieldsCount
+    };
+
+
+    std::string m_line1;
+    std::string m_line2;
+    std::string m_line3;
+    mutable std::string m_satelliteName;
+    mutable std::string m_satelliteNumber;
+    mutable std::string m_designator;
+    mutable double m_dn;
+    mutable double m_d2n;
+    mutable double m_bstar;
+    mutable double m_i;
+    mutable double m_Omega;
+    mutable double m_omega;
+    mutable double m_M;
+    mutable double m_n;
+    mutable double m_e;
+    mutable double m_date;
+    mutable char m_classification;
+    mutable char m_ephemerisType;
+    mutable int m_elementNumber;
+    mutable int m_revolutionNumber;
     FileType m_fileType;
     mutable ErrorCode m_lastError;
+    mutable std::bitset<FieldsCount> m_initList;
 };
 
 } // namespace quicktle

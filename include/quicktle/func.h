@@ -134,7 +134,7 @@ std::string trim(const std::string& str);
     \param error - buffer to keep error code
     \return A 'char' value.
 */
-char parseChar(const std::string *line, const std::size_t index,
+char parseChar(const std::string &line, const std::size_t index,
                Node::ErrorCode &error);
 
 /*!
@@ -146,7 +146,7 @@ char parseChar(const std::string *line, const std::size_t index,
     \param error - buffer to keep error code
     \return A value of 'std::string' type.
 */
-std::string parseString(const std::string *line, const std::size_t start,
+std::string parseString(const std::string &line, const std::size_t start,
                         const std::size_t length, Node::ErrorCode &error);
 
 /*!
@@ -158,7 +158,7 @@ std::string parseString(const std::string *line, const std::size_t start,
     \param error - buffer to keep error code
     \return A value of 'int' type.
 */
-int parseInt(const std::string *line, const std::size_t start,
+int parseInt(const std::string &line, const std::size_t start,
              const std::size_t length, Node::ErrorCode &error);
 
 /*!
@@ -173,7 +173,7 @@ int parseInt(const std::string *line, const std::size_t start,
                                  part of the number
     \return A value of 'double' type.
 */
-double parseDouble(const std::string *line, const std::size_t start,
+double parseDouble(const std::string &line, const std::size_t start,
                    const std::size_t length, Node::ErrorCode &error,
                    const bool decimalPointAssumed=false);
 

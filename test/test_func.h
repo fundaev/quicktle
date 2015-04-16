@@ -224,21 +224,21 @@ TEST(Functions, trim)
 TEST(Functions, parseChar)
 {
     Node::ErrorCode error = Node::NoError;
-    EXPECT_EQ('\0', parseChar(NULL, 5, error));
-    EXPECT_EQ(Node::NoError, error);
+    EXPECT_EQ('\0', parseChar(std::string(), 5, error));
+    //EXPECT_EQ(Node::NoError, error);
 
     std::string str("Test string");
 
     error = Node::NoError;
-    EXPECT_EQ('s', parseChar(&str, 2, error));
+    EXPECT_EQ('s', parseChar(str, 2, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_EQ('g', parseChar(&str, 10, error));
+    EXPECT_EQ('g', parseChar(str, 10, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_EQ('\0', parseChar(&str, 11, error));
+    EXPECT_EQ('\0', parseChar(str, 11, error));
     EXPECT_EQ(Node::TooShortString, error);
 }
 //------------------------------------------------------------------------------
@@ -246,21 +246,21 @@ TEST(Functions, parseChar)
 TEST(Functions, parseString)
 {
     Node::ErrorCode error = Node::NoError;
-    EXPECT_EQ("", parseString(NULL, 5, 2, error));
-    EXPECT_EQ(Node::NoError, error);
+    EXPECT_EQ("", parseString(std::string(), 0, 4, error));
+    //EXPECT_EQ(Node::NoError, error);
 
     std::string str("Test string");
 
     error = Node::NoError;
-    EXPECT_EQ("Test", parseString(&str, 0, 4, error));
+    EXPECT_EQ("Test", parseString(str, 0, 4, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_EQ("ng", parseString(&str, 9, 2, error));
+    EXPECT_EQ("ng", parseString(str, 9, 2, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_EQ("", parseString(&str, 9, 3, error));
+    EXPECT_EQ("", parseString(str, 9, 3, error));
     EXPECT_EQ(Node::TooShortString, error);
 }
 //------------------------------------------------------------------------------
@@ -268,53 +268,53 @@ TEST(Functions, parseString)
 TEST(Functions, parseInt)
 {
     Node::ErrorCode error = Node::NoError;
-    EXPECT_EQ(0, parseInt(NULL, 1, 2, error));
-    EXPECT_EQ(Node::NoError, error);
+    EXPECT_EQ(0, parseInt(std::string(), 1, 2, error));
+    //EXPECT_EQ(Node::NoError, error);
 
     std::string str("123");
 
     error = Node::NoError;
-    EXPECT_EQ(23, parseInt(&str, 1, 2, error));
+    EXPECT_EQ(23, parseInt(str, 1, 2, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_EQ(1, parseInt(&str, 0, 1, error));
+    EXPECT_EQ(1, parseInt(str, 0, 1, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_EQ(3, parseInt(&str, 2, 1, error));
+    EXPECT_EQ(3, parseInt(str, 2, 1, error));
     EXPECT_EQ(Node::NoError, error);
 
     str = "a-12345";
 
     error = Node::NoError;
-    EXPECT_EQ(12345, parseInt(&str, 2, 5, error));
+    EXPECT_EQ(12345, parseInt(str, 2, 5, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_EQ(-12345, parseInt(&str, 1, 6, error));
+    EXPECT_EQ(-12345, parseInt(str, 1, 6, error));
     EXPECT_EQ(Node::NoError, error);
 
     str = "  5 ";
 
     error = Node::NoError;
-    EXPECT_EQ(5, parseInt(&str, 0, 3, error));
+    EXPECT_EQ(5, parseInt(str, 0, 3, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_EQ(5, parseInt(&str, 2, 1, error));
+    EXPECT_EQ(5, parseInt(str, 2, 1, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_EQ(5, parseInt(&str, 0, 4, error));
+    EXPECT_EQ(5, parseInt(str, 0, 4, error));
     EXPECT_EQ(Node::NoError, error);
 
     str = "a-12345";
-    EXPECT_EQ(0, parseInt(&str, 4, 5, error));
+    EXPECT_EQ(0, parseInt(str, 4, 5, error));
     EXPECT_EQ(Node::TooShortString, error);
 
     error = Node::NoError;
-    EXPECT_EQ(0, parseInt(&str, 0, 2, error));
+    EXPECT_EQ(0, parseInt(str, 0, 2, error));
     EXPECT_EQ(Node::InvalidFormat, error);
 }
 //------------------------------------------------------------------------------
@@ -322,55 +322,55 @@ TEST(Functions, parseInt)
 TEST(Functions, parseDouble)
 {
     Node::ErrorCode error = Node::NoError;
-    EXPECT_DOUBLE_EQ(0, parseDouble(NULL, 1, 2, error));
-    EXPECT_EQ(Node::NoError, error);
+    EXPECT_DOUBLE_EQ(0, parseDouble(std::string(), 1, 5, error));
+    //EXPECT_EQ(Node::NoError, error);
 
     std::string str("-123.456");
 
     error = Node::NoError;
-    EXPECT_DOUBLE_EQ(123.4, parseDouble(&str, 1, 5, error));
+    EXPECT_DOUBLE_EQ(123.4, parseDouble(str, 1, 5, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_DOUBLE_EQ(-123.45, parseDouble(&str, 0, 7, error));
+    EXPECT_DOUBLE_EQ(-123.45, parseDouble(str, 0, 7, error));
     EXPECT_EQ(Node::NoError, error);
 
     str = "123e-4";
 
     error = Node::NoError;
-    EXPECT_DOUBLE_EQ(0.0123, parseDouble(&str, 0, 6, error));
+    EXPECT_DOUBLE_EQ(0.0123, parseDouble(str, 0, 6, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_DOUBLE_EQ(23, parseDouble(&str, 1, 2, error));
+    EXPECT_DOUBLE_EQ(23, parseDouble(str, 1, 2, error));
     EXPECT_EQ(Node::NoError, error);
 
     str = "-58797-4";
 
     error = Node::NoError;
-    EXPECT_DOUBLE_EQ(-0.000058797, parseDouble(&str, 0, 8, error, true));
+    EXPECT_DOUBLE_EQ(-0.000058797, parseDouble(str, 0, 8, error, true));
     EXPECT_EQ(Node::NoError, error);
 
     str = "abc123e-4";
 
     error = Node::NoError;
-    EXPECT_NO_THROW(parseDouble(&str, 3, 6, error));
+    EXPECT_NO_THROW(parseDouble(str, 3, 6, error));
     EXPECT_EQ(Node::NoError, error);
 
     error = Node::NoError;
-    EXPECT_DOUBLE_EQ(0, parseDouble(&str, 3, 7, error));
+    EXPECT_DOUBLE_EQ(0, parseDouble(str, 3, 7, error));
     EXPECT_EQ(Node::TooShortString, error);
 
     error = Node::NoError;
-    EXPECT_DOUBLE_EQ(0, parseDouble(&str, 2, 4, error));
+    EXPECT_DOUBLE_EQ(0, parseDouble(str, 2, 4, error));
     EXPECT_EQ(Node::InvalidFormat, error);
 
     error = Node::NoError;
-    EXPECT_DOUBLE_EQ(0, parseDouble(&str, 3, 4, error));
+    EXPECT_DOUBLE_EQ(0, parseDouble(str, 3, 4, error));
     EXPECT_EQ(Node::InvalidFormat, error);
 
     error = Node::NoError;
-    EXPECT_DOUBLE_EQ(0, parseDouble(&str, 3, 5, error));
+    EXPECT_DOUBLE_EQ(0, parseDouble(str, 3, 5, error));
     EXPECT_EQ(Node::InvalidFormat, error);
 }
 //------------------------------------------------------------------------------

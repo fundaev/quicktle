@@ -24,7 +24,6 @@
 
 #define CHECKSUM_INDEX 68  //!< Index of checksum symbol in the TLE format line
 
-#define QUICKTLE_FREE(x) if (x) { delete x; x = NULL; }
 #define SECS_IN_DAY 86400
 #define GM 3.986004418e14
 #define E_RELATIVE_ERROR 1e-7
@@ -65,66 +64,26 @@ Node::Node(const std::string &line1, const std::string &line2,
 Node::Node(const Node &node)
 {
     init();
-    if (node.m_line1)
-        m_line1 = new std::string(*node.m_line1);
-
-    if (node.m_line2)
-        m_line2 = new std::string(*node.m_line2);
-
-    if (node.m_line3)
-        m_line3 = new std::string(*node.m_line3);
-
-    if (node.m_satelliteName)
-        m_satelliteName = new std::string(*node.m_satelliteName);
-
-    if (node.m_satelliteNumber)
-        m_satelliteNumber = new std::string(*node.m_satelliteNumber);
-
-    if (node.m_designator)
-        m_designator = new std::string(*node.m_designator);
-
-    if (node.m_dn)
-        m_dn = new double(*node.m_dn);
-
-    if (node.m_d2n)
-        m_d2n = new double(*node.m_d2n);
-
-    if (node.m_bstar)
-        m_bstar = new double(*node.m_bstar);
-
-    if (node.m_i)
-        m_i = new double(*node.m_i);
-
-    if (node.m_Omega)
-        m_Omega = new double(*node.m_Omega);
-
-    if (node.m_omega)
-        m_omega = new double(*node.m_omega);
-
-    if (node.m_M)
-        m_M = new double(*node.m_M);
-
-    if (node.m_n)
-        m_n = new double(*node.m_n);
-
-    if (node.m_e)
-        m_e = new double(*node.m_e);
-
-    if (node.m_date)
-        m_date = new double(*node.m_date);
-
-    if (node.m_classification)
-        m_classification = new char(*node.m_classification);
-
-    if (node.m_ephemerisType)
-        m_ephemerisType = new char(*node.m_ephemerisType);
-
-    if (node.m_elementNumber)
-        m_elementNumber = new int(*node.m_elementNumber);
-
-    if (node.m_revolutionNumber)
-        m_revolutionNumber = new int(*node.m_revolutionNumber);
-
+    m_line1 = node.m_line1;
+    m_line2 = node.m_line2;
+    m_line3 = node.m_line3;
+    m_satelliteName = node.m_satelliteName;
+    m_satelliteNumber = node.m_satelliteNumber;
+    m_designator = node.m_designator;
+    m_dn = node.m_dn;
+    m_d2n = node.m_d2n;
+    m_bstar = node.m_bstar;
+    m_i = node.m_i;
+    m_Omega = node.m_Omega;
+    m_omega = node.m_omega;
+    m_M = node.m_M;
+    m_n = node.m_n;
+    m_e = node.m_e;
+    m_date = node.m_date;
+    m_classification = node.m_classification;
+    m_ephemerisType = node.m_ephemerisType;
+    m_elementNumber = node.m_elementNumber;
+    m_revolutionNumber = node.m_revolutionNumber;
     m_fileType = node.m_fileType;
 }
 //------------------------------------------------------------------------------
@@ -174,37 +133,34 @@ Node::~Node()
 
 void Node::init()
 {
-    m_line1 = m_line2 = m_line3 = m_satelliteName = m_satelliteNumber = m_designator = NULL;
-    m_dn = m_d2n = m_bstar = m_i = m_Omega = m_omega = m_M = m_n = m_e = NULL;
-    m_classification = m_ephemerisType = NULL;
-    m_elementNumber = m_revolutionNumber = NULL;
-    m_date = NULL;
+    m_dn = 0;
+    m_d2n =  0;
+    m_bstar = 0;
+    m_i = 0;
+    m_Omega = 0;
+    m_omega = 0;
+    m_M = 0;
+    m_n = 0;
+    m_e = 0;
+    m_classification = '\0';
+    m_ephemerisType = '\0';
+    m_elementNumber = 0;
+    m_revolutionNumber = 0;
+    m_date = 0;
     m_lastError = NoError;
+    m_initList = 0;
 }
 //------------------------------------------------------------------------------
 
 void Node::free()
 {
-    QUICKTLE_FREE(m_line1)
-    QUICKTLE_FREE(m_line2)
-    QUICKTLE_FREE(m_line3)
-    QUICKTLE_FREE(m_satelliteName)
-    QUICKTLE_FREE(m_satelliteNumber)
-    QUICKTLE_FREE(m_designator)
-    QUICKTLE_FREE(m_dn)
-    QUICKTLE_FREE(m_d2n)
-    QUICKTLE_FREE(m_n)
-    QUICKTLE_FREE(m_bstar)
-    QUICKTLE_FREE(m_i)
-    QUICKTLE_FREE(m_Omega)
-    QUICKTLE_FREE(m_M)
-    QUICKTLE_FREE(m_omega)
-    QUICKTLE_FREE(m_e)
-    QUICKTLE_FREE(m_classification)
-    QUICKTLE_FREE(m_date)
-    QUICKTLE_FREE(m_ephemerisType)
-    QUICKTLE_FREE(m_elementNumber)
-    QUICKTLE_FREE(m_revolutionNumber)
+    m_line1.clear();
+    m_line2.clear();
+    m_line3.clear();
+    m_satelliteName.clear();
+    m_satelliteNumber.clear();
+    m_designator.clear();
+    init();
 }
 //------------------------------------------------------------------------------
 
@@ -228,9 +184,9 @@ bool Node::assign(const std::string &line1, const std::string &line2,
 
     // Assign
     free();
-    m_line1 = new std::string(line1);
-    m_line2 = new std::string(line2);
-    m_line3 = new std::string(line3);
+    m_line1 = line1;
+    m_line2 = line2;
+    m_line3 = line3;
     m_fileType = ThreeLines;
     // Parse
     if (forceParsing)
@@ -240,18 +196,18 @@ bool Node::assign(const std::string &line1, const std::string &line2,
 }
 //------------------------------------------------------------------------------
 
-bool Node::assign(const std::string &line1, const std::string &line2,
+bool Node::assign(const std::string &line2, const std::string &line3,
                   bool forceParsing)
 {
     // Check checksums
-    ErrorCode error = checkLine(line1);
+    ErrorCode error = checkLine(line2);
     if (error != NoError)
     {
         m_lastError = error;
         return false;
     }
 
-    error = checkLine(line2);
+    error = checkLine(line3);
     if (error != NoError)
     {
         m_lastError = error;
@@ -259,8 +215,8 @@ bool Node::assign(const std::string &line1, const std::string &line2,
     }
     // Assign
     free();
-    m_line2 = new std::string(line1);
-    m_line3 = new std::string(line2);
+    m_line2 = line2;
+    m_line3 = line3;
     m_fileType = TwoLines;
     // Parse
     if (forceParsing)
@@ -308,550 +264,490 @@ Node::ErrorCode Node::checkLine(const std::string &str) const
 
 std::string Node::satelliteNumber() const
 {
-    if (m_satelliteNumber)
-        return *m_satelliteNumber;
+    if (m_initList.test(Field_SatNumber))
+        return m_satelliteNumber;
 
-    if (m_line2)
+    if (!m_line2.empty())
     {
         // Try to obtain the satellite number from the second line...
         ErrorCode error = NoError;
-        m_satelliteNumber = new std::string(trim(parseString(m_line2, 2, 5, error)));
+        m_satelliteNumber = trim(parseString(m_line2, 2, 5, error));
         if (error != NoError)
         {
             m_lastError = error;
-            *m_satelliteNumber = "";
+            m_satelliteNumber.clear();
         }
-
-        if (*m_satelliteNumber != "")
-            return *m_satelliteNumber;
+        else
+        {
+            m_initList.set(Field_SatNumber);
+            return m_satelliteNumber;
+        }
     }
 
-    if (m_line3)
+    if (!m_line3.empty())
     {
-        if (!m_satelliteNumber)
-            m_satelliteNumber = new std::string();
-
         ErrorCode error = NoError;
-        *m_satelliteNumber = trim(parseString(m_line3, 2, 5, error));
+        m_satelliteNumber = trim(parseString(m_line3, 2, 5, error));
         if (error != NoError)
         {
             m_lastError = error;
-            *m_satelliteNumber = "";
+            m_satelliteNumber.clear();
+        }
+        else
+        {
+            m_initList.set(Field_SatNumber);
         }
     }
 
-    if (!m_satelliteNumber)
-        m_satelliteNumber = new std::string();
-
-    return *m_satelliteNumber;
+    return m_satelliteNumber;
 }
 //------------------------------------------------------------------------------
 
-void Node::setSatelliteNumber(const std::string& satelliteNumber)
+void Node::setSatelliteNumber(const std::string &satelliteNumber)
 {
-    if (m_satelliteNumber)
-        *m_satelliteNumber = satelliteNumber;
-    else
-        m_satelliteNumber = new std::string(satelliteNumber);
+    m_satelliteNumber = satelliteNumber;
 }
 //------------------------------------------------------------------------------
 
 std::string Node::satelliteName() const
 {
-    if (!m_satelliteName)
-    {
-        if (m_line1)
-        {
-            std::size_t l = m_line1->length();
-            if (l > 24)
-                l = 24;
+    if (m_initList.test(Field_SatName) || m_line1.empty())
+        return m_satelliteName;
 
-            ErrorCode error = NoError;
-            m_satelliteName = new std::string(trim(parseString(m_line1, 0, l, error)));
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_satelliteName = "";
-            }
-        }
-        else
-        {
-            m_satelliteName = new std::string("");
-        }
+    std::size_t l = m_line1.length();
+    if (l > 24)
+        l = 24;
+
+    ErrorCode error = NoError;
+    m_satelliteName = trim(parseString(m_line1, 0, l, error));
+    if (error != NoError)
+    {
+        m_lastError = error;
+        m_satelliteName.clear();
+    }
+    else
+    {
+        m_initList.set(Field_SatName);
     }
 
-    return *m_satelliteName;
+    return m_satelliteName;
 }
 //------------------------------------------------------------------------------
 
 void Node::setSatelliteName(const std::string& satelliteName)
 {
-    if (m_satelliteName)
-        *m_satelliteName = satelliteName;
-    else
-        m_satelliteName = new std::string(satelliteName);
+    m_satelliteName = satelliteName;
 }
 //------------------------------------------------------------------------------
 
 std::string Node::designator() const
 {
-    if (!m_designator)
+    if (m_initList.test(Field_Designator) || m_line2.empty())
+        return m_designator;
+
+    ErrorCode error = NoError;
+    m_designator = trim(parseString(m_line2, 9, 8, error));
+    if (error != NoError)
     {
-        m_designator = new std::string;
-        if (m_line2)
-        {
-            ErrorCode error = NoError;
-            *m_designator = trim(parseString(m_line2, 9, 8, error));
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_designator = "";
-            }
-        }
+        m_lastError = error;
+        m_designator.clear();
+    }
+    else
+    {
+        m_initList.set(Field_Designator);
     }
 
-    return *m_designator;
+    return m_designator;
 }
 //------------------------------------------------------------------------------
 
 void Node::setDesignator(const std::string &designator)
 {
-    if (m_designator)
-        *m_designator = designator;
-    else
-        m_designator = new std::string(designator);
+    m_designator = designator;
 }
 //------------------------------------------------------------------------------
 
 double Node::n() const
 {
-    if (!m_n)
+    if (m_initList.test(Field_n) || m_line3.empty())
+        return m_n;
+
+    ErrorCode error = NoError;
+    m_n = parseDouble(m_line3, 52, 11, error) * 2 * M_PI / SECS_IN_DAY;
+    if (error != NoError)
     {
-        m_n = new double(0);
-        if (m_line3)
-        {
-            ErrorCode error = NoError;
-            *m_n = parseDouble(m_line3, 52, 11, error) * 2 * M_PI / SECS_IN_DAY;
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_n = 0;
-            }
-        }
+        m_lastError = error;
+        m_n = 0;
+    }
+    else
+    {
+        m_initList.set(Field_n);
     }
 
-    return *m_n;
+    return m_n;
 }
 //------------------------------------------------------------------------------
 
 void Node::set_n(double n)
 {
-    if (m_n)
-        *m_n = n;
-    else
-        m_n = new double(n);
+    m_n = n;
 }
 //------------------------------------------------------------------------------
 
 double Node::dn() const
 {
-    if (!m_dn)
+    if (m_initList.test(Field_dn) || m_line2.empty())
+        return  m_dn;
+
+    ErrorCode error = NoError;
+    m_dn = 2 * parseDouble(m_line2, 33, 10, error)
+                                        * 2 * M_PI / SECS_IN_DAY / SECS_IN_DAY;
+    if (error != NoError)
     {
-        m_dn = new double(0);
-        if (m_line2)
-        {
-            ErrorCode error = NoError;
-            *m_dn = 2 * parseDouble(m_line2, 33, 10, error)
-                    * 2 * M_PI / SECS_IN_DAY / SECS_IN_DAY;
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_dn = 0;
-            }
-        }
+        m_lastError = error;
+        m_dn = 0;
+    }
+    else
+    {
+        m_initList.set(Field_dn);
     }
 
-    return *m_dn;
+    return m_dn;
 }
 //------------------------------------------------------------------------------
 
 void Node::set_dn(double dn)
 {
-    if (m_dn)
-        *m_dn = dn;
-    else
-        m_dn = new double(dn);
+    m_dn = dn;
 }
 //------------------------------------------------------------------------------
 
 double Node::d2n() const
 {
-    if (!m_d2n)
-    {
-        m_d2n = new double(0);
-        if (m_line2)
-        {
-            ErrorCode error = NoError;
-            *m_d2n = 6 * parseDouble(m_line2, 44, 8, error, true)
+    if (m_initList.test(Field_d2n) || m_line2.empty())
+        return m_d2n;
+
+    ErrorCode error = NoError;
+    m_d2n = 6 * parseDouble(m_line2, 44, 8, error, true)
                     * 2 * M_PI / SECS_IN_DAY / SECS_IN_DAY / SECS_IN_DAY;
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_d2n = 0;
-            }
-        }
+    if (error != NoError)
+    {
+        m_lastError = error;
+        m_d2n = 0;
+    }
+    else
+    {
+        m_initList.set(Field_d2n);
     }
 
-    return *m_d2n;
+    return m_d2n;
 }
 //------------------------------------------------------------------------------
 
 void Node::set_d2n(double d2n)
 {
-    if (m_d2n)
-        *m_d2n = d2n;
-    else
-        m_d2n = new double(d2n);
+    m_d2n = d2n;
 }
 //------------------------------------------------------------------------------
 
 double Node::i() const
 {
-    if (!m_i)
+    if (m_initList.test(Field_i) || m_line3.empty())
+        return m_i;
+
+    ErrorCode error = NoError;
+    m_i = deg2rad(parseDouble(m_line3, 8, 8, error));
+    if (error != NoError)
     {
-        m_i = new double(0);
-        if (m_line3)
-        {
-            ErrorCode error = NoError;
-            *m_i = deg2rad(parseDouble(m_line3, 8, 8, error));
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_i = 0;
-            }
-        }
+        m_lastError = error;
+        m_i = 0;
     }
 
-    return *m_i;
+    return m_i;
 }
 //------------------------------------------------------------------------------
 
 void Node::set_i(double i)
 {
-    if (m_i)
-        *m_i = i;
-    else
-        m_i = new double(i);
+    m_i = i;
 }
 //------------------------------------------------------------------------------
 
 double Node::Omega() const
 {
-    if (!m_Omega)
+    if (m_initList.test(Field_Omega) || m_line3.empty())
+        return m_Omega;
+
+    ErrorCode error = NoError;
+    m_Omega = deg2rad(parseDouble(m_line3, 17, 8, error));
+    if (error != NoError)
     {
-        m_Omega = new double(0);
-        if (m_line3)
-        {
-            ErrorCode error = NoError;
-            *m_Omega = deg2rad(parseDouble(m_line3, 17, 8, error));
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_Omega = 0;
-            }
-        }
+        m_lastError = error;
+        m_Omega = 0;
+    }
+    else
+    {
+        m_initList.set(Field_Omega);
     }
 
-    return *m_Omega;
+    return m_Omega;
 }
 //------------------------------------------------------------------------------
 
 void Node::set_Omega(double Omega)
 {
-    if (m_Omega)
-        *m_Omega = Omega;
-    else
-        m_Omega = new double(Omega);
+    m_Omega = Omega;
 }
 //------------------------------------------------------------------------------
 
 double Node::omega() const
 {
-    if (!m_omega)
+    if (m_initList.test(Field_omega) || m_line3.empty())
+        return m_omega;
+
+    ErrorCode error = NoError;
+    m_omega = deg2rad(parseDouble(m_line3, 34, 8, error));
+    if (error != NoError)
     {
-        m_omega = new double(0);
-        if (m_line3)
-        {
-            ErrorCode error = NoError;
-            *m_omega = deg2rad(parseDouble(m_line3, 34, 8, error));
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_omega = 0;
-            }
-        }
+        m_lastError = error;
+        m_omega = 0;
+    }
+    else
+    {
+        m_initList.set(Field_omega);
     }
 
-    return *m_omega;
+    return m_omega;
 }
 //------------------------------------------------------------------------------
 
 void Node::set_omega(double omega)
 {
-    if (m_omega)
-        *m_omega = omega;
-    else
-        m_omega = new double(omega);
+    m_omega = omega;
 }
 //------------------------------------------------------------------------------
 
 double Node::M() const
 {
-    if (!m_M)
+    if (m_initList.test(Field_M) || m_line3.empty())
+        return m_M;
+
+    ErrorCode error = NoError;
+    m_M = deg2rad(parseDouble(m_line3, 43, 8, error));
+    if (error != NoError)
     {
-        m_M = new double(0);
-        if (m_line3)
-        {
-            ErrorCode error = NoError;
-            *m_M = deg2rad(parseDouble(m_line3, 43, 8, error));
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_M = 0;
-            }
-        }
+        m_lastError = error;
+        m_M = 0;
+    }
+    else
+    {
+        m_initList.set(Field_M);
     }
 
-    return *m_M;
+    return m_M;
 }
 //------------------------------------------------------------------------------
 
 void Node::set_M(double M)
 {
-    if (m_M)
-        *m_M = M;
-    else
-        m_M = new double(M);
+    m_M = M;
 }
 //------------------------------------------------------------------------------
 
 double Node::bstar() const
 {
-    if (!m_bstar)
+    if (m_initList.test(Field_bstar) || m_line2.empty())
+        return m_bstar;
+
+    ErrorCode error = NoError;
+    m_bstar = parseDouble(m_line2, 53, 8, error, true);
+    if (error != NoError)
     {
-        m_bstar = new double(0);
-        if (m_line2)
-        {
-            ErrorCode error = NoError;
-            *m_bstar = parseDouble(m_line2, 53, 8, error, true);
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_bstar = 0;
-            }
-        }
+        m_lastError = error;
+        m_bstar = 0;
+    }
+    else
+    {
+        m_initList.set(Field_bstar);
     }
 
-    return *m_bstar;
+    return m_bstar;
 }
 //------------------------------------------------------------------------------
 
 void Node::set_bstar(double bstar)
 {
-    if (m_bstar)
-        *m_bstar = bstar;
-    else
-        m_bstar = new double(bstar);
+    m_bstar = bstar;
 }
 //------------------------------------------------------------------------------
 
 double Node::e() const
 {
-    if (!m_e)
+    if (m_initList.test(Field_e) || m_line3.empty())
+        return m_e;
+
+    ErrorCode error = NoError;
+    m_e = parseDouble(m_line3, 26, 8, error, true);
+    if (error != NoError)
     {
-        m_e = new double(0);
-        if (m_line3)
-        {
-            ErrorCode error = NoError;
-            *m_e = parseDouble(m_line3, 26, 8, error, true);
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_e = 0;
-            }
-        }
+        m_lastError = error;
+        m_e = 0;
+    }
+    else
+    {
+        m_initList.set(Field_e);
     }
 
-    return *m_e;
+    return m_e;
 }
 //------------------------------------------------------------------------------
 
 void Node::set_e(double e)
 {
-    if (m_e)
-        *m_e = e;
-    else
-        m_e = new double(e);
+    m_e = e;
 }
 //------------------------------------------------------------------------------
 
 char Node::classification() const
 {
-    if (!m_classification)
+    if (m_initList.test(Field_Classification) || m_line2.empty())
+        return m_classification;
+
+    ErrorCode error = NoError;
+    m_classification = parseChar(m_line2, 7, error);
+    if (error != NoError)
     {
-        m_classification = new char('\0');
-        if (m_line2)
-        {
-            ErrorCode error = NoError;
-            *m_classification = parseChar(m_line2, 7, error);
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_classification = '\0';
-            }
-        }
+        m_lastError = error;
+        m_classification = '\0';
+    }
+    else
+    {
+        m_initList.set(Field_Classification);
     }
 
-    return *m_classification;
+    return m_classification;
 }
 //------------------------------------------------------------------------------
 
 void Node::setClassification(char classification)
 {
-    if (m_classification)
-        *m_classification = classification;
-    else
-        m_classification = new char(classification);
+    m_classification = classification;
 }
 //------------------------------------------------------------------------------
 
 char Node::ephemerisType() const
 {
-    if (!m_ephemerisType)
+    if (m_initList.test(Field_EphemerisType) || m_line2.empty())
+        return m_ephemerisType;
+
+    ErrorCode error = NoError;
+    m_ephemerisType = parseChar(m_line2, 62, error);
+    if (error != NoError)
     {
-        m_ephemerisType = new char('\0');
-        if (m_line2)
-        {
-            ErrorCode error = NoError;
-            *m_ephemerisType = parseChar(m_line2, 62, error);
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_ephemerisType = '\0';
-            }
-        }
+        m_lastError = error;
+        m_ephemerisType = '\0';
+    }
+    else
+    {
+        m_initList.set(Field_EphemerisType);
     }
 
-    return *m_ephemerisType;
+    return m_ephemerisType;
 }
 //------------------------------------------------------------------------------
 
 void Node::setEphemerisType(char ephemerisType)
 {
-    if (m_ephemerisType)
-        *m_ephemerisType = ephemerisType;
-    else
-        m_ephemerisType = new char(ephemerisType);
+    m_ephemerisType = ephemerisType;
 }
 //------------------------------------------------------------------------------
 
 int Node::elementNumber() const
 {
-    if (!m_elementNumber)
+    if (m_initList.test(Field_ElementNumber) || m_line2.empty())
+        return m_elementNumber;
+
+    ErrorCode error = NoError;
+    m_elementNumber = parseInt(m_line2, 64, 4, error);
+    if (error != NoError)
     {
-        m_elementNumber = new int(0);
-        if (m_line2)
-        {
-            ErrorCode error = NoError;
-            *m_elementNumber = parseInt(m_line2, 64, 4, error);
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_elementNumber = 0;
-            }
-        }
+        m_lastError = error;
+        m_elementNumber = 0;
+    }
+    else
+    {
+        m_initList.set(Field_ElementNumber);
     }
 
-    return *m_elementNumber;
+    return m_elementNumber;
 }
 //------------------------------------------------------------------------------
 
 void Node::setElementNumber(int elementNumber)
 {
-    if (m_elementNumber)
-        *m_elementNumber = elementNumber;
-    else
-        m_elementNumber = new int(elementNumber);
+    m_elementNumber = elementNumber;
 }
 //------------------------------------------------------------------------------
 
 int Node::revolutionNumber() const
 {
-    if (!m_revolutionNumber)
+    if (m_initList.test(Field_RevolutionNumber) || m_line3.empty())
+        return m_revolutionNumber;
+
+    ErrorCode error = NoError;
+    m_revolutionNumber = parseInt(m_line3, 63, 5, error);
+    if (error != NoError)
     {
-        m_revolutionNumber = new int(0);
-        if (m_line3)
-        {
-            ErrorCode error = NoError;
-            *m_revolutionNumber = parseInt(m_line3, 63, 5, error);
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_revolutionNumber = 0;
-            }
-        }
+        m_lastError = error;
+        m_revolutionNumber = 0;
+    }
+    else
+    {
+        m_initList.set(Field_RevolutionNumber);
     }
 
-    return *m_revolutionNumber;
+    return m_revolutionNumber;
 }
 //------------------------------------------------------------------------------
 
 void Node::setRevolutionNumber(int revolutionNumber)
 {
-    if (m_revolutionNumber)
-        *m_revolutionNumber = revolutionNumber;
-    else
-        m_revolutionNumber = new int(revolutionNumber);
+    m_revolutionNumber = revolutionNumber;
 }
 //------------------------------------------------------------------------------
 
 double Node::preciseEpoch() const
 {
-    if (!m_date)
-    {
-        if (m_line2)
-        {
-            ErrorCode error =NoError;
-            std::string date = parseString(m_line2, 18, 14, error);
-            if (error != NoError)
-            {
-                m_lastError = error;
-                return 0;
-            }
+    if (m_initList.test(Field_date) || m_line2.empty())
+        return m_date;
 
-            m_date = new double(string2date(date, error));
-            if (error != NoError)
-            {
-                m_lastError = error;
-                *m_date = 0;
-            }
-        }
-        else
-        {
-            m_date = new double(0);
-        }
+    ErrorCode error =NoError;
+    std::string date = parseString(m_line2, 18, 14, error);
+    if (error != NoError)
+    {
+        m_lastError = error;
+        m_date = 0;
+        return m_date;
     }
 
-    return *m_date;
+    m_date = string2date(date, error);
+    if (error != NoError)
+    {
+        m_lastError = error;
+        m_date = 0;
+    }
+    else
+    {
+        m_initList.set(Field_date);
+    }
+
+    return m_date;
 }
 //------------------------------------------------------------------------------
 
 void Node::setPreciseEpoch(double preciseEpoch)
 {
-    if (m_date)
-        *m_date = preciseEpoch;
-    else
-        m_date = new double(preciseEpoch);
+    m_date = preciseEpoch;
 }
 //------------------------------------------------------------------------------
 
