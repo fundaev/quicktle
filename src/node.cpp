@@ -115,6 +115,7 @@ void Node::swap(Node& node)
     std::swap(m_fileType, node.m_fileType);
 
     std::swap(m_lastError, node.m_lastError);
+    std::swap(m_initList, node.m_initList);
 }
 //------------------------------------------------------------------------------
 
@@ -148,7 +149,7 @@ void Node::init()
     m_revolutionNumber = 0;
     m_date = 0;
     m_lastError = NoError;
-    m_initList = 0;
+    m_initList.reset();
 }
 //------------------------------------------------------------------------------
 
