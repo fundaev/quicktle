@@ -53,11 +53,11 @@ Node::Node(const std::string &line1, const std::string &line2,
 }
 //------------------------------------------------------------------------------
 
-Node::Node(const std::string &line1, const std::string &line2,
+Node::Node(const std::string &line2, const std::string &line3,
            bool forceParsing)
 {
     init();
-    assign(line1, line2, forceParsing);
+    assign(line2, line3, forceParsing);
 }
 //------------------------------------------------------------------------------
 
@@ -85,18 +85,20 @@ Node::Node(const Node &node)
     m_elementNumber = node.m_elementNumber;
     m_revolutionNumber = node.m_revolutionNumber;
     m_fileType = node.m_fileType;
+    m_lastError = node.m_lastError;
+    m_initList = node.m_initList;
 }
 //------------------------------------------------------------------------------
 
 void Node::swap(Node& node)
 {
-    std::swap(m_line1, node.m_line1);
-    std::swap(m_line2, node.m_line2);
-    std::swap(m_line3, node.m_line3);
+    m_line1.swap(node.m_line1);
+    m_line2.swap(node.m_line2);
+    m_line3.swap(node.m_line3);
 
-    std::swap(m_satelliteName, node.m_satelliteName);
-    std::swap(m_satelliteNumber, node.m_satelliteNumber);
-    std::swap(m_designator, node.m_designator);
+    m_satelliteName.swap(node.m_satelliteName);
+    m_satelliteNumber.swap(node.m_satelliteNumber);
+    m_designator.swap(node.m_designator);
 
     std::swap(m_dn, node.m_dn);
     std::swap(m_d2n, node.m_d2n);
@@ -307,6 +309,7 @@ std::string Node::satelliteNumber() const
 void Node::setSatelliteNumber(const std::string &satelliteNumber)
 {
     m_satelliteNumber = satelliteNumber;
+    m_initList.set(Field_SatNumber);
 }
 //------------------------------------------------------------------------------
 
@@ -338,6 +341,7 @@ std::string Node::satelliteName() const
 void Node::setSatelliteName(const std::string& satelliteName)
 {
     m_satelliteName = satelliteName;
+    m_initList.set(Field_SatName);
 }
 //------------------------------------------------------------------------------
 
@@ -365,6 +369,7 @@ std::string Node::designator() const
 void Node::setDesignator(const std::string &designator)
 {
     m_designator = designator;
+    m_initList.set(Field_Designator);
 }
 //------------------------------------------------------------------------------
 
@@ -392,6 +397,7 @@ double Node::n() const
 void Node::set_n(double n)
 {
     m_n = n;
+    m_initList.set(Field_n);
 }
 //------------------------------------------------------------------------------
 
@@ -420,6 +426,7 @@ double Node::dn() const
 void Node::set_dn(double dn)
 {
     m_dn = dn;
+    m_initList.set(Field_dn);
 }
 //------------------------------------------------------------------------------
 
@@ -448,6 +455,7 @@ double Node::d2n() const
 void Node::set_d2n(double d2n)
 {
     m_d2n = d2n;
+    m_initList.set(Field_d2n);
 }
 //------------------------------------------------------------------------------
 
@@ -471,6 +479,7 @@ double Node::i() const
 void Node::set_i(double i)
 {
     m_i = i;
+    m_initList.set(Field_i);
 }
 //------------------------------------------------------------------------------
 
@@ -498,6 +507,7 @@ double Node::Omega() const
 void Node::set_Omega(double Omega)
 {
     m_Omega = Omega;
+    m_initList.set(Field_Omega);
 }
 //------------------------------------------------------------------------------
 
@@ -525,6 +535,7 @@ double Node::omega() const
 void Node::set_omega(double omega)
 {
     m_omega = omega;
+    m_initList.set(Field_omega);
 }
 //------------------------------------------------------------------------------
 
@@ -552,6 +563,7 @@ double Node::M() const
 void Node::set_M(double M)
 {
     m_M = M;
+    m_initList.set(Field_M);
 }
 //------------------------------------------------------------------------------
 
@@ -579,6 +591,7 @@ double Node::bstar() const
 void Node::set_bstar(double bstar)
 {
     m_bstar = bstar;
+    m_initList.set(Field_bstar);
 }
 //------------------------------------------------------------------------------
 
@@ -606,6 +619,7 @@ double Node::e() const
 void Node::set_e(double e)
 {
     m_e = e;
+    m_initList.set(Field_e);
 }
 //------------------------------------------------------------------------------
 
@@ -633,6 +647,7 @@ char Node::classification() const
 void Node::setClassification(char classification)
 {
     m_classification = classification;
+    m_initList.set(Field_Classification);
 }
 //------------------------------------------------------------------------------
 
@@ -660,6 +675,7 @@ char Node::ephemerisType() const
 void Node::setEphemerisType(char ephemerisType)
 {
     m_ephemerisType = ephemerisType;
+    m_initList.set(Field_EphemerisType);
 }
 //------------------------------------------------------------------------------
 
@@ -687,6 +703,7 @@ int Node::elementNumber() const
 void Node::setElementNumber(int elementNumber)
 {
     m_elementNumber = elementNumber;
+    m_initList.set(Field_ElementNumber);
 }
 //------------------------------------------------------------------------------
 
@@ -714,6 +731,7 @@ int Node::revolutionNumber() const
 void Node::setRevolutionNumber(int revolutionNumber)
 {
     m_revolutionNumber = revolutionNumber;
+    m_initList.set(Field_RevolutionNumber);
 }
 //------------------------------------------------------------------------------
 
@@ -722,7 +740,7 @@ double Node::preciseEpoch() const
     if (m_initList.test(Field_date) || m_line2.empty())
         return m_date;
 
-    ErrorCode error =NoError;
+    ErrorCode error = NoError;
     std::string date = parseString(m_line2, 18, 14, error);
     if (error != NoError)
     {
@@ -749,6 +767,7 @@ double Node::preciseEpoch() const
 void Node::setPreciseEpoch(double preciseEpoch)
 {
     m_date = preciseEpoch;
+    m_initList.set(Field_date);
 }
 //------------------------------------------------------------------------------
 

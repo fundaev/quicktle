@@ -77,7 +77,7 @@ public:
         \param forceParsing - defines, if the data, specified in the given
                               lines should be immediately parsed.
     */
-    Node(const std::string &line1, const std::string &line2,
+    Node(const std::string &line2, const std::string &line3,
          bool forceParsing = false);
     //! Copy constructor
     Node(const Node &node);
