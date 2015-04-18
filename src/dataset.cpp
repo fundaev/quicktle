@@ -54,7 +54,7 @@ DataSet::IndexType DataSet::nearestNotLess(const time_t &t, bool &found) const
     if (t >= (value = m_data.at(size - 1).epoch()))
     {
         found = (value == t);
-        return size;
+        return (found ? size - 1 : size);
     }
 
     if (t <= (value = m_data.at(0).epoch()))

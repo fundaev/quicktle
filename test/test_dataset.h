@@ -64,7 +64,7 @@ TEST(DataSetTest, append)
     dataSet.append(node4);
     dataSet.append(node5);
 
-    EXPECT_EQ(5, dataSet.size());
+    ASSERT_EQ(5, dataSet.size());
     EXPECT_EQ("Satellite-5", dataSet.node(0)->satelliteName());
     EXPECT_EQ("Satellite-3", dataSet.node(1)->satelliteName());
     EXPECT_EQ("Satellite-1", dataSet.node(2)->satelliteName());
@@ -109,7 +109,7 @@ TEST(DataSetTest, node)
     dataSet.append(node4);
     dataSet.append(node5);
 
-    EXPECT_EQ(5, dataSet.size());
+    ASSERT_EQ(5, dataSet.size());
     EXPECT_EQ(NULL, dataSet.node(-1));
     EXPECT_EQ(NULL, dataSet.node(5));
     EXPECT_EQ("Satellite-1", dataSet.node(0)->satelliteName());
@@ -156,7 +156,7 @@ TEST(DataSetTest, remove)
     dataSet.append(node4);
     dataSet.append(node5);
 
-    EXPECT_EQ(5, dataSet.size());
+    ASSERT_EQ(5, dataSet.size());
     EXPECT_EQ("Satellite-1", dataSet.node(0)->satelliteName());
     EXPECT_EQ("Satellite-2", dataSet.node(1)->satelliteName());
     EXPECT_EQ("Satellite-3", dataSet.node(2)->satelliteName());
@@ -165,7 +165,7 @@ TEST(DataSetTest, remove)
 
     dataSet.remove(node3);
 
-    EXPECT_EQ(4, dataSet.size());
+    ASSERT_EQ(4, dataSet.size());
     EXPECT_EQ("Satellite-1", dataSet.node(0)->satelliteName());
     EXPECT_EQ("Satellite-2", dataSet.node(1)->satelliteName());
     EXPECT_EQ("Satellite-4", dataSet.node(2)->satelliteName());
@@ -209,7 +209,7 @@ TEST(DataSetTest, nearestNode)
     dataSet.append(node4);
     dataSet.append(node5);
 
-    EXPECT_EQ(5, dataSet.size());
+    ASSERT_EQ(5, dataSet.size());
     EXPECT_EQ("Satellite-1", dataSet.nearestNode(node1.epoch()).satelliteName());
     EXPECT_EQ("Satellite-1", dataSet.nearestNode(node1.epoch() + 3600).satelliteName());
     EXPECT_EQ("Satellite-1", dataSet.nearestNode(node1.epoch() + 43199).satelliteName());
