@@ -99,21 +99,15 @@ bool DataSet::remove(const Node &node)
 }
 //------------------------------------------------------------------------------
 
-const Node* DataSet::node(const IndexType &index) const
+const Node& DataSet::node(const IndexType &index) const
 {
-    if (index < 0 || index >= m_data.size())
-        return NULL;
-
-    return &m_data.at(index);
+    return m_data.at(index);
 }
 //------------------------------------------------------------------------------
 
-Node DataSet::nearestNode(const time_t &t) const
+const Node& DataSet::nearestNode(const time_t &t) const
 {
     IndexType size = m_data.size();
-    if (!size)
-        return Node();
-
     bool found = false;
     IndexType index = nearestNotLess(t, found);
 
@@ -128,7 +122,7 @@ Node DataSet::nearestNode(const time_t &t) const
             --index;
     }
 
-    return Node(m_data.at(index));
+    return m_data.at(index);
 }
 //------------------------------------------------------------------------------
 

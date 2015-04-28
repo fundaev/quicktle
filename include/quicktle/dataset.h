@@ -62,14 +62,14 @@ public:
         \param index - node index
         \return Node at the given index
     */
-    const Node* node(const IndexType &index) const;
+    const Node& node(const IndexType &index) const;
     /*!
         \brief Find the node with nearest to \a t date and time
                and returns its copy
         \param t - date and time
         \return Copy of the nearest node
     */
-    Node nearestNode(const time_t &t) const;
+    const Node& nearestNode(const time_t &t) const;
 
 private:
     IndexType nearestNotLess(const time_t &t, bool &found) const;

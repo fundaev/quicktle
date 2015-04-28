@@ -72,8 +72,8 @@ public:
          const std::string &line3, bool forceParsing = false);
     /*!
         \brief Constructor
-        \param line1 - second TLE line ("1 ...")
-        \param line2 - third TLE line ("2 ...")
+        \param line2 - second TLE line ("1 ...")
+        \param line3 - third TLE line ("2 ...")
         \param forceParsing - defines, if the data, specified in the given
                               lines should be immediately parsed.
     */
@@ -261,7 +261,7 @@ public:
         \param node - The Node object
         \return Output stream
     */
-    friend std::ostream& operator<<(std::ostream &stream, Node &node);
+    friend std::ostream& operator<<(std::ostream &stream, const Node &node);
     //! Swap the data of two Node objects
     void swap(Node &node);
     //! Get the code of last error

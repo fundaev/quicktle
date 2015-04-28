@@ -24,7 +24,7 @@ int main(int argc, char** argv)
         tle >> nodes;
     f.close();
 
-    quicktle::Node node = nodes.nearestNode(std::time(0));
+    const quicktle::Node &node = nodes.nearestNode(std::time(0));
     std::cout << node;
 
     return 0;

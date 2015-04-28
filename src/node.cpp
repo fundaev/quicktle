@@ -841,7 +841,7 @@ Node& Node::outputFormat(const FileType format)
 }
 //------------------------------------------------------------------------------
 
-std::ostream& operator<<(std::ostream& stream, Node& node)
+std::ostream& operator<<(std::ostream& stream, const Node& node)
 {
     if (node.m_fileType == ThreeLines)
     {

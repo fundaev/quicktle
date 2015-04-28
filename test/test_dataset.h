@@ -65,11 +65,11 @@ TEST(DataSetTest, append)
     dataSet.append(node5);
 
     ASSERT_EQ(5, dataSet.size());
-    EXPECT_EQ("Satellite-5", dataSet.node(0)->satelliteName());
-    EXPECT_EQ("Satellite-3", dataSet.node(1)->satelliteName());
-    EXPECT_EQ("Satellite-1", dataSet.node(2)->satelliteName());
-    EXPECT_EQ("Satellite-4", dataSet.node(3)->satelliteName());
-    EXPECT_EQ("Satellite-2", dataSet.node(4)->satelliteName());
+    EXPECT_EQ("Satellite-5", dataSet.node(0).satelliteName());
+    EXPECT_EQ("Satellite-3", dataSet.node(1).satelliteName());
+    EXPECT_EQ("Satellite-1", dataSet.node(2).satelliteName());
+    EXPECT_EQ("Satellite-4", dataSet.node(3).satelliteName());
+    EXPECT_EQ("Satellite-2", dataSet.node(4).satelliteName());
 
     dataSet.clear();
     EXPECT_EQ(0, dataSet.size());
@@ -110,13 +110,11 @@ TEST(DataSetTest, node)
     dataSet.append(node5);
 
     ASSERT_EQ(5, dataSet.size());
-    EXPECT_EQ(NULL, dataSet.node(-1));
-    EXPECT_EQ(NULL, dataSet.node(5));
-    EXPECT_EQ("Satellite-1", dataSet.node(0)->satelliteName());
-    EXPECT_EQ("Satellite-2", dataSet.node(1)->satelliteName());
-    EXPECT_EQ("Satellite-3", dataSet.node(2)->satelliteName());
-    EXPECT_EQ("Satellite-4", dataSet.node(3)->satelliteName());
-    EXPECT_EQ("Satellite-5", dataSet.node(4)->satelliteName());
+    EXPECT_EQ("Satellite-1", dataSet.node(0).satelliteName());
+    EXPECT_EQ("Satellite-2", dataSet.node(1).satelliteName());
+    EXPECT_EQ("Satellite-3", dataSet.node(2).satelliteName());
+    EXPECT_EQ("Satellite-4", dataSet.node(3).satelliteName());
+    EXPECT_EQ("Satellite-5", dataSet.node(4).satelliteName());
 
     dataSet.clear();
     EXPECT_EQ(0, dataSet.size());
@@ -157,19 +155,19 @@ TEST(DataSetTest, remove)
     dataSet.append(node5);
 
     ASSERT_EQ(5, dataSet.size());
-    EXPECT_EQ("Satellite-1", dataSet.node(0)->satelliteName());
-    EXPECT_EQ("Satellite-2", dataSet.node(1)->satelliteName());
-    EXPECT_EQ("Satellite-3", dataSet.node(2)->satelliteName());
-    EXPECT_EQ("Satellite-4", dataSet.node(3)->satelliteName());
-    EXPECT_EQ("Satellite-5", dataSet.node(4)->satelliteName());
+    EXPECT_EQ("Satellite-1", dataSet.node(0).satelliteName());
+    EXPECT_EQ("Satellite-2", dataSet.node(1).satelliteName());
+    EXPECT_EQ("Satellite-3", dataSet.node(2).satelliteName());
+    EXPECT_EQ("Satellite-4", dataSet.node(3).satelliteName());
+    EXPECT_EQ("Satellite-5", dataSet.node(4).satelliteName());
 
     dataSet.remove(node3);
 
     ASSERT_EQ(4, dataSet.size());
-    EXPECT_EQ("Satellite-1", dataSet.node(0)->satelliteName());
-    EXPECT_EQ("Satellite-2", dataSet.node(1)->satelliteName());
-    EXPECT_EQ("Satellite-4", dataSet.node(2)->satelliteName());
-    EXPECT_EQ("Satellite-5", dataSet.node(3)->satelliteName());
+    EXPECT_EQ("Satellite-1", dataSet.node(0).satelliteName());
+    EXPECT_EQ("Satellite-2", dataSet.node(1).satelliteName());
+    EXPECT_EQ("Satellite-4", dataSet.node(2).satelliteName());
+    EXPECT_EQ("Satellite-5", dataSet.node(3).satelliteName());
 
     dataSet.clear();
     EXPECT_EQ(0, dataSet.size());
