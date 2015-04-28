@@ -37,6 +37,7 @@ if (BUILD_SAMPLES)
 	add_subdirectory(${QUICKTLE_SAMPLES_DIR}/sample1)
 	add_subdirectory(${QUICKTLE_SAMPLES_DIR}/sample2)
 	add_subdirectory(${QUICKTLE_SAMPLES_DIR}/sample3)
+	add_subdirectory(${QUICKTLE_SAMPLES_DIR}/sample4)
 endif (BUILD_SAMPLES)
 
 option(BUILD_TESTS "Build tests" ON)
@@ -48,12 +49,7 @@ add_library(${PROJECT_NAME} SHARED ${QUICKTLE_SOURCES})
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib COMPONENT bin)
 install(FILES ${QUICKTLE_HEADERS} DESTINATION include/quicktle COMPONENT hdr)
-install(FILES ${QUICKTLE_SOURCES} DESTINATION src/quicktle COMPONENT src)
-
-#if (UNIX)
-#	execute_process(COMMAND dpkg --print-architecture OUTPUT_VARIABLE ARTITECTURE)
-#endif (UNIX)
-
+#install(FILES ${QUICKTLE_SOURCES} DESTINATION src/quicktle COMPONENT src)
 
 set(CPACK_GENERATOR "TGZ;DEB;RPM")
 set(CPACK_PROJECT_CONFIG_FILE ${CMAKE_SOURCE_DIR}/CPackConfig.cmake)
