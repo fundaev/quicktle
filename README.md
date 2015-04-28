@@ -43,11 +43,7 @@ The ```quicktle::Stream``` class is developed to simplify the reading TLE files.
 If it is necessary to store the big volume of data about satellite positions and to search for the position, nearest to the given moment of time, it is convenient to use ```quicktle::DataSet``` class. Have a look at fourth sample in the "samples" directory.
 
 
-## 4 Samples
-
-In the 'samples' directory you can find several examples,   demonstrating  how  to  use  the  QuickTle library.
-
-## 5 Unit-testing
+## 4 Unit-testing
 
 For unit-testing the Google C++ Testing Framework (a.k.a  [GoogleTest](http://code.google.com/p/googletest/))  is  used.  So  you  should install this framework to be able to build the unit-testing  program.  Make sure  also, that you defined the 'GTEST_DIR' environment variable in your system.
  
