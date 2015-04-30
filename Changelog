@@ -1,3 +1,11 @@
+Version 2.0.0
+* TLELib has been renamed to QuickTle.
+* quicktle::DataSet class has been added.
+* quicktle::Node class uses angles in radians instead of degrees now.
+* quicktle::Node provides now geocentric coordinates and velocity, orbit semi-major axis, focal parameter, radius-vector eccentric and true anomaly.
+* cmake build system is used now.
+
+
 Version 1.2.0
 * TLELib does not throw exceptions anymore. See tlelib::Node::ErrorCode
 * Code style is changed
